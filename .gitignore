@@ -14,3 +14,7 @@ local.properties
 
 ### Java ###
 *.class
+
+
+### MS Office Temp File ###
+~*
