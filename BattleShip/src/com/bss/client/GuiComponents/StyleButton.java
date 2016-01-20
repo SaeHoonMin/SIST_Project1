@@ -1,5 +1,6 @@
 package com.bss.client.GuiComponents;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
@@ -12,20 +13,23 @@ public class StyleButton extends JButton implements MouseListener{
 	int w, h;
 	int lx,ly;
 	int fontSize;
+	Color color;
 	
 	public StyleButton(String text)
 	{	
 		setText(text);
-		setPreferredSize(new Dimension(100,50));
+		setPreferredSize(new Dimension(150,50));
 		
 		setFont(new Font("Arial", Font.PLAIN,16));
 		fontSize = getFont().getSize();
 		w = getWidth();
 		h = getHeight();
-		setVisible(true);
+		
+		setFocusable(false);
 		
 		setBorderPainted(false);
 		setContentAreaFilled(false);
+	//	setForeground(new Color(0xff,0xf8,0xdc));
 		
 		addMouseListener(this);
 		
@@ -41,12 +45,10 @@ public class StyleButton extends JButton implements MouseListener{
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("mouse entered");
-		new Thread(new Runnable() {
-			public synchronized void run() {
-				
+		System.out.println("btn x : "+getX()+" btn y : "+getY());
 		
-				int cw = w;
-				int ch = h;
+		new Thread(new Runnable() {
+			public  void run() {
 				
 				int fSize = fontSize;
 				
@@ -72,10 +74,11 @@ public class StyleButton extends JButton implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("mouse exited");
+		
 		new Thread(new Runnable() {
-			public synchronized void run() {
+			public void run() {
 				
-				
+
 				int fSize = getFont().getSize();
 				
 				while (true) {

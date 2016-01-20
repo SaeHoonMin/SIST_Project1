@@ -15,61 +15,85 @@ package com.bss.client;
  * 
  */
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.bss.client.GuiComponents.StyleButton;
+import com.bss.client.GuiComponents.LoginWindowFrame;
+
+import resources.ResourceLoader;
+import sun.font.CreatedFontTracker;
 
 public class MainClass {
-	
 
+	
+	static Image img;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-	//	MainClass inst = new MainClass();
+		JFrame jf = new JFrame();
 		
-		JFrame jf = new JFrame("test");
 	
+		try {
+			img = ImageIO.read(ResourceLoader.getResURL("images/SpaceShip.png"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		jf.setSize(1280, 1024);
-		
-		
-		// getClassLoader().getResource 와  getClassLoader 제외하고 사용하는 경우의 차이????
-		//아래와 같이 사용할 때 불러오기 가능...
-		
-		// todo : jpanel 상속한 클래스 빼기.
-		//		   리소스로더 클래스 만들기.
-		//        frame도  마찬가지로 클래스 빼기.
-		//        style 버튼 ( 일단은 확장가능한 버튼만) 만들어서 main에 "로그인" 버튼에 적용
-		
-		final ImageIcon icon11 = new ImageIcon(MainClass.class.getClassLoader().getResource("resources/1.jpg"));
-		JPanel p1 = new JPanel() {
-			public void paintComponent(Graphics g) {
-				g.drawImage(icon11.getImage(), 0, 0,this.getWidth(),this.getHeight(), null);
-				setOpaque(false);
-				super.paintComponent(g);
+		JPanel jp = new JPanel(){
+			public void paintComponent(Graphics g)
+			{
+				g.drawImage(img, 0, 0,img.getWidth(null),img.getHeight(null), null);
 			}
 		};
-		jf.add(p1);
-		p1.setLayout(new FlowLayout());
-		//p1.setBackground(Color.white);
 		
-		StyleButton btn1 = new StyleButton("Login");
-		StyleButton btn2 = new StyleButton("Exit Game");
-		btn1.setBounds(100,100,100,50);
-		btn2.setBounds(100,210,100,50);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int w = (int) screenSize.getWidth();
+		int h = (int) screenSize.getHeight();
+		int iw = img.getWidth(null);
+		int ih = img.getHeight(null);
+		jf.setLocation(w/2 - iw/2,h/2 - ih/2 );
 		
-		p1.add(btn1);
-		p1.add(btn2);
-		
+		jf.add(jp);
+		jf.setSize(img.getWidth(null), img.getHeight(null));
+		jf.setUndecorated(true);
 		jf.setVisible(true);
+		
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}).run();
+		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
+		
+		
+		LoginWindowFrame loginWindow = new LoginWindowFrame();
+		
 		
 		
 		
 	}
+	
+
 
 }
