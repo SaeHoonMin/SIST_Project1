@@ -22,7 +22,7 @@
 
 01. 파일 및 디렉토리 설명
 
-	Root
+>Root
 >>- BattleShip/ 				: 프로젝트 폴더
 >>		- .gitignore				: 말 그대로...
 		- BattleShip_plan.docx 		: 기획 문서 ( 지속 수정 )
