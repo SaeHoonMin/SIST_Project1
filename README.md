@@ -23,8 +23,8 @@
 01. 파일 및 디렉토리 설명
 
 	Root
-		- BattleShip/ 				: 프로젝트 폴더
-		- .gitignore				: 말 그대로...
+>>- BattleShip/ 				: 프로젝트 폴더
+>>		- .gitignore				: 말 그대로...
 		- BattleShip_plan.docx 		: 기획 문서 ( 지속 수정 )
 		- README.md 				: This File.
 
@@ -37,4 +37,5 @@
 					- 추가예정
 
 			- resources/			: 게임 리소스 파일들과 ResourceLoader 클래스 
+
 
