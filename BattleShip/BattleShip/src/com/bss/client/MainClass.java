@@ -1,4 +1,4 @@
-package com.sist.battleship.client;
+package com.bss.client;
 /*
  * 	Created by Sehoon Min.
  * 
@@ -15,13 +15,14 @@ package com.sist.battleship.client;
  * 
  */
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.bss.client.GuiComponents.StyleButton;
 
 public class MainClass {
 	
@@ -54,13 +55,19 @@ public class MainClass {
 			}
 		};
 		jf.add(p1);
-		p1.setLayout(new BorderLayout());
+		p1.setLayout(new FlowLayout());
 		//p1.setBackground(Color.white);
+		
+		StyleButton btn1 = new StyleButton("Login");
+		StyleButton btn2 = new StyleButton("Exit Game");
+		btn1.setBounds(100,100,100,50);
+		btn2.setBounds(100,210,100,50);
+		
+		p1.add(btn1);
+		p1.add(btn2);
 		
 		jf.setVisible(true);
 		
-		
-	
 		
 		
 	}

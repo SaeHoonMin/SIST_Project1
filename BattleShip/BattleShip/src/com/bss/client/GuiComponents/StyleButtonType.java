@@ -1,4 +1,4 @@
-package com.sist.battleship.client.GuiComponents;
+package com.bss.client.GuiComponents;
 
 public enum StyleButtonType {
 	
