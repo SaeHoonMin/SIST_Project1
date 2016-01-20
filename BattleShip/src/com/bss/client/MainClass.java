@@ -29,7 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.bss.client.GuiComponents.LoginWindowFrame;
+import com.bss.client.scene.LoginWindowFrame;
 
 import resources.ResourceLoader;
 import sun.font.CreatedFontTracker;
@@ -88,8 +88,6 @@ public class MainClass {
 		
 		
 		LoginWindowFrame loginWindow = new LoginWindowFrame();
-		
-		
 		
 		
 	}

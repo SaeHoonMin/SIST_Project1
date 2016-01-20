@@ -1,4 +1,4 @@
-package com.bss.client.GuiComponents;
+package com.bss.client.scene;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -15,6 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.bss.client.GuiComponents.StyleButton;
+import com.bss.client.GuiComponents.StyleTextArea;
 
 import resources.ResourceLoader;
 
@@ -55,6 +58,7 @@ public class LoginWindowFrame extends JFrame implements ActionListener{
 		loginPanel.setLayout(new FlowLayout());
 		
 		btnLogin = new StyleButton("Login");
+		btnLogin.addActionListener(this);
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener(this);
 		
@@ -75,7 +79,8 @@ public class LoginWindowFrame extends JFrame implements ActionListener{
 		
 		setSize(1280, 1024);
 		setVisible(true);
-		
+		setResizable(false);
+	
 		setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 	}
 	
@@ -86,7 +91,11 @@ public class LoginWindowFrame extends JFrame implements ActionListener{
 		{
 			System.exit(0);
 		}
+		else if(e.getSource().equals(btnLogin))
+		{
+			System.out.println("login");
+			WaitRoomFrame n = new WaitRoomFrame();
+			n.setVisible(true);
+		}
 	}
-
-	
 }
