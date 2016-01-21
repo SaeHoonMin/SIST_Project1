@@ -29,7 +29,7 @@ public class WaitRoomPanel extends JPanel{
     WaitRoomPanel(JFrame parent) 
     {
     	
-    	setSize(1280,1200);
+    	setSize(1280,1024);
     	
 		String[] col1={"방이름","공개/비공개","인원"};
 		String[][] row1=new String[0][3];

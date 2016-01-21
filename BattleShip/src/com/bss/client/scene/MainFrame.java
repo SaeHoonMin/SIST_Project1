@@ -1,9 +1,16 @@
 package com.bss.client.scene;
 
+import java.awt.Font;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class MainFrame extends JFrame  implements ActionListener{
 	 
@@ -33,33 +40,33 @@ public class MainFrame extends JFrame  implements ActionListener{
 		/*******************
 		 * In Login Panel...
 		 *******************/
+		
 		if (e.getSource().equals(loginWindow.btnExit)) {
 			System.exit(0);
 		} 
 		else if (e.getSource().equals(loginWindow.btnLogin)) {
-			System.out.println("login");
 			waitRoom = new WaitRoomPanel(this);
 			remove(loginWindow);
-			add(waitRoom);
-			revalidate();
+			setContentPane(waitRoom);
+			repaint();
 		}
 		
 		/*********************
 		 *  In the WaitRoom..
 		 ********************/
-		//blah blah..
+		//WaitRoom -> GameReady
 		if(e.getSource().equals(waitRoom.b1))
 		{
 			readyPanel = new GameReadyPanel(this);
 			remove(waitRoom);
-			add(readyPanel);
-			revalidate();
+			
+			setContentPane(readyPanel);
+			repaint();
 		}
 		
 		/*********************
 		 *  In the GameReady..
 		 ********************/
-		
-		
 	}
+
 }

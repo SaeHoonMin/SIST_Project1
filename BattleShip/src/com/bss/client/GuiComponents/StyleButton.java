@@ -10,10 +10,10 @@ import javax.swing.JButton;
 
 public class StyleButton extends JButton implements MouseListener{
 	
-	int w, h;
-	int lx,ly;
-	int fontSize;
-	Color color;
+	private int w, h;
+	private int lx,ly;
+	private int fontSize;
+	private Color color;
 	
 	public StyleButton(String text)
 	{	
@@ -30,6 +30,9 @@ public class StyleButton extends JButton implements MouseListener{
 		setBorderPainted(false);
 		setContentAreaFilled(false);
 	//	setForeground(new Color(0xff,0xf8,0xdc));
+		
+		
+		color = getForeground();
 		
 		addMouseListener(this);
 		
@@ -49,6 +52,10 @@ public class StyleButton extends JButton implements MouseListener{
 		
 		new Thread(new Runnable() {
 			public  void run() {
+				
+				setContentAreaFilled(true);
+				setBackground(Color.darkGray);
+				setForeground(Color.white);
 				
 				int fSize = fontSize;
 				
@@ -78,6 +85,8 @@ public class StyleButton extends JButton implements MouseListener{
 		new Thread(new Runnable() {
 			public void run() {
 				
+				setContentAreaFilled(false);
+				setForeground(color);
 
 				int fSize = getFont().getSize();
 				

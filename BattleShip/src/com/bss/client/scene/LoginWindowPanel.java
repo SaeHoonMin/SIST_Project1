@@ -71,9 +71,10 @@ public class LoginWindowPanel extends JPanel{
 	}
 	
 	public void paintComponent(Graphics g) {
+		
 		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
-		paintChildren(g);
-		setOpaque(false);
+		//setOpaque(false);
+		
 	}
 	
 

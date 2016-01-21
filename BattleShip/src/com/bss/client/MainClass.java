@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.bss.client.scene.LoginWindowPanel;
 import com.bss.client.scene.MainFrame;
@@ -91,11 +92,7 @@ public class MainClass {
 		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 		
 		
-		
-		
-		
 		MainFrame mainFrame = new MainFrame();
-		
 		
 	}
 	
