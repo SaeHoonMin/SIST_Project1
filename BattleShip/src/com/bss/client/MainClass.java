@@ -44,9 +44,8 @@ public class MainClass {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		/* 로딩화면. */
 		JFrame jf = new JFrame();
-		
-	
 		try {
 			img = ImageIO.read(ResourceLoader.getResURL("images/SpaceShip.png"));
 		} catch (IOException e1) {
@@ -60,9 +59,6 @@ public class MainClass {
 				g.drawImage(img, 0, 0,img.getWidth(null),img.getHeight(null), null);
 			}
 		};
-		
-		
-		
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = (int) screenSize.getWidth();
@@ -89,9 +85,13 @@ public class MainClass {
 			}
 			
 		}).run();
+		
 		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 		
+		/*********/ 
 		
+		//mainFrame Start... main game window. 
+		//Includes login, waitroom, game scenes..
 		MainFrame mainFrame = new MainFrame();
 		
 	}
