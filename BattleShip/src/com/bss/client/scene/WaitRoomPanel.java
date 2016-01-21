@@ -1,6 +1,7 @@
 package com.bss.client.scene;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
-public class WaitRoomFrame extends JFrame{
+public class WaitRoomPanel extends JPanel{
 	
     JTable table1,table2;
     DefaultTableModel model1,model2;
@@ -21,7 +22,8 @@ public class WaitRoomFrame extends JFrame{
     JTextField tf;
     JComboBox box;
     JButton b1,b2,b3,b4,b5,b6;
-    WaitRoomFrame() 
+    
+    WaitRoomPanel(JFrame parent) 
     {
     	
     	setSize(1280,1200);
@@ -54,9 +56,13 @@ public class WaitRoomFrame extends JFrame{
 		
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(3,2,5,5));
+		
 		p.add(b1 = new JButton("방만들기"));p.add(b2 = new JButton("방들어가기"));
 		p.add(b3 = new JButton("1:1게임"));p.add(b4 = new JButton("쪽지보내기"));
 		p.add(b5 = new JButton("아무것도 안하기"));p.add(b6 = new JButton("종료하기"));
+		
+		
+		b1.addActionListener((ActionListener)parent);
 		
 		
 		setLayout(null);
@@ -73,6 +79,5 @@ public class WaitRoomFrame extends JFrame{
 		add(box);
 		add(p);
 		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	 }
 }

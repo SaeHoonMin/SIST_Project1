@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ import com.bss.client.GuiComponents.StyleTextArea;
 
 import resources.ResourceLoader;
 
-public class LoginWindowFrame extends JFrame implements ActionListener{
+public class LoginWindowPanel extends JPanel{
 
 	Image img;
 	
@@ -36,31 +37,23 @@ public class LoginWindowFrame extends JFrame implements ActionListener{
 	
 	JLabel label ;
 	
-	public LoginWindowFrame()
+	public LoginWindowPanel(JFrame parent)
 	{
-		img = Toolkit.getDefaultToolkit().createImage(ResourceLoader.getResURL("images/login_bg.gif"));
-		System.out.println(img);
-		bgPanel = new JPanel()
-		{
-			public void paintComponent(Graphics g) {
-				g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
-				paintChildren(g);
-				setOpaque(false);
-			}
-		};
 		
-	//	label = new JLabel(new ImageIcon(img));
-	//	bgPanel.add(label);
+		setLayout(null);
+		
+		img = Toolkit.getDefaultToolkit().createImage(ResourceLoader.getResURL("images/login_bg.gif"));
+	
 		
 		loginPanel = new JPanel();
-//		loginPanel.setBackground(new Color(0,0,0,0));
+		loginPanel.setBackground(new Color(0,0,0));
 		loginPanel.setBounds(100,400,300,400);
 		loginPanel.setLayout(new FlowLayout());
 		
 		btnLogin = new StyleButton("Login");
-		btnLogin.addActionListener(this);
+		btnLogin.addActionListener((ActionListener) parent);
 		btnExit = new StyleButton("Exit Game");
-		btnExit.addActionListener(this);
+		btnExit.addActionListener((ActionListener) parent);
 		
 		taLogin = new StyleTextArea();
 		
@@ -75,27 +68,13 @@ public class LoginWindowFrame extends JFrame implements ActionListener{
 		
 		add(loginPanel);
 		
-		add(bgPanel);
-		
-		setSize(1280, 1024);
-		setVisible(true);
-		setResizable(false);
-	
-		setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource().equals(btnExit))
-		{
-			System.exit(0);
-		}
-		else if(e.getSource().equals(btnLogin))
-		{
-			System.out.println("login");
-			WaitRoomFrame n = new WaitRoomFrame();
-			n.setVisible(true);
-		}
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
+		paintChildren(g);
+		setOpaque(false);
 	}
+	
+
 }

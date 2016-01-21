@@ -29,7 +29,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.bss.client.scene.LoginWindowFrame;
+import com.bss.client.scene.LoginWindowPanel;
+import com.bss.client.scene.MainFrame;
 
 import resources.ResourceLoader;
 import sun.font.CreatedFontTracker;
@@ -59,6 +60,9 @@ public class MainClass {
 			}
 		};
 		
+		
+		
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = (int) screenSize.getWidth();
 		int h = (int) screenSize.getHeight();
@@ -87,7 +91,10 @@ public class MainClass {
 		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 		
 		
-		LoginWindowFrame loginWindow = new LoginWindowFrame();
+		
+		
+		
+		MainFrame mainFrame = new MainFrame();
 		
 		
 	}
