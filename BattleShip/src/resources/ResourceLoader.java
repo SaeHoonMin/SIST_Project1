@@ -2,11 +2,13 @@ package resources;
 
 import java.net.URL;
 
-
 /*
+ *  Created By Sehoon Min.
+ *  Modified Date : 2016-01-21
+ * 
  *  -- Usage --
  *  
- *  function ( url you need )
+ *  function ( url )
  * 
  *  -> function ( ResourceLoader.getResURL("filename"));
  *  ex ) function ( ResourceLoader.getResURL("1.jpg"));
@@ -15,13 +17,8 @@ import java.net.URL;
  */
 
 public class ResourceLoader {
-   
-   static ResourceLoader inst ;
-   
    public static URL getResURL(String fileName)
    {
-      if(inst == null)
-         inst = new ResourceLoader();
       
       URL location = null;
       try{

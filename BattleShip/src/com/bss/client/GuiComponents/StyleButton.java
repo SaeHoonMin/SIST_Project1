@@ -62,7 +62,7 @@ public class StyleButton extends JButton implements MouseListener{
 						err.printStackTrace();
 					}
 					
-					if (fSize >= fontSize * 1.4)
+					if (fSize >= fontSize * 1.3)
 						break;
 				}
 			}
