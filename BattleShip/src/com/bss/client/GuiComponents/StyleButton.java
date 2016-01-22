@@ -29,7 +29,7 @@ public class StyleButton extends JButton implements MouseListener{
 		
 		setBorderPainted(false);
 		setContentAreaFilled(false);
-	//	setForeground(new Color(0xff,0xf8,0xdc));
+		setForeground(new Color(0xff,0xf8,0xdc));
 		
 		
 		color = getForeground();
@@ -51,7 +51,7 @@ public class StyleButton extends JButton implements MouseListener{
 		System.out.println("btn x : "+getX()+" btn y : "+getY());
 		
 		new Thread(new Runnable() {
-			public  void run() {
+			public void run() {
 				
 				setContentAreaFilled(true);
 				setBackground(Color.darkGray);

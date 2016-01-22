@@ -46,7 +46,7 @@ public class LoginWindowPanel extends JPanel{
 	
 		
 		loginPanel = new JPanel();
-		loginPanel.setBackground(new Color(0,0,0));
+		loginPanel.setBackground(new Color(0,0,0,0));
 		loginPanel.setBounds(100,400,300,400);
 		loginPanel.setLayout(new FlowLayout());
 		
@@ -73,7 +73,7 @@ public class LoginWindowPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		
 		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
-		//setOpaque(false);
+		setOpaque(false);
 		
 	}
 	
