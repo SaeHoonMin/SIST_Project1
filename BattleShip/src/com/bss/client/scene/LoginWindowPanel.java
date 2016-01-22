@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bss.client.GameObjects.Tile;
 import com.bss.client.GuiComponents.StyleButton;
 import com.bss.client.GuiComponents.StyleTextArea;
 
@@ -27,7 +28,6 @@ public class LoginWindowPanel extends JPanel{
 	Image img;
 	
 	JPanel bgPanel; 
-	JPanel loginPanel;
 	
 	StyleButton btnLogin ;
 	StyleButton btnExit ;
@@ -36,6 +36,7 @@ public class LoginWindowPanel extends JPanel{
 	StyleTextArea taPwd;
 	
 	JLabel label ;
+
 	
 	public LoginWindowPanel(JFrame parent)
 	{
@@ -43,30 +44,24 @@ public class LoginWindowPanel extends JPanel{
 		setLayout(null);
 		
 		img = Toolkit.getDefaultToolkit().createImage(ResourceLoader.getResURL("images/login_bg.gif"));
-	
-		
-		loginPanel = new JPanel();
-		loginPanel.setBackground(new Color(0,0,0,0));
-		loginPanel.setBounds(100,400,300,400);
-		loginPanel.setLayout(new FlowLayout());
 		
 		btnLogin = new StyleButton("Login");
 		btnLogin.addActionListener((ActionListener) parent);
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener((ActionListener) parent);
+
+		btnLogin.setSize(150,70);
+		btnExit.setSize(150,70);
 		
-		taLogin = new StyleTextArea();
+		int screenW = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		int screenH = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		
-		taLogin.setSize(100, 50);
-		taPwd = new StyleTextArea();
-		
-		loginPanel.add(taLogin);
-		loginPanel.add(taPwd);
-		loginPanel.add(btnLogin);
-		loginPanel.add(btnExit);
+		btnLogin.setLocation(screenW/2 - btnLogin.getWidth()/2, screenH/2 - btnLogin.getHeight()/2);
+		btnExit.setLocation(screenW/2 - btnExit.getWidth()/2, screenH/2 - btnExit.getHeight()/2 + btnLogin.getHeight()+5);
 		
 		
-		add(loginPanel);
+		add(btnLogin);
+		add(btnExit);
 		
 	}
 	
@@ -75,7 +70,6 @@ public class LoginWindowPanel extends JPanel{
 		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
 		setOpaque(false);
 		
-	}
-	
+	}	
 
 }

@@ -47,8 +47,6 @@ public class StyleButton extends JButton implements MouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("mouse entered");
-		System.out.println("btn x : "+getX()+" btn y : "+getY());
 		
 		new Thread(new Runnable() {
 			public void run() {
@@ -80,7 +78,6 @@ public class StyleButton extends JButton implements MouseListener{
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("mouse exited");
 		
 		new Thread(new Runnable() {
 			public void run() {
@@ -110,7 +107,7 @@ public class StyleButton extends JButton implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
