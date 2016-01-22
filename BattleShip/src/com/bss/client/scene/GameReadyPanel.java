@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.bss.client.GameObjects.Tile;
 import com.bss.client.GuiComponents.StyleButton;
-import com.bss.client.GuiComponents.Tile;
 
 import resources.ResourceLoader;
 
@@ -29,14 +29,13 @@ public class GameReadyPanel extends JPanel{
 		bgImg = toolKit.createImage(ResourceLoader.getResURL("images/bg.jpg"));
 
 		
-		setSize(1280,1024);
+		setSize(1280,frame.getHeight());
 		
 		int tStartX = toolKit.getScreenSize().width /3;
 		int tStartY = toolKit.getScreenSize().height/3;
 		
-		System.out.println(tStartX+ " " + tStartY);
 		
-		Tile.setStartPosition(tStartX, tStartY);
+		Tile.setStartPosition(400,256);
 		
 		tiles = new Tile[10][10];
 		

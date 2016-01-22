@@ -17,9 +17,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bss.client.GameObjects.Tile;
 import com.bss.client.GuiComponents.StyleButton;
 import com.bss.client.GuiComponents.StyleTextArea;
-import com.bss.client.GuiComponents.Tile;
 
 import resources.ResourceLoader;
 

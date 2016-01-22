@@ -1,4 +1,4 @@
-package com.bss.client.GuiComponents;
+package com.bss.client.GameObjects;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -27,6 +27,9 @@ public class Tile extends JLabel implements MouseListener{
 	private int row, col;
 	private int x, y;
 	
+	private Ship ship=null;
+	private int shipBodyLoc = -1;		// 0 to 4
+	
 	public static void setStartPosition(int X, int Y){
 		startX = X;
 		startY = Y;
@@ -52,14 +55,26 @@ public class Tile extends JLabel implements MouseListener{
 		
 		setIcon(icon);
 		
-		System.out.printf("tile created(%d,%d),(%d,%d)\n",x,y,width,height);
-		
-		
 		
 		addMouseListener(this);
 	}
 	
 
+	public boolean isHit()
+	{
+		if(ship==null)
+			return false;
+		return true;
+	}
+	
+	
+	
+	/*
+	 * 
+	 *  Event Handlers...
+	 * 
+	 */
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -69,7 +84,6 @@ public class Tile extends JLabel implements MouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.printf("Mouse Entered at %d %d\n",row,col);
 		setIcon(null);
 	}
 

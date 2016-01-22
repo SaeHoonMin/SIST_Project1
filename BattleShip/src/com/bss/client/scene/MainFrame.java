@@ -13,19 +13,31 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class MainFrame extends JFrame  implements ActionListener{
+	
+	static MainFrame inst;
+	
 	 
 	LoginWindowPanel 	loginWindow;
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
 	
+	public static MainFrame getInst()
+	{
+		return inst;
+	}
+	
 	public MainFrame()
 	{
-		setSize(1280, 1024);
+		if(inst == null)
+			inst = this;
+		
+		setSize(1280, 982);
 		setTitle("BattleShip");
 	//	setLayout(null);
 		
 		loginWindow = new LoginWindowPanel(this);
-		
+		loginWindow.setAlignmentX(0.5f);
+		loginWindow.setAlignmentX(0.5f);
 		add(loginWindow);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -46,6 +58,8 @@ public class MainFrame extends JFrame  implements ActionListener{
 		} 
 		else if (e.getSource().equals(loginWindow.btnLogin)) {
 			waitRoom = new WaitRoomPanel(this);
+		
+			
 			remove(loginWindow);
 			setContentPane(waitRoom);
 			repaint();
