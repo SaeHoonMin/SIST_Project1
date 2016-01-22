@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.bss.client.GuiComponents.UIDebugWindow;
 import com.bss.client.scene.LoginWindowPanel;
 import com.bss.client.scene.MainFrame;
 
@@ -77,7 +78,7 @@ public class MainClass {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -93,6 +94,7 @@ public class MainClass {
 		//mainFrame Start... main game window. 
 		//Includes login, waitroom, game scenes..
 		MainFrame mainFrame = new MainFrame();
+		UIDebugWindow debugWindow = new UIDebugWindow();
 		
 	}
 	

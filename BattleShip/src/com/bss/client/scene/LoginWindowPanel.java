@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import com.bss.client.GuiComponents.StyleButton;
 import com.bss.client.GuiComponents.StyleTextArea;
+import com.bss.client.GuiComponents.Tile;
 
 import resources.ResourceLoader;
 
@@ -35,6 +36,7 @@ public class LoginWindowPanel extends JPanel{
 	StyleTextArea taPwd;
 	
 	JLabel label ;
+
 	
 	public LoginWindowPanel(JFrame parent)
 	{
@@ -42,16 +44,12 @@ public class LoginWindowPanel extends JPanel{
 		setLayout(null);
 		
 		img = Toolkit.getDefaultToolkit().createImage(ResourceLoader.getResURL("images/login_bg.gif"));
-	
 		
 		btnLogin = new StyleButton("Login");
 		btnLogin.addActionListener((ActionListener) parent);
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener((ActionListener) parent);
 
-
-		
-		
 		btnLogin.setSize(150,70);
 		btnExit.setSize(150,70);
 		
@@ -60,7 +58,6 @@ public class LoginWindowPanel extends JPanel{
 		
 		btnLogin.setLocation(screenW/2 - btnLogin.getWidth()/2, screenH/2 - btnLogin.getHeight()/2);
 		btnExit.setLocation(screenW/2 - btnExit.getWidth()/2, screenH/2 - btnExit.getHeight()/2 + btnLogin.getHeight()+5);
-		
 		
 		
 		add(btnLogin);
