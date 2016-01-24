@@ -23,7 +23,6 @@ public class UIDebugWindow extends JFrame implements Runnable{
 	
 	public UIDebugWindow()
 	{
-		
 		toolkit = Toolkit.getDefaultToolkit();
 		setSize(600,300);
 		setLocation((int) (toolkit.getScreenSize().getWidth()-410),0);
@@ -57,20 +56,22 @@ public class UIDebugWindow extends JFrame implements Runnable{
 		StringBuffer buf = new StringBuffer();
 		StringBuffer buf2 = new StringBuffer();
 		MainFrame inst = MainFrame.getInst();
+		int x, y, w, h;
+		int mouseX, mouseY;
 		
 		
 		// TODO Auto-generated method stub
 		while(true)
 		{
 			
-			int mouseX = MouseInfo.getPointerInfo().getLocation().x;
-			int mouseY	= MouseInfo.getPointerInfo().getLocation().y;
+			mouseX = MouseInfo.getPointerInfo().getLocation().x;
+			mouseY	= MouseInfo.getPointerInfo().getLocation().y;
 			
-			int x= inst.getLocation().x;
-			int y = inst.getLocation().y;
+			x= inst.getLocation().x;
+			y = inst.getLocation().y;
 			
-			int w = inst.getWidth();
-			int h = inst.getHeight();
+			w = inst.getWidth();
+			h = inst.getHeight();
 			
 			buf.delete(0, buf.length());
 			buf.append("x : ");
@@ -86,10 +87,10 @@ public class UIDebugWindow extends JFrame implements Runnable{
 			buf2.append(mouseY);
 			
 			
-			resText.setText(inst.getSize().toString());
+			resText.setText("width : "+inst.getWidth()+ " height :" + inst.getHeight());
 			
-			if(mouseX-x < 0 || mouseY-y <0 || mouseY>h || mouseX > w)
-				relCursorText.setText("Cursor isn't inside the window.");
+			if(mouseX-x < 0 || mouseY-y <0 || mouseY > h+y || mouseX > w+x)
+				relCursorText.setText("Out of Bound");
 			else
 				relCursorText.setText(buf.toString());
 			

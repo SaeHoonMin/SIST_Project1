@@ -62,6 +62,8 @@ public final class ImageUtils implements ImageObserver {
 		// Return the buffered image
 		return bimage;
 	}
+	
+
 
 	/**
 	 * Creates a transparent image. These can be used for aligning menu items.

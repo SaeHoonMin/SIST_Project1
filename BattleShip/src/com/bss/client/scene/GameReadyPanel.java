@@ -1,24 +1,32 @@
 package com.bss.client.scene;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.util.ArrayList;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bss.client.GameObjects.Grid;
+import com.bss.client.GameObjects.Ship;
 import com.bss.client.GameObjects.Tile;
-import com.bss.client.GuiComponents.StyleButton;
 
-import resources.ResourceLoader;
+import resources.ResLoader;
 
-public class GameReadyPanel extends JPanel{
+public class GameReadyPanel extends JPanel {
 	
+	
+	JLabel shipContainer;
+	Image img_shipContainer;
 	Image bgImg;
 	
+	Grid grid;
 	Tile[][] tiles;
+	
 	
 	public GameReadyPanel(JFrame frame)
 	{
@@ -26,8 +34,14 @@ public class GameReadyPanel extends JPanel{
 		
 		setLayout(null);
 		
-		bgImg = toolKit.createImage(ResourceLoader.getResURL("images/bg.jpg"));
-
+		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));
+		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
+		
+		shipContainer = new JLabel();
+		shipContainer.setIcon(new ImageIcon(img_shipContainer));
+		shipContainer.setLocation(930,100);
+		shipContainer.setSize(270,500);
+		add(shipContainer);
 		
 		setSize(1280,frame.getHeight());
 		
@@ -35,28 +49,27 @@ public class GameReadyPanel extends JPanel{
 		int tStartY = toolKit.getScreenSize().height/3;
 		
 		
-		Tile.setStartPosition(400,256);
-		
-		tiles = new Tile[10][10];
-		
-		for(int i=0;i<10;i++)
-		{
-			for(int j=0;j<10;j++)
-			{
-				tiles[i][j] = new Tile(i,j);
-				
-				add(tiles[i][j]);
-			}
-		}
+		grid = new Grid(400,256,this);
 		
 		
-//		setBackground(Color.CYAN);
+		Ship ship = new Ship();
+		add(ship);
+		
+		/*
+		 * Set zOrders of Components
+		 */
+		setComponentZOrder(ship	, 1);
+		grid.setGridZOrder(2);
+		setComponentZOrder(shipContainer,2);
+		
 	}
 	
 	public void paintComponent(Graphics g) {
 		g.drawImage(bgImg, 0, 0,this.getWidth(),this.getHeight(), this);
 		paintChildren(g);
 		setOpaque(false);
-	}	
+	}
+
+
 	
 }

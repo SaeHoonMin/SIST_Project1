@@ -16,13 +16,13 @@ import java.net.URL;
  *  
  */
 
-public class ResourceLoader {
+public class ResLoader {
    public static URL getResURL(String fileName)
    {
       
       URL location = null;
       try{
-         location = ResourceLoader.class.getResource(fileName);
+         location = ResLoader.class.getResource(fileName);
       }catch(NullPointerException e)
       {
          System.out.println(e.getMessage());

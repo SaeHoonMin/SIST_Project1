@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import com.bss.client.GameObjects.Tile;
 
-import resources.ResourceLoader;
+import resources.ResLoader;
 
 public class GamePlayPanel extends JPanel {
 	
@@ -24,7 +24,7 @@ public class GamePlayPanel extends JPanel {
 		
 		setLayout(null);
 		
-		bgImg = toolKit.createImage(ResourceLoader.getResURL("images/bg.jpg"));
+		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));
 
 		
 		setSize(1280,frame.getHeight());

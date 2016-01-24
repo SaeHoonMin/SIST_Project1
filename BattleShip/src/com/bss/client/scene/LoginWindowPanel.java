@@ -1,27 +1,18 @@
 package com.bss.client.scene;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.bss.client.GameObjects.Tile;
 import com.bss.client.GuiComponents.StyleButton;
 import com.bss.client.GuiComponents.StyleTextArea;
 
-import resources.ResourceLoader;
+import resources.ResLoader;
 
 public class LoginWindowPanel extends JPanel{
 
@@ -37,13 +28,12 @@ public class LoginWindowPanel extends JPanel{
 	
 	JLabel label ;
 
-	
 	public LoginWindowPanel(JFrame parent)
 	{
 		
 		setLayout(null);
 		
-		img = Toolkit.getDefaultToolkit().createImage(ResourceLoader.getResURL("images/login_bg.gif"));
+		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/1.jpg"));
 		
 		btnLogin = new StyleButton("Login");
 		btnLogin.addActionListener((ActionListener) parent);
@@ -53,8 +43,8 @@ public class LoginWindowPanel extends JPanel{
 		btnLogin.setSize(150,70);
 		btnExit.setSize(150,70);
 		
-		int screenW = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		int screenH = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		int screenW = parent.getWidth();
+		int screenH = parent.getHeight();
 		
 		btnLogin.setLocation(screenW/2 - btnLogin.getWidth()/2, screenH/2 - btnLogin.getHeight()/2);
 		btnExit.setLocation(screenW/2 - btnExit.getWidth()/2, screenH/2 - btnExit.getHeight()/2 + btnLogin.getHeight()+5);

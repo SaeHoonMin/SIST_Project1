@@ -1,18 +1,14 @@
 package com.bss.client.scene;
 
-import java.awt.Font;
-import java.awt.Window;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
-public class MainFrame extends JFrame  implements ActionListener{
+import com.bss.client.GuiComponents.UIDebugWindow;
+
+public class MainFrame extends JFrame  implements ActionListener, Runnable{
 	
 	static MainFrame inst;
 	
@@ -21,8 +17,19 @@ public class MainFrame extends JFrame  implements ActionListener{
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
 	
+	private int mX,mY;
+	private int x, y;
+	
+	public int mouseX, mouseY;
+	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
+	
 	public static MainFrame getInst()
 	{
+		if(inst == null)
+		{
+			inst = new MainFrame();
+			System.out.println("If you see this message, it's not safe.");
+		}
 		return inst;
 	}
 	
@@ -33,7 +40,6 @@ public class MainFrame extends JFrame  implements ActionListener{
 		
 		setSize(1280, 982);
 		setTitle("BattleShip");
-	//	setLayout(null);
 		
 		loginWindow = new LoginWindowPanel(this);
 		loginWindow.setAlignmentX(0.5f);
@@ -42,7 +48,13 @@ public class MainFrame extends JFrame  implements ActionListener{
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-
+		
+		
+		
+		UIDebugWindow debugWindow = new UIDebugWindow();
+		
+		Thread t = new Thread(this);
+		t.run();
 	}
 
 	@Override
@@ -83,4 +95,28 @@ public class MainFrame extends JFrame  implements ActionListener{
 		 ********************/
 	}
 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true)
+		{
+			mX = MouseInfo.getPointerInfo().getLocation().x;
+			mY = MouseInfo.getPointerInfo().getLocation().y;
+			
+			x = getLocation().x;
+			y = getLocation().y;
+			
+			mouseX = mX-x-xOffset;
+			mouseY = mY-y-yOffset;
+		
+			
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 }

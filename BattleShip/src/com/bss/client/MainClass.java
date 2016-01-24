@@ -16,26 +16,20 @@ package com.bss.client;
  */
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import com.bss.client.GuiComponents.UIDebugWindow;
-import com.bss.client.scene.LoginWindowPanel;
 import com.bss.client.scene.MainFrame;
 
-import resources.ResourceLoader;
-import sun.font.CreatedFontTracker;
+import resources.ResContainer;
+import resources.ResLoader;
 
 public class MainClass {
 
@@ -46,20 +40,19 @@ public class MainClass {
 		// TODO Auto-generated method stub
 		
 		/* 로딩화면. */
-		JFrame jf = new JFrame();
-		try {
-			img = ImageIO.read(ResourceLoader.getResURL("images/SpaceShip.png"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
-		JPanel jp = new JPanel(){
-			public void paintComponent(Graphics g)
-			{
-				g.drawImage(img, 0, 0,img.getWidth(null),img.getHeight(null), null);
-			}
-		};
+		// ResContainer를 가장 처음에 생성하자.
+		ResContainer resc = new ResContainer();
+		
+		
+		JFrame jf = new JFrame();
+		
+		img =  Toolkit.getDefaultToolkit().getImage(ResLoader.getResURL("images/SpaceShip.png"));
+	
+		JPanel jp = new JPanel();
+		JLabel lb = new JLabel();
+		lb.setIcon(new ImageIcon(img));
+		jp.add(lb);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = (int) screenSize.getWidth();
@@ -78,7 +71,7 @@ public class MainClass {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					Thread.sleep(10);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -93,11 +86,9 @@ public class MainClass {
 		
 		//mainFrame Start... main game window. 
 		//Includes login, waitroom, game scenes..
+		
 		MainFrame mainFrame = new MainFrame();
-		UIDebugWindow debugWindow = new UIDebugWindow();
+		
 		
 	}
-	
-
-
 }
