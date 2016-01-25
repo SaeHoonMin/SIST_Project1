@@ -1,5 +1,7 @@
 package com.bss.client.scene;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
@@ -15,10 +17,19 @@ import javax.swing.table.DefaultTableModel;
 
 import com.bss.client.GuiComponents.StyleButton;
 
+import resources.ResContainer;
+
 
 public class WaitRoomPanel extends JPanel{
 	
-    JTable table1,table2;
+    @Override
+	protected void paintComponent(Graphics arg0) {
+		// TODO Auto-generated method stub
+		arg0.drawImage(ResContainer.bg_waitRoom, 0, 0, this);
+		setOpaque(false);
+	}
+
+	JTable table1,table2;
     DefaultTableModel model1,model2;
     JTextArea ta;
     JTextField tf;
@@ -46,8 +57,10 @@ public class WaitRoomPanel extends JPanel{
 		table2=new JTable(model2);
 		JScrollPane js2=new JScrollPane(table2);
 		
+		
 		ta = new JTextArea();
 		JScrollPane js3 = new JScrollPane(ta);
+		
 		
 		tf = new JTextField();
 		box = new JComboBox();
@@ -83,4 +96,6 @@ public class WaitRoomPanel extends JPanel{
 		add(p);
 		
 	 }
+    
+    
 }

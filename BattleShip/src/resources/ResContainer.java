@@ -16,6 +16,8 @@ public class ResContainer {
 	 */
 	/* Images... */
 	public static Image bg_login;
+	public static Image bg_waitRoom;
+	
 	public static Image shipContainer;
 	
 	public static Image tile;
@@ -54,14 +56,16 @@ public class ResContainer {
 		
 		//frame background images
 		bg_login = toolKit.getImage(ResLoader.getResURL("images/bg.jpg"));
+		bg_waitRoom = toolKit.getImage(ResLoader.getResURL("images/1.jpg"));
 		
-		//Tile Images..
+		//Tile Images
 		tile = toolKit.getImage(ResLoader.getResURL("images/Tile.png"));
 		tile_pressed =  toolKit.getImage(ResLoader.getResURL("images/Tile_Black.png"));
 		tile_over =  toolKit.getImage(ResLoader.getResURL("images/Tile_Pink.png"));
 		tile_valid =  toolKit.getImage(ResLoader.getResURL("images/Tile_Blue.png"));
 		tile_invalid =  toolKit.getImage(ResLoader.getResURL("images/Tile_Red.png"));
 		
+		//Tile Icons
 		tile_icon = new ImageIcon(tile);
 		tile_pressed_icon = new ImageIcon(tile_pressed);
 		tile_over_icon = new ImageIcon(tile_over);
@@ -70,13 +74,15 @@ public class ResContainer {
 		
 		
 		
-		
+		//Ship Images
 		ship2v = toolKit.getImage(ResLoader.getResURL("images/Ship_Temp_V.png"));
 		ship2h = toolKit.getImage(ResLoader.getResURL("images/Ship_Temp_H.png"));
 		
 		ship3v = toolKit.getImage(ResLoader.getResURL("images/ships/ship3_1_v.png"));
 		ship3h = toolKit.getImage(ResLoader.getResURL("images/ships/ship3_1_h.png"));
 		
+		
+		//Ship Icons
 		ship2v_icon = new ImageIcon(ship2v);
 		ship2h_icon = new ImageIcon(ship2h);
 		
