@@ -1,4 +1,4 @@
-package com.bss.client.scene;
+package com.bss.client.container;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,7 +7,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.bss.client.GameObjects.Tile;
+import com.bss.client.gameObjects.Tile;
 
 import resources.ResLoader;
 

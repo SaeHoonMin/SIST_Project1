@@ -1,4 +1,4 @@
-package com.bss.client.scene;
+package com.bss.client.container;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import com.bss.client.GuiComponents.StyleButton;
+import com.bss.client.components.StyleButton;
 
 import resources.ResContainer;
 

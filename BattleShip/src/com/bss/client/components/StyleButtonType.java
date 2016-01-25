@@ -1,4 +1,4 @@
-package com.bss.client.GuiComponents;
+package com.bss.client.components;
 
 public enum StyleButtonType {
 	

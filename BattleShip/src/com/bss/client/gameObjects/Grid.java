@@ -1,11 +1,11 @@
-package com.bss.client.GameObjects;
+package com.bss.client.gameObjects;
 
 import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import com.bss.client.scene.MainFrame;
+import com.bss.client.container.MainFrame;
 
 import resources.ResContainer;
 
@@ -171,18 +171,20 @@ public class Grid implements Runnable{
 			}
 			else if(t==null)	
 			{
-				/**** 배는 선택되었지만 타일은 매치하지 않으면 ****/
+				/*********************************
+				 *  배는 선택되었지만 타일은 매치하지 않으면 
+				 *  배치된 배 중에서 어떤 배인지를 찾고 되돌려보낸다.
+				 * *******************************/
 				for(int i=0; i<locatedShips.size() ; i++)
 				{
-					System.out.println("humm...");
 					Ship s = locatedShips.get(i);
 					if(s==ship)
 					{
-						System.out.println("HERE");
 						locatedShips.remove(i);
 						s.setLocated(false);
 						s.setHeadTile(null);			
 					}
+					s.returnToSlot();
 				}
 				count=1;
 				

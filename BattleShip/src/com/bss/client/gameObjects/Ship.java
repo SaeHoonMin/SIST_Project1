@@ -1,7 +1,8 @@
-package com.bss.client.GameObjects;
+package com.bss.client.gameObjects;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -14,7 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import com.bss.client.scene.MainFrame;
+import com.bss.client.container.MainFrame;
 import com.sun.xml.internal.ws.org.objectweb.asm.Type;
 
 import resources.ImageUtils;
@@ -23,11 +24,12 @@ import resources.ResLoader;
 
 public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	
-	private int id;
-
 	private static Ship selected;
 	
 	private boolean isLocated=false;
+	
+	private int startX;
+	private int startY;
 	
 	private int clickedX;
 	private int clickedY;
@@ -84,21 +86,42 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	{
 		this.isLocated = isLocated;
 	}
+	public Tile getHeadTile() {
+		return headTile;
+	}
+	public void setHeadTile(Tile headTile) {
+		this.headTile = headTile;
+	}
+
 	
 	//Temporary Creator.
 	//Width and Height must be decided by ship type.
 	//Also Ship's Rotation function must be implemented.
-	public Ship(ShipType type, ShipAngle angle, int id)
+	public Ship(ShipType type, ShipAngle angle )
 	{
-		this.id = id;
 		this.type = type;
 		this.angle = angle;
 		
 		setShipForm();
 		
 		//getScaled
+		setLocation(100,100);
+		startX=100; startY = 100;
 		
-
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+	
+	public Ship(ShipType type, ShipAngle angle, int x, int y)
+	{
+		this.type = type;
+		this.angle = angle;
+		
+		setShipForm();
+		
+		setLocation(x,y);
+		startX=x; startY = y;
+		
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -277,7 +300,7 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 
 
 	@Override
-	public synchronized void mouseDragged(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if((mState == MouseState.PRESSED || mState == MouseState.DRAGGING )&& e.getSource()==this)
 		{
@@ -292,26 +315,54 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 			setLocation(mouseX,mouseY);
 		}
 	}
+	
+	public void returnToSlot()
+	{
+		new Thread(new Runnable(){
+			
+			int dx, dy;
+			int gx, gy;
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				dx = startX - getX();
+				dy = startY - getY();
+				
+				System.out.println("run called");
+				
+				while(true)
+				{
+					if (angle == ShipAngle.V)
+						rotateShip();
+				
+					gx = dx/100;
+					gy = dy/100;
+					
+					if( getX()-startX <= 0 && getY()-startY <=0)
+					{
+						setLocation(startX,startY);
+						break;
+					}
+					setLocation(getX()+gx,getY()+gy);
+					
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}).start();
+	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
 	
-	
-	public Tile getHeadTile() {
-		return headTile;
-	}
-	public void setHeadTile(Tile headTile) {
-		this.headTile = headTile;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	
+
 
 
 }

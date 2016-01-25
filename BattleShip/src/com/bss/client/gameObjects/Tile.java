@@ -1,4 +1,4 @@
-package com.bss.client.GameObjects;
+package com.bss.client.gameObjects;
 
 import java.awt.Image;
 import java.awt.MouseInfo;
@@ -9,7 +9,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import com.bss.client.scene.MainFrame;
+import com.bss.client.container.MainFrame;
 
 import resources.ResContainer;
 import resources.ResLoader;

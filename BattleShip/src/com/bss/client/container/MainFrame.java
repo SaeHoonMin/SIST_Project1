@@ -1,4 +1,4 @@
-package com.bss.client.scene;
+package com.bss.client.container;
 
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
-import com.bss.client.GuiComponents.UIDebugWindow;
+import com.bss.client.components.UIDebugWindow;
 
 public class MainFrame extends JFrame  implements ActionListener, Runnable{
 	

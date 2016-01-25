@@ -1,4 +1,4 @@
-package com.bss.client.GuiComponents;
+package com.bss.client.components;
 
 import java.awt.GridLayout;
 import java.awt.MouseInfo;
@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.bss.client.scene.MainFrame;
+import com.bss.client.container.MainFrame;
 
 public class UIDebugWindow extends JFrame implements Runnable{
 	

@@ -1,4 +1,4 @@
-package com.bss.client.scene;
+package com.bss.client.container;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,11 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.bss.client.GameObjects.Grid;
-import com.bss.client.GameObjects.Ship;
-import com.bss.client.GameObjects.ShipAngle;
-import com.bss.client.GameObjects.ShipType;
-import com.bss.client.GameObjects.Tile;
+import com.bss.client.gameObjects.Grid;
+import com.bss.client.gameObjects.Ship;
+import com.bss.client.gameObjects.ShipAngle;
+import com.bss.client.gameObjects.ShipType;
+import com.bss.client.gameObjects.Tile;
 
 import javafx.scene.transform.Scale;
 import resources.ResLoader;
@@ -57,12 +57,10 @@ public class GameReadyPanel extends JPanel {
 		grid = new Grid(400,256,this);
 		
 		
-		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, 1);
-		ship.setLocation(1095,150);
+		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, 1095,150);
 		add(ship);
 		
-		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,2);
-		ship2.setLocation(1045,205);
+		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,1045,210);
 		add(ship);
 		
 		/*
