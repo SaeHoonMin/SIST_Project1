@@ -61,12 +61,17 @@ public class GameReadyPanel extends JPanel {
 		ship.setLocation(1095,150);
 		add(ship);
 		
+		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,2);
+		ship2.setLocation(1045,205);
+		add(ship);
+		
 		/*
 		 * Set zOrders of Components
 		 */
-		setComponentZOrder(ship	, 1);
-		grid.setGridZOrder(2);
-		setComponentZOrder(shipContainer,2);
+		setComponentZOrder(ship , 1);
+		setComponentZOrder(ship2 , 2);
+		grid.setGridZOrder(3);
+		setComponentZOrder(shipContainer,3);
 		
 	}
 	

@@ -113,6 +113,22 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 		else if(type==ShipType.Destoryer)
 		{
 			tileSize = 3;
+			
+			vImage = ResContainer.ship3v;
+			hImage = ResContainer.ship3h;
+			vIcon = ResContainer.ship3v_icon;
+			hIcon = ResContainer.ship3h_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 150;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 150;
+			}
 		}
 		else if(type==ShipType.Frigate)
 		{
