@@ -53,7 +53,10 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	private Image hImage;
 	private Image curImage;
 	
-	
+	public MouseState getMouseState()
+	{
+		return mState;
+	}
 	public ShipAngle getAngle()
 	{
 		return angle;
@@ -217,12 +220,17 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public synchronized void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == this)
 		{
-			mState = MouseState.PRESSED;
 			
+			/* 순서 절대 주의. */
+			
+			clickedX = e.getX();
+			clickedY = e.getY();
+			
+			offsetPoints.clear();
 			if (angle == ShipAngle.H) {
 				for (int i = -1; clickedX + i * 50 > 0; i--) {
 					offsetPoints.add(new Point(i * 50, 0));
@@ -240,10 +248,8 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 			}
 			
 			
+			mState = MouseState.PRESSED;
 			selected = this;
-			
-			clickedX = e.getX();
-			clickedY = e.getY();
 			
 			setBorder(BorderFactory.createLineBorder(new Color(255,0,0,100), 3));
 			
@@ -260,17 +266,18 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 			setIcon(curIcon);
 			setBorder(null);
 
-			
+			System.out.println("===============");
 			for(Point p : offsetPoints)
 				System.out.println(p);
 			offsetPoints.clear();
+			
 			selected=null;
 		}
 	}
 
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public synchronized void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if((mState == MouseState.PRESSED || mState == MouseState.DRAGGING )&& e.getSource()==this)
 		{

@@ -49,8 +49,13 @@ public class Grid implements Runnable{
 		}
 	}
 	
+
+	
+	
 	public Tile whichTile(int x, int y)
 	{
+		// guess this can be optimized?
+		// by using vector & hashmap ?
 		for(int i=0;i<10;i++)
 		{
 			for(int j=0;j<10;j++)
@@ -69,7 +74,12 @@ public class Grid implements Runnable{
 			return true;
 		return false;
 	}
-
+	
+	/*  
+	 * Cosider Refactoring ..
+	 * 
+	 * complexity too high...
+	 */
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -85,16 +95,19 @@ public class Grid implements Runnable{
 		
 		while(true)
 		{
+
 			x = inst.mouseX;
 			y = inst.mouseY;
-			
-			t = whichTile(x,y);
-			
+
+			t = whichTile(x, y);
+
 			ship = Ship.getSelected();
-			if(ship!=null)
-				ship_before=ship;
+
+			if (ship != null)
+				ship_before = ship;
+
 			
-			// 현재 선택된 배는 없지만 이전에 선택했던 배가 있고, 이전 루프에서
+			// 현재 선택된 배는 없지만(마우스클릭 뗀 상태) 이전에 선택했던 배가 있고, 이전 루프에서
 			// 타일에 배가 들어간다고 판정되면  ==> 배를 위치시킨다.
 			if(ship==null && ship_before!=null && count==ship_before.getTileSize() )
 			{
@@ -115,22 +128,21 @@ public class Grid implements Runnable{
 				locatedShips.add(ship_before);
 				
 				ship_before=null;
+				
 				reservedTiles.clear();
+				continue;
 			}
 			
+			// 배를 선택한 상태이고 타일 안에도 마우스가 위치한다면
 			if(t!=null && ship!=null )
 			{
+				
 				count=1;
 				
 				opp = ship.getOffsetPoints();
 				Tile addingTile;
 				
-				
-				for(int i=0; i< reservedTiles.size(); i++)
-				{
-					reservedTiles.get(i).setIcon(ResContainer.tile_icon);
-				}
-				reservedTiles.clear();
+				clearReservedTiles(reservedTiles);
 				
 				for(int i=0; i<opp.size();i++)
 				{
@@ -151,15 +163,20 @@ public class Grid implements Runnable{
 						reservedTiles.get(i).setIcon(ResContainer.tile_valid_icon);
 					}
 				}
+				else
+				{
+					clearReservedTiles(reservedTiles);
+				}
+				
 			}
-			else if(t==null && ship !=null)	
+			else if(t==null)	
 			{
-				//배는 선택되었지만 타일은 매치하지 않으면
+				/**** 배는 선택되었지만 타일은 매치하지 않으면 ****/
 				for(int i=0; i<locatedShips.size() ; i++)
 				{
 					System.out.println("humm...");
 					Ship s = locatedShips.get(i);
-					if(s.getId()==ship.getId())
+					if(s==ship)
 					{
 						System.out.println("HERE");
 						locatedShips.remove(i);
@@ -168,18 +185,13 @@ public class Grid implements Runnable{
 					}
 				}
 				count=1;
-			}
-			else
-			{
-				for(int i=0; i< reservedTiles.size(); i++)
-				{
-					reservedTiles.get(i).setIcon(ResContainer.tile_icon);
-				}
-				reservedTiles.clear();
+				
+				clearReservedTiles(reservedTiles);
 			}
 			
+			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -187,5 +199,14 @@ public class Grid implements Runnable{
 		}
 	}	//Thread ends.
 	
+	
+	private void clearReservedTiles(ArrayList<Tile> reserved)
+	{
+		for(int i=0; i< reserved.size(); i++)
+		{
+			reserved.get(i).setIcon(ResContainer.tile_icon);
+		}
+		reserved.clear();
+	}
 	
 }

@@ -100,6 +100,7 @@ public class MainFrame extends JFrame  implements ActionListener, Runnable{
 		// TODO Auto-generated method stub
 		while(true)
 		{
+			synchronized(this){
 			mX = MouseInfo.getPointerInfo().getLocation().x;
 			mY = MouseInfo.getPointerInfo().getLocation().y;
 			
@@ -108,7 +109,7 @@ public class MainFrame extends JFrame  implements ActionListener, Runnable{
 			
 			mouseX = mX-x-xOffset;
 			mouseY = mY-y-yOffset;
-		
+			}
 			
 			try {
 				Thread.sleep(5);

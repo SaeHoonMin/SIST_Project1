@@ -113,7 +113,7 @@ public class Tile extends JLabel implements MouseListener{
 		else
 			return;
 	
-		System.out.printf("(%d,%d,%d,%d),(%d,%d)\n",x,y,x+width,y+height,MainFrame.getInst().mouseX,MainFrame.getInst().mouseY);
+	//	System.out.printf("(%d,%d,%d,%d),(%d,%d)\n",x,y,x+width,y+height,MainFrame.getInst().mouseX,MainFrame.getInst().mouseY);
 		
 		t.setIcon(icon_pressed);
 	}
