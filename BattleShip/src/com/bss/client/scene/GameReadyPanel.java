@@ -13,8 +13,11 @@ import javax.swing.JPanel;
 
 import com.bss.client.GameObjects.Grid;
 import com.bss.client.GameObjects.Ship;
+import com.bss.client.GameObjects.ShipAngle;
+import com.bss.client.GameObjects.ShipType;
 import com.bss.client.GameObjects.Tile;
 
+import javafx.scene.transform.Scale;
 import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel {
@@ -35,6 +38,7 @@ public class GameReadyPanel extends JPanel {
 		setLayout(null);
 		
 		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));
+		
 		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
 		
 		shipContainer = new JLabel();
@@ -43,7 +47,8 @@ public class GameReadyPanel extends JPanel {
 		shipContainer.setSize(270,500);
 		add(shipContainer);
 		
-		setSize(1280,frame.getHeight());
+		setSize(frame.getWidth(),frame.getHeight());
+		
 		
 		int tStartX = toolKit.getScreenSize().width /3;
 		int tStartY = toolKit.getScreenSize().height/3;
@@ -52,7 +57,8 @@ public class GameReadyPanel extends JPanel {
 		grid = new Grid(400,256,this);
 		
 		
-		Ship ship = new Ship();
+		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, 1);
+		ship.setLocation(1095,150);
 		add(ship);
 		
 		/*
@@ -70,6 +76,4 @@ public class GameReadyPanel extends JPanel {
 		setOpaque(false);
 	}
 
-
-	
 }
