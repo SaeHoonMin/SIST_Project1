@@ -321,29 +321,48 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 		new Thread(new Runnable(){
 			
 			int dx, dy;
-			int gx, gy;
+			int signx, signy;
+			int ax, ay;
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				dx = startX - getX();
-				dy = startY - getY();
 				
-				System.out.println("run called");
+				// TODO Auto-generated method stub
+				dx = Math.abs(startX - getX());
+				dy = Math.abs(startY - getY());
+				
+				if(startX-getX() < 0)
+					signx = -1;
+				else
+					signx = 1;
+				if(startY-getY() < 0)
+					signy = -1;
+				else
+					signx = 1;
+				
+				ax = 1+ dx/10;
+				ay = 1+ dy/10;
+				
+				
+				
+				System.out.printf("%d,%d\n",ax,ay);
 				
 				while(true)
 				{
 					if (angle == ShipAngle.V)
 						rotateShip();
 				
-					gx = dx/100;
-					gy = dy/100;
 					
-					if( getX()-startX <= 0 && getY()-startY <=0)
+					
+					if( dy <= 0 && dx <=0)
 					{
 						setLocation(startX,startY);
 						break;
 					}
-					setLocation(getX()+gx,getY()+gy);
+					
+					setLocation(getX()+(signx*ax),getY()+(signy+ay));
+					
+					dx-=ax;
+					dy-=ay;
 					
 					try {
 						Thread.sleep(10);
@@ -352,8 +371,8 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 						e.printStackTrace();
 					}
 				}
-				
 			}
+			
 		}).start();
 	}
 

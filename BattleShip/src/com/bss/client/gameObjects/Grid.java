@@ -132,6 +132,11 @@ public class Grid implements Runnable{
 				reservedTiles.clear();
 				continue;
 			}
+			else if(ship==null && ship_before != null)
+			{
+				ship_before.returnToSlot();
+				ship_before = null;
+			}
 			
 			// 배를 선택한 상태이고 타일 안에도 마우스가 위치한다면
 			if(t!=null && ship!=null )
@@ -182,11 +187,12 @@ public class Grid implements Runnable{
 					{
 						locatedShips.remove(i);
 						s.setLocated(false);
-						s.setHeadTile(null);			
+						s.setHeadTile(null);	
+						
 					}
-					s.returnToSlot();
 				}
 				count=1;
+				
 				
 				clearReservedTiles(reservedTiles);
 			}
