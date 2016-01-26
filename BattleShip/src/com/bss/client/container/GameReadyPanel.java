@@ -3,8 +3,6 @@ package com.bss.client.container;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,7 +15,6 @@ import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.ShipType;
 import com.bss.client.gameObjects.Tile;
 
-import javafx.scene.transform.Scale;
 import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel {
