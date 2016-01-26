@@ -14,14 +14,15 @@ public class Grid implements Runnable{
 	private int startX, startY;
 	
 	private Tile[][] tiles;
-	private ArrayList<Tile> locatedTiles = new ArrayList<Tile>();
-	private ArrayList<Ship> locatedShips = new ArrayList<Ship>();
+	
+	private ArrayList<Ship> locatedShip = new ArrayList<Ship>();
+	
 	private JPanel panel;
 	
 	public Grid(int startX, int startY, JPanel panel)
 	{
-		this.startX = startX;
-		this.startY = startY;
+		this.startX=startX;
+		this.startY=startY;
 		this.panel = panel;
 		
 		tiles = new Tile[10][10];
@@ -30,7 +31,7 @@ public class Grid implements Runnable{
 		{
 			for(int j=0;j<10;j++)
 			{
-				tiles[i][j] = new Tile(i,j,startX,startY);
+				tiles[i][j] = new Tile(i,j,this);
 				panel.add(tiles[i][j]);
 			}
 		}
@@ -61,7 +62,9 @@ public class Grid implements Runnable{
 			for(int j=0;j<10;j++)
 			{
 				if(isInside(tiles[i][j],x,y))
+				{
 					return tiles[i][j];
+				}
 			}
 		}
 		return null;
@@ -74,6 +77,7 @@ public class Grid implements Runnable{
 			return true;
 		return false;
 	}
+
 	
 	/*  
 	 * Cosider Refactoring ..
@@ -86,7 +90,8 @@ public class Grid implements Runnable{
 		MainFrame inst = MainFrame.getInst();
 		int x , y;
 		int count=0;
-		Tile t;
+		Tile t = null;
+		Tile t_before = null;
 		
 		Ship ship;
 		Ship ship_before =null;
@@ -98,9 +103,11 @@ public class Grid implements Runnable{
 
 			x = inst.mouseX;
 			y = inst.mouseY;
+			
+			t_before = t;
 
 			t = whichTile(x, y);
-
+			
 			ship = Ship.getSelected();
 
 			if (ship != null)
@@ -112,20 +119,31 @@ public class Grid implements Runnable{
 			if(ship==null && ship_before!=null && count==ship_before.getTileSize() )
 			{
 				Tile minTile = reservedTiles.get(0);
+				Tile maxTile = reservedTiles.get(0);
 				for(int i=0; i< reservedTiles.size(); i++)
-				{
-					/*************** *******************/
-					locatedTiles.add(reservedTiles.get(i));
+				{	
+					reservedTiles.get(i).setIcon(ResContainer.tile_located_icon);
+					reservedTiles.get(i).setState(TileState.LOCATED);
+					reservedTiles.get(i).setLocatedShip(ship_before, i);
 					
-					reservedTiles.get(i).setIcon(ResContainer.tile_valid_icon);
+					
 					if(minTile.getX()>reservedTiles.get(i).getX() ||
 							minTile.getY()>reservedTiles.get(i).getY())
 						minTile = reservedTiles.get(i);
+					if(maxTile.getX()<reservedTiles.get(i).getX() ||
+							maxTile.getY()<reservedTiles.get(i).getY())
+						maxTile = reservedTiles.get(i);
 				}
+				
+				
 				ship_before.setLocation(minTile.getX(), minTile.getY());
 				ship_before.setLocated(true);
 				ship_before.setHeadTile(minTile);
-				locatedShips.add(ship_before);
+				ship_before.setTaileTile(maxTile);
+
+				setReservedTiles(ship_before);
+				
+				locatedShip.add(ship_before);
 				
 				ship_before=null;
 				
@@ -134,6 +152,16 @@ public class Grid implements Runnable{
 			}
 			else if(ship==null && ship_before != null)
 			{
+				for(int i=0;i<locatedShip.size();i++)
+				{
+					if(locatedShip.get(i)==ship_before)
+					{
+						unsetReservedTiles(ship_before);
+						locatedShip.remove(i);
+						break;
+					}
+				}
+				
 				ship_before.returnToSlot();
 				ship_before = null;
 			}
@@ -141,61 +169,102 @@ public class Grid implements Runnable{
 			// 배를 선택한 상태이고 타일 안에도 마우스가 위치한다면
 			if(t!=null && ship!=null )
 			{
-				
+				boolean same = false;
 				count=1;
 				
 				opp = ship.getOffsetPoints();
 				Tile addingTile;
+				TileState tState = t.getState();
 				
-				clearReservedTiles(reservedTiles);
-				
-				for(int i=0; i<opp.size();i++)
-				{
-					Point p = opp.get(i);
-					addingTile = whichTile( x + p.x  , y + p.y );
-					if(addingTile != null)
-					{
-						reservedTiles.add(addingTile);
-						count++;
-					}	
-				}
-				
-				if(count==ship.getTileSize())
-				{
-					reservedTiles.add(t);
-					for(int i=0;i<count;i++)
-					{
-						reservedTiles.get(i).setIcon(ResContainer.tile_valid_icon);
-					}
-				}
-				else
+				if(t_before != t)
 				{
 					clearReservedTiles(reservedTiles);
 				}
+				if(tState == TileState.LOCATED && isLocatedShip(ship)
+						&& t.getLocatedShip()==ship)
+				{
+					unsetReservedTiles(ship);
+				}
+				
+				
+				
+					for(int i=0; i<opp.size();i++)
+					{
+						Point p = opp.get(i);
+						addingTile = whichTile( x + p.x  , y + p.y );
+						if(addingTile != null && addingTile.getState() == TileState.EMPTY)
+						{
+							for(int j=0; j<reservedTiles.size(); j++)
+							{
+								if((addingTile.getRow() == reservedTiles.get(j).getRow())
+										&& (addingTile.getCol() == reservedTiles.get(j).getCol()))
+								{
+									same=true;
+									break;
+								}
+							}
+							if(same==false)
+							{
+								reservedTiles.add(addingTile);
+							}
+							count++;
+						}
+						
+					}
+					
+					if(tState!=TileState.EMPTY)
+						count--;
+					
+					same=false;
+					
+					if(count==ship.getTileSize())
+					{
+						for(int j=0; j<reservedTiles.size(); j++)
+						{
+							if((t.getRow() == reservedTiles.get(j).getRow())
+									&& (t.getCol() == reservedTiles.get(j).getCol()))
+							{
+								same=true;
+								break;
+							}
+						}
+						if(same==false)
+						{
+							System.out.println("t added");
+							reservedTiles.add(t);
+						}
+						//소트 해야함...
+						for(int i=0;i<count;i++)
+						{
+							Tile tile = reservedTiles.get(i);
+							tile.setIcon(ResContainer.tile_located_icon);
+						//	tile.setState(TileState.LOCATED);
+						//	tile.setLocatedShip(ship, i);
+						}
+					}
 				
 			}
-			else if(t==null)	
+			else if(t==null && ship !=null)	
 			{
 				/*********************************
 				 *  배는 선택되었지만 타일은 매치하지 않으면 
 				 *  배치된 배 중에서 어떤 배인지를 찾고 되돌려보낸다.
 				 * *******************************/
-				for(int i=0; i<locatedShips.size() ; i++)
+				
+				for(int i=0; i<reservedTiles.size() ; i++)
 				{
-					Ship s = locatedShips.get(i);
+					Ship s = reservedTiles.get(i).getLocatedShip();
 					if(s==ship)
 					{
-						locatedShips.remove(i);
+						//locateInfo.remove(i);
 						s.setLocated(false);
 						s.setHeadTile(null);	
-						
 					}
 				}
 				count=1;
 				
-				
-				clearReservedTiles(reservedTiles);
-			}
+			  clearReservedTiles(reservedTiles);
+			} 
 			
 			
 			try {
@@ -207,14 +276,117 @@ public class Grid implements Runnable{
 		}
 	}	//Thread ends.
 	
+	private boolean isLocatedShip(Ship s)
+	{
+		for(int i=0;i<locatedShip.size();i++)
+		{
+			if(locatedShip.get(i)==s)
+				return true;
+		}
+		return false;
+	}
+	
+	
+	private void setReservedTiles(Ship s)
+	{
+		Tile minTile = s.getHeadTile();
+		Tile maxTile = s.getTaileTile();
+		
+		int il = maxTile.getRow()+1;
+		int jl = maxTile.getCol()+1;
+		for( int i = minTile.getRow()-1  ; i <= il ; i++)
+		{
+			for (int j = minTile.getCol()-1 ; j <= jl ; j++)
+			{
+				if( i>=0 && i<10 && j>=0 && j<10)
+				{
+					if(tiles[i][j].getState()!=TileState.LOCATED)
+					{
+						tiles[i][j].setState(TileState.RESERVED);
+						tiles[i][j].setIcon(ResContainer.tile_reserved_icon);
+					}
+					
+				}
+			}
+		}
+	}
+	private void unsetReservedTiles(Ship s)
+	{
+		System.out.println("unset");
+		Tile minTile = s.getHeadTile();
+		if(minTile==null)
+			return;
+		
+		int il = s.getTaileTile().getRow()+1;
+		int jl = s.getTaileTile().getCol()+1;
+		
+		for( int i = minTile.getRow()-1 ; i <= il ; i++)
+		{
+			for (int  j = minTile.getCol()-1 ; j <= jl ; j++)
+			{
+				if( i>=0 && i<10 && j>=0 && j<10)
+				{
+					tiles[i][j].setState(TileState.EMPTY);
+					tiles[i][j].setIcon(ResContainer.tile_icon);
+				}
+			}
+		}
+		
+		for(int h = 0; h<locatedShip.size(); h++)
+		{
+			Ship ship = locatedShip.get(h);
+			if(ship==s)
+				continue;
+			
+			Tile mint = ship.getHeadTile();
+			if(mint==null)
+				return;
+			
+			Tile maxt = ship.getTaileTile();
+			
+			int ill = maxt.getRow()+1;
+			int jll = maxt.getCol()+1;
+			for( int i = mint.getRow()-1 ; i <= ill ; i++)
+			{
+				for (int  j = mint.getCol()-1 ; j <= jll ; j++)
+				{
+					if( i>=0 && i<10 && j>=0 && j<10)
+					{
+						if(tiles[i][j].getState()!=TileState.LOCATED)
+						{
+							tiles[i][j].setState(TileState.RESERVED);
+							tiles[i][j].setIcon(ResContainer.tile_reserved_icon);
+						}
+					}
+				}
+			}
+			
+		}
+	}
 	
 	private void clearReservedTiles(ArrayList<Tile> reserved)
 	{
+		
 		for(int i=0; i< reserved.size(); i++)
 		{
-			reserved.get(i).setIcon(ResContainer.tile_icon);
+			Tile tile = reserved.get(i);
+			TileState ts = tile.getState();
+			if(ts != TileState.RESERVED && ts != TileState.LOCATED)
+			{
+				tile.setIcon(ResContainer.tile_icon);
+				tile.setLocatedShip(null, -1);
+			}
 		}
 		reserved.clear();
 	}
+
+	public int getStartY() {
+		return startY;
+	}
+
+	public int getStartX() {
+		return startX;
+	}
+
 	
 }

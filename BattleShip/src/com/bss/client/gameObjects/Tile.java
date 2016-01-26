@@ -17,71 +17,119 @@ import resources.ResLoader;
 public class Tile extends JLabel implements MouseListener{
 	
 	private static int width=50, height=50;
-	
-	private ImageIcon icon;
-	private ImageIcon icon_pressed;
-	private ImageIcon icon_over;
-	
-	private boolean pressState;
-	private Tile beforeObj;
-	
+
+	private ImageIcon curIcon;
 	
 	private int row, col;			// Rows and Cols in 10 * 10 Grid
 	private int x, y;				// Start Location of this object.
 	
-
+	private TileState state;
+	
 	int mouseX;
 	int mouseY;
 	
-	private Ship ship=null;
+
+	
+	private Grid parent;
+	
+	private Ship locatedShip;
 	private int shipBodyLoc = -1;		// 0 to 4
 	
-	public Tile(int row, int col,int startX,int startY)
+	public Grid getGrid()
+	{
+		return parent;
+	}
+
+	/*
+	 * Ship : reference of located ship
+	 * loc 	: ship's body number which 0 to max 5 range int
+	 */
+	public void setLocatedShip(Ship ship,int loc)
+	{
+		shipBodyLoc = loc;
+		locatedShip = ship;
+	}
+	public Ship getLocatedShip()
+	{
+		return locatedShip;
+	}
+	public int getLocatedBodyNum()
+	{
+		return shipBodyLoc;
+	}
+	public void removeShip()
+	{
+		shipBodyLoc = -1;
+		locatedShip = null;
+		state = TileState.EMPTY;
+	}
+	
+	
+	public Tile(int row, int col,Grid grid)
 	{
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 		
-		icon = new ImageIcon(ResContainer.tile);
-		icon_pressed = new ImageIcon(ResContainer.tile_pressed);
-		icon_over = new ImageIcon(ResContainer.tile_over);
+		setCurIcon(ResContainer.tile_icon);
 		
 		this.row = row;
 		this.col = col;
 		
+		parent = grid;
 		
-		this.x = startX + col * width;
-		this.y = startY + row * height;
+		this.x = grid.getStartX() + col * width;
+		this.y = grid.getStartY() + row * height;
 		
 		setBounds ( x,y,width,height);
 		
-		setIcon(icon);
+		setIcon(getCurIcon());
 		
+		setState(TileState.EMPTY);
 		
 		addMouseListener(this);
 	}
-	
 
 	public boolean isHit()
 	{
-		if(ship==null)
+		if(locatedShip==null)
 			return false;
 		return true;
 	}
-	
-	public int getX()
-	{ return x; }
-	public int getY()
-	{ return y; }
-	public int getWidth()
-	{ return width ; }
-	public int getHeight()
-	{ return height ; }
-	
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
 	/*
 	 * 
 	 *  Event Handlers...
 	 * 
 	 */
+	
+	public void resetIcon()
+	{
+		setIcon(getCurIcon());
+	}
+	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -92,20 +140,33 @@ public class Tile extends JLabel implements MouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
-		setIcon(icon_over);
+	/*	
+		if(state == TileState.EMPTY )
+		{
+			setCurIcon(ResContainer.tile_over_icon);
+			resetIcon();
+		}
+	*/	
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		setIcon(icon);
+	/*	
+		if(state == TileState.EMPTY)
+		{
+			setCurIcon(ResContainer.tile_icon);
+
+			resetIcon();
+		}
+	*/
+		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+	/*	
 		Tile t;
 		
 		if( e.getSource() instanceof Tile )
@@ -115,13 +176,17 @@ public class Tile extends JLabel implements MouseListener{
 	
 	//	System.out.printf("(%d,%d,%d,%d),(%d,%d)\n",x,y,x+width,y+height,MainFrame.getInst().mouseX,MainFrame.getInst().mouseY);
 		
-		t.setIcon(icon_pressed);
+		setCurIcon(ResContainer.tile_pressed_icon);
+		
+		resetIcon();
+		
+	*/
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+	/*	
 		Tile t;
 		
 		if( e.getSource() instanceof Tile )
@@ -133,12 +198,29 @@ public class Tile extends JLabel implements MouseListener{
 		mouseY = MainFrame.getInst().mouseY;
 		
 		if( mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height)
-			setIcon(icon_over);
+			setCurIcon(ResContainer.tile_over_icon);
 		else
 		{
-			
-			setIcon(icon);
+			setCurIcon(ResContainer.tile_icon);
 		}
+		resetIcon();
+	*/
+	}
+
+	public TileState getState() {
+		return state;
+	}
+
+	public void setState(TileState state) {
+		this.state = state;
+	}
+
+	public ImageIcon getCurIcon() {
+		return curIcon;
+	}
+
+	public void setCurIcon(ImageIcon curIcon) {
+		this.curIcon = curIcon;
 	}
 
 }

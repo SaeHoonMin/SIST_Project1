@@ -23,18 +23,18 @@ public class ResContainer {
 	public static Image tile;
 	public static Image tile_pressed;
 	public static Image tile_over;
-	public static Image tile_valid;
+	public static Image tile_located;
 	public static Image tile_invalid;
-
+	public static Image tile_reserved;
+	
 	/* Icons... */
 	public static ImageIcon tile_icon;
 	public static ImageIcon tile_pressed_icon;
 	public static ImageIcon tile_over_icon;
-	public static ImageIcon tile_valid_icon;
+	public static ImageIcon tile_located_icon;
 	public static ImageIcon tile_invalid_icon;
-	
-	
-	
+	public static ImageIcon tile_reserved_icon;
+
 	/*
 	 * Ship 
 	 */
@@ -62,16 +62,16 @@ public class ResContainer {
 		tile = toolKit.getImage(ResLoader.getResURL("images/Tile.png"));
 		tile_pressed =  toolKit.getImage(ResLoader.getResURL("images/Tile_Black.png"));
 		tile_over =  toolKit.getImage(ResLoader.getResURL("images/Tile_Pink.png"));
-		tile_valid =  toolKit.getImage(ResLoader.getResURL("images/Tile_Blue.png"));
+		tile_located =  toolKit.getImage(ResLoader.getResURL("images/Tile_Blue.png"));
 		tile_invalid =  toolKit.getImage(ResLoader.getResURL("images/Tile_Red.png"));
-		
+		tile_reserved = toolKit.getImage(ResLoader.getResURL("images/Tile_White.png"));
 		//Tile Icons
 		tile_icon = new ImageIcon(tile);
 		tile_pressed_icon = new ImageIcon(tile_pressed);
 		tile_over_icon = new ImageIcon(tile_over);
-		tile_valid_icon = new ImageIcon(tile_valid);
+		tile_located_icon = new ImageIcon(tile_located);
 		tile_invalid_icon = new ImageIcon(tile_invalid);
-		
+		tile_reserved_icon = new ImageIcon(tile_reserved);
 		
 		
 		//Ship Images

@@ -42,6 +42,7 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	
 	private ArrayList<Point> offsetPoints = new ArrayList<Point>();
 	private Tile headTile;
+	private Tile taileTile;
 
 	private ShipType type;
 	private ShipAngle angle;
@@ -227,7 +228,10 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if(isLocated)
-			rotateShip();		//Temporary
+		{
+			Grid gd = headTile.getGrid();
+			
+		}
 	}
 
 	@Override
@@ -379,6 +383,12 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
+	}
+	public Tile getTaileTile() {
+		return taileTile;
+	}
+	public void setTaileTile(Tile taileTile) {
+		this.taileTile = taileTile;
 	}
 	
 
