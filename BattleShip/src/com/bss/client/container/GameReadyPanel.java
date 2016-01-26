@@ -63,6 +63,8 @@ public class GameReadyPanel extends JPanel {
 		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,1045,210);
 		add(ship);
 		
+		
+		
 		/*
 		 * Set zOrders of Components
 		 */
