@@ -85,7 +85,7 @@ public class Grid implements Runnable{
 	 * complexity too high...
 	 */
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO Auto-generated method stub
 		MainFrame inst = MainFrame.getInst();
 		int x , y;
@@ -100,6 +100,8 @@ public class Grid implements Runnable{
 		
 		while(true)
 		{
+			//버그 : 배 전부 없앨때? reserved 잔상
+			// 발생빈도 낮음
 
 			x = inst.mouseX;
 			y = inst.mouseY;
@@ -152,18 +154,22 @@ public class Grid implements Runnable{
 			}
 			else if(ship==null && ship_before != null)
 			{
+				//버그 예상..
 				for(int i=0;i<locatedShip.size();i++)
 				{
 					if(locatedShip.get(i)==ship_before)
 					{
 						unsetReservedTiles(ship_before);
 						locatedShip.remove(i);
+						System.out.println("ship removed : "+ship_before.getTileSize());
 						break;
 					}
 				}
 				
 				ship_before.returnToSlot();
 				ship_before = null;
+				
+				System.out.println("left LocatedShip : "+locatedShip.size());
 			}
 			
 			// 배를 선택한 상태이고 타일 안에도 마우스가 위치한다면
@@ -187,62 +193,50 @@ public class Grid implements Runnable{
 				}
 				
 				
-				
-					for(int i=0; i<opp.size();i++)
-					{
-						Point p = opp.get(i);
-						addingTile = whichTile( x + p.x  , y + p.y );
-						if(addingTile != null && addingTile.getState() == TileState.EMPTY)
-						{
-							for(int j=0; j<reservedTiles.size(); j++)
-							{
-								if((addingTile.getRow() == reservedTiles.get(j).getRow())
-										&& (addingTile.getCol() == reservedTiles.get(j).getCol()))
-								{
-									same=true;
-									break;
-								}
-							}
-							if(same==false)
-							{
-								reservedTiles.add(addingTile);
-							}
-							count++;
-						}
-						
-					}
-					
-					if(tState!=TileState.EMPTY)
-						count--;
-					
-					same=false;
-					
-					if(count==ship.getTileSize())
-					{
-						for(int j=0; j<reservedTiles.size(); j++)
-						{
-							if((t.getRow() == reservedTiles.get(j).getRow())
-									&& (t.getCol() == reservedTiles.get(j).getCol()))
-							{
-								same=true;
+				for (int i = 0; i < opp.size(); i++) {
+					Point p = opp.get(i);
+					addingTile = whichTile(x + p.x, y + p.y);
+					if (addingTile != null && addingTile.getState() == TileState.EMPTY) {
+						for (int j = 0; j < reservedTiles.size(); j++) {
+							if ((addingTile.getRow() == reservedTiles.get(j).getRow())
+									&& (addingTile.getCol() == reservedTiles.get(j).getCol())) {
+								same = true;
 								break;
 							}
 						}
-						if(same==false)
-						{
-							System.out.println("t added");
-							reservedTiles.add(t);
+						if (same == false) {
+							reservedTiles.add(addingTile);
 						}
-						//소트 해야함...
-						for(int i=0;i<count;i++)
-						{
-							Tile tile = reservedTiles.get(i);
-							tile.setIcon(ResContainer.tile_located_icon);
-						//	tile.setState(TileState.LOCATED);
-						//	tile.setLocatedShip(ship, i);
+						count++;
+					}
+
+				}
+
+				if (tState != TileState.EMPTY)
+					count--;
+
+				same = false;
+
+				if (count == ship.getTileSize()) {
+					for (int j = 0; j < reservedTiles.size(); j++) {
+						if ((t.getRow() == reservedTiles.get(j).getRow())
+								&& (t.getCol() == reservedTiles.get(j).getCol())) {
+							same = true;
+							break;
 						}
 					}
-				
+					if (same == false) {
+						reservedTiles.add(t);
+					}
+					// 소트 해야함...
+					for (int i = 0; i < count; i++) {
+						Tile tile = reservedTiles.get(i);
+						tile.setIcon(ResContainer.tile_located_icon);
+						// tile.setState(TileState.LOCATED);
+						// tile.setLocatedShip(ship, i);
+					}
+				}
+
 			}
 			else if(t==null && ship !=null)	
 			{
@@ -312,7 +306,6 @@ public class Grid implements Runnable{
 	}
 	private void unsetReservedTiles(Ship s)
 	{
-		System.out.println("unset");
 		Tile minTile = s.getHeadTile();
 		if(minTile==null)
 			return;
