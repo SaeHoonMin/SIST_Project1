@@ -1,4 +1,4 @@
-package com.bss.client.scene;
+package com.bss.client.container;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.bss.client.GuiComponents.StyleButton;
-import com.bss.client.GuiComponents.StyleTextArea;
+import com.bss.client.components.StyleButton;
+import com.bss.client.components.StyleTextArea;
 
 import resources.ResLoader;
 
@@ -20,8 +20,8 @@ public class LoginWindowPanel extends JPanel{
 	
 	JPanel bgPanel; 
 	
-	StyleButton btnLogin ;
-	StyleButton btnExit ;
+	public StyleButton btnLogin ;
+	public StyleButton btnExit ;
 	
 	StyleTextArea taLogin;
 	StyleTextArea taPwd;

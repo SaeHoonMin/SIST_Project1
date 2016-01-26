@@ -1,5 +1,4 @@
-package com.bss.client.scene;
-
+package com.bss.client.container;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -27,7 +26,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-import com.bss.client.GuiComponents.StyleButton;
+import com.bss.client.components.StyleButton;
 
 
 public class WaitRoomPanel extends JPanel 

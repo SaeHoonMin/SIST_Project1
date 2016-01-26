@@ -25,8 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.bss.client.GuiComponents.UIDebugWindow;
-import com.bss.client.scene.MainFrame;
+import com.bss.client.components.UIDebugWindow;
+import com.bss.client.container.MainFrame;
 
 import resources.ResContainer;
 import resources.ResLoader;
