@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 
 import com.bss.client.GuiComponents.UIDebugWindow;
 
+import com.bss.client.scene.WaitRoomPanel;
+
 public class MainFrame extends JFrame  implements ActionListener, Runnable{
 	
 	static MainFrame inst;
