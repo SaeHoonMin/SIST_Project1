@@ -190,6 +190,7 @@ public class Grid implements Runnable{
 						&& t.getLocatedShip()==ship)
 				{
 					unsetReservedTiles(ship);
+					removeLocatedShip(ship);
 				}
 				
 				
@@ -279,7 +280,14 @@ public class Grid implements Runnable{
 		}
 		return false;
 	}
-	
+	private void removeLocatedShip(Ship s)
+	{
+		for(int i =0; i<locatedShip.size();i++)
+		{
+			if(locatedShip.get(i)==s)
+				locatedShip.remove(i);
+		}
+	}
 	
 	private void setReservedTiles(Ship s)
 	{
