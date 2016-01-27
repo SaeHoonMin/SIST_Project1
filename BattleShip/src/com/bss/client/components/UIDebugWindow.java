@@ -63,6 +63,18 @@ public class UIDebugWindow extends JFrame implements Runnable{
 		// TODO Auto-generated method stub
 		while(true)
 		{
+			/*
+			mX = MouseInfo.getPointerInfo().getLocation().x;
+			mY = MouseInfo.getPointerInfo().getLocation().y;
+			
+			x = getLocation().x;
+			y = getLocation().y;
+			
+			mouseX = mX-x-xOffset;
+			mouseY = mY-y-yOffset;
+			*/
+			
+			
 			
 			mouseX = MouseInfo.getPointerInfo().getLocation().x;
 			mouseY	= MouseInfo.getPointerInfo().getLocation().y;
@@ -75,9 +87,9 @@ public class UIDebugWindow extends JFrame implements Runnable{
 			
 			buf.delete(0, buf.length());
 			buf.append("x : ");
-			buf.append(mouseX-x);
+			buf.append(mouseX-x-8);
 			buf.append(" y: ");
-			buf.append(mouseY-y);
+			buf.append(mouseY-y-31);
 			
 
 			buf2.delete(0, buf2.length());

@@ -43,12 +43,21 @@ public class ResContainer {
 	public static Image ship2h;
 	public static Image ship3v;
 	public static Image ship3h;
+	public static Image ship4v;
+	public static Image ship4h;
+	public static Image ship5v;
+	public static Image ship5h;
+	
 	
 	/* Icons */
 	public static ImageIcon ship2v_icon;
 	public static ImageIcon ship2h_icon;
 	public static ImageIcon ship3v_icon;
 	public static ImageIcon ship3h_icon;
+	public static ImageIcon ship4v_icon;
+	public static ImageIcon ship4h_icon;
+	public static ImageIcon ship5v_icon;
+	public static ImageIcon ship5h_icon;
 	
 	public ResContainer()
 	{
@@ -81,6 +90,11 @@ public class ResContainer {
 		ship3v = toolKit.getImage(ResLoader.getResURL("images/ships/ship3_1_v.png"));
 		ship3h = toolKit.getImage(ResLoader.getResURL("images/ships/ship3_1_h.png"));
 		
+		ship4v = toolKit.getImage(ResLoader.getResURL("images/ships/ship4_1_v.png"));
+		ship4h = toolKit.getImage(ResLoader.getResURL("images/ships/ship4_1_h.png"));
+		
+		ship5v = toolKit.getImage(ResLoader.getResURL("images/ships/ship5_1_v.png"));
+		ship5h = toolKit.getImage(ResLoader.getResURL("images/ships/ship5_1_h.png"));
 		
 		//Ship Icons
 		ship2v_icon = new ImageIcon(ship2v);
@@ -89,7 +103,11 @@ public class ResContainer {
 		ship3v_icon = new ImageIcon(ship3v);
 		ship3h_icon = new ImageIcon(ship3h);
 		
+		ship4v_icon = new ImageIcon(ship4v);
+		ship4h_icon = new ImageIcon(ship4h);
 		
+		ship5v_icon = new ImageIcon(ship5v);
+		ship5h_icon = new ImageIcon(ship5h);
 	}
 	
 }

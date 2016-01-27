@@ -76,7 +76,6 @@ public class MainFrame extends JFrame  implements ActionListener, Runnable{
 			setContentPane(waitRoom);
 			repaint();
 		}
-		
 		/*********************
 		 *  In the WaitRoom..
 		 ********************/

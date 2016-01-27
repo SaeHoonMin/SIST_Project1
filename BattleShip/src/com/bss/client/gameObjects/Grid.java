@@ -161,7 +161,6 @@ public class Grid implements Runnable{
 					{
 						unsetReservedTiles(ship_before);
 						locatedShip.remove(i);
-						System.out.println("ship removed : "+ship_before.getTileSize());
 						break;
 					}
 				}
@@ -169,7 +168,6 @@ public class Grid implements Runnable{
 				ship_before.returnToSlot();
 				ship_before = null;
 				
-				System.out.println("left LocatedShip : "+locatedShip.size());
 			}
 			
 			// 배를 선택한 상태이고 타일 안에도 마우스가 위치한다면

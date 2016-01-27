@@ -15,6 +15,7 @@ package com.bss.client;
  * 
  */
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -50,6 +51,7 @@ public class MainClass {
 		img =  Toolkit.getDefaultToolkit().getImage(ResLoader.getResURL("images/SpaceShip.png"));
 	
 		JPanel jp = new JPanel();
+		jp.setBackground(new Color(0,0,0,0));
 		JLabel lb = new JLabel();
 		lb.setIcon(new ImageIcon(img));
 		jp.add(lb);
@@ -65,6 +67,7 @@ public class MainClass {
 		jf.setSize(img.getWidth(null), img.getHeight(null));
 		jf.setUndecorated(true);
 		jf.setVisible(true);
+		jf.setBackground(new Color(255,255,255,0));
 		
 		new Thread(new Runnable(){
 			@Override

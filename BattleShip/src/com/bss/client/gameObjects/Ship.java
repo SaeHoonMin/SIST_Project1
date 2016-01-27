@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -132,10 +134,42 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 		if(type == ShipType.BattleShip)
 		{
 			tileSize = 5;
+			
+			vImage = ResContainer.ship5v;
+			hImage = ResContainer.ship5h;
+			vIcon = ResContainer.ship5v_icon;
+			hIcon = ResContainer.ship5h_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 250;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 250;
+			}
 		}
 		else if(type==ShipType.Cruiser)
 		{
 			tileSize = 4;
+			
+			vImage = ResContainer.ship4v;
+			hImage = ResContainer.ship4h;
+			vIcon = ResContainer.ship4v_icon;
+			hIcon = ResContainer.ship4h_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 200;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 200;
+			}
 		}
 		else if(type==ShipType.Destoryer)
 		{
@@ -227,11 +261,6 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(isLocated)
-		{
-			Grid gd = headTile.getGrid();
-			
-		}
 	}
 
 	@Override
@@ -293,9 +322,6 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 			setIcon(curIcon);
 			setBorder(null);
 
-			System.out.println("===============");
-			for(Point p : offsetPoints)
-				System.out.println(p);
 			offsetPoints.clear();
 			
 			selected=null;
@@ -346,10 +372,6 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 				ax = 1+ dx/10;
 				ay = 1+ dy/10;
 				
-				
-				
-				System.out.printf("%d,%d\n",ax,ay);
-				
 				while(true)
 				{
 					if (angle == ShipAngle.V)
@@ -390,6 +412,7 @@ public class Ship extends JLabel implements MouseListener, MouseMotionListener{
 	public void setTaileTile(Tile taileTile) {
 		this.taileTile = taileTile;
 	}
+	
 	
 
 
