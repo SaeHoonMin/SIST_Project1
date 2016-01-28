@@ -82,7 +82,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	}
 	
 	//WaitRoom -> GameReady
-	public void openReadyRoom()
+	public void openGameReady()
 	{
 		readyPanel = new GameReadyPanel(this);
 		remove(waitRoom);

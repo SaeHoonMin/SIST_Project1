@@ -1,5 +1,7 @@
 package com.bss.client.gameObjects;
 
-public enum ShipAngle {
+import java.io.Serializable;
+
+public enum ShipAngle implements Serializable{
 		H,V;
 }

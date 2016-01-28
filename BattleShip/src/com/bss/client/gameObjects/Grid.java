@@ -1,6 +1,7 @@
 package com.bss.client.gameObjects;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -9,7 +10,7 @@ import com.bss.client.container.MainFrame;
 
 import resources.ResContainer;
 
-public class Grid implements Runnable{
+public class Grid implements Runnable, Serializable{
 	
 	private int startX, startY;
 	

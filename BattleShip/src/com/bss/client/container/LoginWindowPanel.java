@@ -38,9 +38,9 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/1.jpg"));
 		
 		btnLogin = new StyleButton("Login");
-		btnLogin.addActionListener((ActionListener) parent);
+		btnLogin.addActionListener(this);
 		btnExit = new StyleButton("Exit Game");
-		btnExit.addActionListener((ActionListener) parent);
+		btnExit.addActionListener(this);
 		btnSetting = new StyleButton("Settings");
 
 		btnLogin.setSize(150,70);

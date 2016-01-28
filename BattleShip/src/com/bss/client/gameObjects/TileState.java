@@ -1,5 +1,7 @@
 package com.bss.client.gameObjects;
 
-public enum TileState {
+import java.io.Serializable;
+
+public enum TileState implements Serializable{
 	INVALID, LOCATED, EMPTY, ATTACKED, RESERVED
 }

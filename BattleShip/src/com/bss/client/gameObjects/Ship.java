@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -24,7 +25,8 @@ import resources.ImageUtils;
 import resources.ResContainer;
 import resources.ResLoader;
 
-public class Ship extends JLabel implements MouseListener, MouseMotionListener{
+public class Ship extends JLabel 
+implements MouseListener, MouseMotionListener, Serializable{
 	
 	private static Ship selected;
 	

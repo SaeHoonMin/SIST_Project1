@@ -3,6 +3,7 @@ package com.bss.client.container;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -20,7 +21,7 @@ import com.bss.client.components.StyleButton;
 import resources.ResContainer;
 
 
-public class WaitRoomPanel extends JPanel{
+public class WaitRoomPanel extends JPanel implements ActionListener{
 	
     @Override
 	protected void paintComponent(Graphics arg0) {
@@ -78,7 +79,7 @@ public class WaitRoomPanel extends JPanel{
 		p.add(b5 = new JButton("아무것도 안하기"));p.add(b6 = new JButton("종료하기"));
 		
 		
-		b1.addActionListener((ActionListener)parent);
+		b1.addActionListener(this);
 		
 		
 		setLayout(null);
@@ -96,6 +97,15 @@ public class WaitRoomPanel extends JPanel{
 		add(p);
 		
 	 }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource() == b1)
+		{
+			MainFrame.getInst().openGameReady();
+		}
+	}
     
     
 }

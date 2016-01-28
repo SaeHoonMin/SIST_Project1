@@ -5,6 +5,7 @@ import java.awt.MouseInfo;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -14,7 +15,7 @@ import com.bss.client.container.MainFrame;
 import resources.ResContainer;
 import resources.ResLoader;
 
-public class Tile extends JLabel implements MouseListener{
+public class Tile extends JLabel implements MouseListener, Serializable{
 	
 	private static int width=50, height=50;
 
@@ -27,8 +28,6 @@ public class Tile extends JLabel implements MouseListener{
 	
 	int mouseX;
 	int mouseY;
-	
-
 	
 	private Grid parent;
 	
