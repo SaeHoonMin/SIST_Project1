@@ -1,5 +1,5 @@
 package com.bss.common;
 
-public enum bssProtocol {
+public enum BssProtocol {
 
 }

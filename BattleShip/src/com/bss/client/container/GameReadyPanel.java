@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,7 +23,7 @@ import com.bss.client.gameObjects.Tile;
 
 import resources.ResLoader;
 
-public class GameReadyPanel extends JPanel {
+public class GameReadyPanel extends JPanel implements ActionListener{
 	
 	JLabel countDown;
 	
@@ -141,6 +143,15 @@ public class GameReadyPanel extends JPanel {
 			}
 			
 		}).start();
+	}
+
+	
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

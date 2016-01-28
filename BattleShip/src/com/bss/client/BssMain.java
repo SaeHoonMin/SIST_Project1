@@ -32,7 +32,7 @@ import com.bss.client.container.MainFrame;
 import resources.ResContainer;
 import resources.ResLoader;
 
-public class MainClass {
+public class BssMain {
 
 	
 	static Image img;

@@ -13,14 +13,20 @@ public class StyleButton extends JButton implements MouseListener{
 	private int w, h;
 	private int lx,ly;
 	private int fontSize;
+	
+	private Color bgColor;
+	private Color overColor;
 	private Color color;
 	
 	public StyleButton(String text)
 	{	
+		
+		bgColor = new Color(75,180,138);
+		overColor = new Color(124,204,172);
 		setText(text);
 		setPreferredSize(new Dimension(150,50));
 		
-		setFont(new Font("Arial", Font.PLAIN,16));
+		setFont(new Font("Arial", Font.BOLD,16));
 		fontSize = getFont().getSize();
 		w = getWidth();
 		h = getHeight();
@@ -28,7 +34,7 @@ public class StyleButton extends JButton implements MouseListener{
 		setFocusable(false);
 		
 		setBorderPainted(false);
-		setContentAreaFilled(false);
+		setBackground(bgColor);
 		setForeground(new Color(0xff,0xf8,0xdc));
 		
 		
@@ -51,15 +57,14 @@ public class StyleButton extends JButton implements MouseListener{
 		new Thread(new Runnable() {
 			public void run() {
 				
-				setContentAreaFilled(true);
-				setBackground(Color.darkGray);
+				setBackground(overColor);
 				setForeground(Color.white);
 				
 				int fSize = fontSize;
 				
 				while (true) {
 					fSize ++;
-					setFont(new Font("Arial", Font.PLAIN, fSize));
+					setFont(new Font("Arial", Font.BOLD, fSize));
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException err) {
@@ -82,14 +87,14 @@ public class StyleButton extends JButton implements MouseListener{
 		new Thread(new Runnable() {
 			public void run() {
 				
-				setContentAreaFilled(false);
+				setBackground(bgColor);
 				setForeground(color);
 
 				int fSize = getFont().getSize();
 				
 				while (true) {
 					fSize --;
-					setFont(new Font("Arial", Font.PLAIN, fSize));
+					setFont(new Font("Arial", Font.BOLD, fSize));
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException err) {

@@ -3,16 +3,26 @@ package com.bss.client.container;
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.Socket;
 
 import javax.swing.JFrame;
 
 import com.bss.client.components.UIDebugWindow;
 
-public class MainFrame extends JFrame  implements ActionListener, Runnable{
+public class MainFrame extends JFrame  implements Runnable{
 	
 	static MainFrame inst;
 	
 	 
+    //Network
+    Socket s;
+    OutputStream out;
+    BufferedReader in;
+	
+	
 	LoginWindowPanel 	loginWindow;
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
@@ -56,42 +66,29 @@ public class MainFrame extends JFrame  implements ActionListener, Runnable{
 		Thread t = new Thread(this);
 		t.run();
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+	
+	
+	public void quitGame()
+	{
+		dispose();
+		System.exit(0);
+	}
+	public void openWaitRoom()
+	{
+		waitRoom = new WaitRoomPanel(this);
+		remove(loginWindow);
+		setContentPane(waitRoom);
+		repaint();
+	}
+	
+	//WaitRoom -> GameReady
+	public void openReadyRoom()
+	{
+		readyPanel = new GameReadyPanel(this);
+		remove(waitRoom);
 		
-		/*******************
-		 * In Login Panel...
-		 *******************/
-		
-		if (e.getSource().equals(loginWindow.btnExit)) {
-			System.exit(0);
-		} 
-		else if (e.getSource().equals(loginWindow.btnLogin)) {
-			waitRoom = new WaitRoomPanel(this);
-		
-			
-			remove(loginWindow);
-			setContentPane(waitRoom);
-			repaint();
-		}
-		/*********************
-		 *  In the WaitRoom..
-		 ********************/
-		//WaitRoom -> GameReady
-		if(e.getSource().equals(waitRoom.b1))
-		{
-			readyPanel = new GameReadyPanel(this);
-			remove(waitRoom);
-			
-			setContentPane(readyPanel);
-			repaint();
-		}
-		
-		/*********************
-		 *  In the GameReady..
-		 ********************/
+		setContentPane(readyPanel);
+		repaint();
 	}
 
 	@Override

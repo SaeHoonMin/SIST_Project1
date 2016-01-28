@@ -3,6 +3,7 @@ package com.bss.client.container;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
@@ -14,23 +15,24 @@ import com.bss.client.components.StyleTextArea;
 
 import resources.ResLoader;
 
-public class LoginWindowPanel extends JPanel{
+public class LoginWindowPanel extends JPanel implements ActionListener{
 
-	Image img;
+	private Image img;
 	
-	JPanel bgPanel; 
+	private JPanel bgPanel; 
 	
-	StyleButton btnLogin ;
-	StyleButton btnExit ;
+	private StyleButton btnLogin ;
+	private StyleButton btnSetting;
+	private StyleButton btnExit ;
 	
-	StyleTextArea taLogin;
-	StyleTextArea taPwd;
+	private StyleTextArea taLogin;
+	private StyleTextArea taPwd;
 	
-	JLabel label ;
+	private JLabel label ;
 
 	public LoginWindowPanel(JFrame parent)
 	{
-		
+		setOpaque(false);
 		setLayout(null);
 		
 		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/1.jpg"));
@@ -39,17 +41,23 @@ public class LoginWindowPanel extends JPanel{
 		btnLogin.addActionListener((ActionListener) parent);
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener((ActionListener) parent);
+		btnSetting = new StyleButton("Settings");
 
 		btnLogin.setSize(150,70);
 		btnExit.setSize(150,70);
+		btnSetting.setSize(150,70);
 		
 		int screenW = parent.getWidth();
 		int screenH = parent.getHeight();
 		
-		btnLogin.setLocation(screenW/2 - btnLogin.getWidth()/2, screenH/2 - btnLogin.getHeight()/2);
-		btnExit.setLocation(screenW/2 - btnExit.getWidth()/2, screenH/2 - btnExit.getHeight()/2 + btnLogin.getHeight()+5);
+		int a = screenW/2 - btnLogin.getWidth()/2;
+		int b =  screenH/2 - btnLogin.getHeight()/2;
 		
+		btnLogin.setLocation(a,b);
+		btnSetting.setLocation(a,b+75);
+		btnExit.setLocation(a,b+150);
 		
+		add(btnSetting);
 		add(btnLogin);
 		add(btnExit);
 		
@@ -58,8 +66,31 @@ public class LoginWindowPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		
 		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
-		setOpaque(false);
 		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		StyleButton b = null;
+		if( e.getSource() instanceof StyleButton )
+			 b = (StyleButton) e.getSource();
+		else
+			return;
+		
+		if(b==btnLogin)
+		{
+			//Connection first..
+			
+			MainFrame.getInst().openWaitRoom();
+		}
+		else if(b==btnExit)
+			MainFrame.getInst().quitGame();
+		else if(b==btnSetting)
+		{
+			//do something... 
+		}
 	}	
 
 }
