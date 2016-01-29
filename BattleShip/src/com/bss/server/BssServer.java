@@ -26,7 +26,9 @@ public class BssServer extends JFrame implements Runnable{
 	
     ServerSocket ss;
     Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
-    static ArrayList<Client> matchQueue = new ArrayList<Client>();
+    
+    ArrayList<Client> matchQueue = new ArrayList<Client>();
+    
     
     public BssServer()
     {
