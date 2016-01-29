@@ -33,7 +33,6 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 	
 	Grid grid;
-	Tile[][] tiles;
 	
 	int shipContX;
 	int shipContY;
@@ -81,6 +80,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		readyBtn = new StyleButton("Ready");
 		readyBtn.setBounds(400,780,250,100);
+		readyBtn.addActionListener(this);
 		resetBtn = new StyleButton("Reset");
 		resetBtn.setBounds(660,780,250,100);
 		
@@ -107,6 +107,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		grid.setGridZOrder(10);
 		setComponentZOrder(shipContainer,10);
 		
+		grid.startLocateThread();
 		startCountDown();
 	}
 	
@@ -151,6 +152,11 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
+		if(e.getSource() == readyBtn)
+		{
+			MainFrame.getInst().openGameStart(grid);
+		}
 		
 	}
 
