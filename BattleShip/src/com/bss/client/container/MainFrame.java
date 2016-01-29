@@ -63,7 +63,7 @@ public class MainFrame extends JFrame  implements Runnable{
 		
 		
 		
-		UIDebugWindow debugWindow = new UIDebugWindow();
+	//	UIDebugWindow debugWindow = new UIDebugWindow();
 		
 		Thread t = new Thread(this);
 		t.run();

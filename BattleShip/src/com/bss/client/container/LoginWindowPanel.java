@@ -38,12 +38,16 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		
 		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/1.jpg"));
 		
+		taLogin = new StyleTextArea();
+		
+		
 		btnLogin = new StyleButton("Login");
 		btnLogin.addActionListener(this);
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener(this);
 		btnSetting = new StyleButton("Settings");
 
+		taLogin.setSize(150,40);
 		btnLogin.setSize(150,70);
 		btnExit.setSize(150,70);
 		btnSetting.setSize(150,70);
@@ -54,10 +58,12 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		int a = screenW/2 - btnLogin.getWidth()/2;
 		int b =  screenH/2 - btnLogin.getHeight()/2;
 		
+		taLogin.setLocation(a,b-75);
 		btnLogin.setLocation(a,b);
 		btnSetting.setLocation(a,b+75);
 		btnExit.setLocation(a,b+150);
 		
+		add(taLogin);
 		add(btnSetting);
 		add(btnLogin);
 		add(btnExit);

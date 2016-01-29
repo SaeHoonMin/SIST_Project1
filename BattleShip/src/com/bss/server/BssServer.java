@@ -1,12 +1,15 @@
 package com.bss.server;
 
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -21,15 +24,20 @@ public class BssServer extends JFrame implements Runnable{
 	JTextArea logConsole;
 	JScrollPane scrollPanel;
 	
-	
     ServerSocket ss;
     Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
-    
+    static ArrayList<Client> matchQueue = new ArrayList<Client>();
     
     public BssServer()
     {
     	logConsole = new JTextArea();
     	scrollPanel = new JScrollPane(logConsole);
+
+		scrollPanel.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {  
+	        public void adjustmentValueChanged(AdjustmentEvent e) {  
+	            e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
+	        }
+	    });
     	
     	setSize(300,400);
     	add(scrollPanel,"Center");
@@ -41,6 +49,8 @@ public class BssServer extends JFrame implements Runnable{
     	{
     		ss=new ServerSocket(3355);
     		printLog("Start Server...");
+    		printLog("this Server's IP : " +InetAddress.getLocalHost().getHostAddress());
+    		printLog("this Server's Port : "+ss.getLocalPort());
     	}catch(Exception ex){}
     }
     //접속을 받는다 
@@ -48,44 +58,71 @@ public class BssServer extends JFrame implements Runnable{
     
     public void run()
     {
-    	  try
-    	  {
-    		  while(true)
-    		  {
-    			  Socket s=ss.accept();
-    			  
-    			  printLog("Client "+s.getInetAddress()+" has Connected");
-    			  
-    			  Client client=new Client(s);
-    			  client.start();
-    			
-    		  }
-    	  }catch(Exception ex){}
+		try {
+			while (true) {
+				Socket s = ss.accept();
+
+				printLog("Client " + s.getInetAddress() + " has Connected");
+
+				Client client = new Client(s);
+				client.start();
+
+			}
+		} catch (Exception ex) {
+		}
     }
     
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         BssServer server=new BssServer();
         new Thread(server).start();
+   
+        server.createMatchThread();
 	}
 	
-	private void printLog(String str)
+	public void createMatchThread()
 	{
-		if(str.charAt(str.length()-1)!='\n')
-			logConsole.append(str+"\n");
-		else
-			logConsole.append(str);
+		MatchThread mt = new MatchThread();
+		mt.start();
 	}
 	
+
 	
+	class MatchThread extends Thread
+	{
+		 
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			printLog("matchThread Start");
+			while(true)
+			{
+				if(matchQueue.size()>=2)
+				{
+					//2명 이상이 큐에 들어오면
+					printLog("Match Found");
+					Client c1 = matchQueue.get(0);
+					Client c2 = matchQueue.get(1);
+					
+					c1.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c2.nickName);
+					c2.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c1.nickName);
+					
+					matchQueue.remove(0);
+					matchQueue.remove(1);
+				}
+			}
+		}
+	}
 	
     class Client extends Thread
     {
-    	 String nickName;
+    	 String nickName = "temp";
     	 Socket s;
     	 BufferedReader in;//읽기
     	 OutputStream out;//쓰기 TCP
     	 ObjectOutputStream objOut;
+    	 
+    	 
     	 
     	 public Client(Socket s)
     	 {
@@ -114,13 +151,20 @@ public class BssServer extends JFrame implements Runnable{
     				   StringTokenizer st=new StringTokenizer(msg,"|");
     				   
     				   int no=Integer.parseInt(st.nextToken());
-    				    //처리
-    				   printLog("no : "+no);
-    				   
+    				    
+    				   //처리
     				   switch(no)
     				   {
     				   case BssProtocol.HOST_CONNECTED:
     					   messageTo(BssProtocol.WELCOME +"|"+"Welcome to the BattleShip in Space.");
+    					   break;
+    				   case BssProtocol.MATCH_QUE_REQ:
+    					   printLog("Match Que requested");
+    					   synchronized(this)
+    					   {
+    						   matchQueue.add(this);
+    						   printLog("matchQueue Size : "+matchQueue.size());
+    					   }    					   
     					   break;
     				   }
     				   
@@ -148,4 +192,13 @@ public class BssServer extends JFrame implements Runnable{
     		  }catch(Exception ex){}
     	 }
     }
+    
+	private void printLog(String str)
+	{
+		if(str.charAt(str.length()-1)!='\n')
+			logConsole.append(str+"\n");
+		else
+			logConsole.append(str);
+		
+	}
 }

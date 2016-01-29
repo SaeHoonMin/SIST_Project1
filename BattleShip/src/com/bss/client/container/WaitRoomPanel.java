@@ -16,7 +16,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
+import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
 
@@ -101,11 +103,14 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == b1)
 		{
-			
-			
-			MainFrame.getInst().openGameReady();
+			System.out.println("sending message match requeset");
+			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
 		}
 	}
     
+	public void gameStart()
+	{
+		MainFrame.getInst().openGameReady();
+	}
     
 }

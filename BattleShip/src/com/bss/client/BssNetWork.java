@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import com.bss.client.container.WaitRoomPanel;
 import com.bss.common.BssProtocol;
 
 /*
@@ -35,6 +36,8 @@ public class BssNetWork extends Thread{
 	private BufferedReader in;
 	
 	private boolean isConnected=false;
+	
+	WaitRoomPanel waitRoom;
 	
 	public boolean isConnected()
 	{
@@ -91,6 +94,13 @@ public class BssNetWork extends Thread{
 				System.out.println(BssProtocol.HOST_CONNECTED+"\n");
 				out.write((BssProtocol.HOST_CONNECTED+"\n").getBytes());
 				break;
+			
+			case BssProtocol.MATCH_QUE_REQ:
+				System.out.println(MSGTYPE);
+				out.write((MSGTYPE+"\n").getBytes());
+				if(obj instanceof WaitRoomPanel)
+					waitRoom = (WaitRoomPanel) obj;
+				break;
 			}
 		}
 		else
@@ -102,11 +112,7 @@ public class BssNetWork extends Thread{
 			e.printStackTrace();
 		}
 	}
-	public void sentMessage(int MSGTYPE, String msg)
-	{
-		
-	}
-	
+
 	
 	
 	@Override
@@ -131,6 +137,10 @@ public class BssNetWork extends Thread{
 				{
 				case BssProtocol.WELCOME:
 					System.out.println(strTokens.nextToken());
+					break;
+				
+				case BssProtocol.MATCH_QUE_FOUND:
+					waitRoom.gameStart();
 					break;
 				}
 				

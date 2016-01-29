@@ -3,6 +3,7 @@ package com.bss.client.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -18,11 +19,12 @@ public class StyleTextArea extends JTextField implements Runnable, KeyListener {
 	{
 		setPreferredSize(new Dimension(150,50));
 		setFont(new Font("Arial",Font.BOLD,16));
-		setBackground(new Color(255,255,255));
-		
-		
-		setAlignmentX(0.5f);
-		setAlignmentY(0.5f);
+		setBackground(new Color(124,204,172));
+		setForeground(Color.white);
+		setBorder(null);
+	
+		setMargin(new Insets(10,10,10,10));
+	
 		
 		length = 10;
 		
