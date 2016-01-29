@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.StyleTextArea;
 
@@ -82,8 +83,10 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		if(b==btnLogin)
 		{
 			//Connection first..
-			
-			MainFrame.getInst().openWaitRoom();
+			if(BssNetWork.getInst().isConnected())
+			{
+				MainFrame.getInst().openWaitRoom();
+			}
 		}
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();

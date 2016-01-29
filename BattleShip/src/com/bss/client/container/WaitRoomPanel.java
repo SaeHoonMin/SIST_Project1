@@ -36,7 +36,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     JTextField tf;
     JComboBox box;
     StyleButton b1;
-    JButton b2,b3,b4,b5,b6;
+
     
     WaitRoomPanel(JFrame parent) 
     {
@@ -72,12 +72,10 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		box.addItem("pink");
 		
 		JPanel p = new JPanel();
-		p.setLayout(new GridLayout(3,2,5,5));
 		
-		p.add(b1 = new StyleButton("Create Room"));p.add(b2 = new JButton("방들어가기"));
-		p.add(b3 = new JButton("1:1게임"));p.add(b4 = new JButton("쪽지보내기"));
-		p.add(b5 = new JButton("아무것도 안하기"));p.add(b6 = new JButton("종료하기"));
+		p.setLayout(new GridLayout(1,1,5,5));
 		
+		p.add(b1 = new StyleButton("Quick Match"));
 		
 		b1.addActionListener(this);
 		
@@ -95,7 +93,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		add(tf);
 		add(box);
 		add(p);
-		
+	
 	 }
 
 	@Override
@@ -103,6 +101,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == b1)
 		{
+			
+			
 			MainFrame.getInst().openGameReady();
 		}
 	}

@@ -20,6 +20,16 @@ public class Grid implements Runnable, Serializable{
 	
 	private JPanel panel;
 	
+	
+	public ArrayList<Ship> getLocatedShip()
+	{
+		return locatedShip;
+	}
+	public Tile getTileByRC(int row, int col)
+	{
+		return tiles[row][col];
+	}
+	
 	public Grid(int startX, int startY, JPanel panel)
 	{
 		this.startX=startX;
@@ -36,6 +46,11 @@ public class Grid implements Runnable, Serializable{
 				panel.add(tiles[i][j]);
 			}
 		}
+		
+	}
+	
+	public void startLocateThread()
+	{
 		Thread t = new Thread(this);
 		t.start();
 	}

@@ -11,6 +11,7 @@ import java.net.Socket;
 import javax.swing.JFrame;
 
 import com.bss.client.components.UIDebugWindow;
+import com.bss.client.gameObjects.Grid;
 
 public class MainFrame extends JFrame  implements Runnable{
 	
@@ -26,6 +27,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	LoginWindowPanel 	loginWindow;
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
+	GamePlayPanel		playPanel;
 	
 	private int mX,mY;
 	private int x, y;
@@ -88,6 +90,15 @@ public class MainFrame extends JFrame  implements Runnable{
 		remove(waitRoom);
 		
 		setContentPane(readyPanel);
+		repaint();
+	}
+	//GameReady -> GameStart
+	public void openGameStart(Grid grid)
+	{
+		playPanel = new GamePlayPanel(grid, this);
+		remove(readyPanel);
+		
+		setContentPane(playPanel);
 		repaint();
 	}
 

@@ -1,7 +1,9 @@
 package com.bss.server;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,6 +13,8 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import com.bss.common.BssProtocol;
 
 public class BssServer extends JFrame implements Runnable{
 	
@@ -73,37 +77,52 @@ public class BssServer extends JFrame implements Runnable{
 			logConsole.append(str);
 	}
 	
+	
+	
     class Client extends Thread
     {
-    	 String id,name,sex,pos;
-    	 int avata;
+    	 String nickName;
     	 Socket s;
     	 BufferedReader in;//읽기
     	 OutputStream out;//쓰기 TCP
+    	 ObjectOutputStream objOut;
     	 
     	 public Client(Socket s)
     	 {
     		  try
     		  {
     			   this.s=s;
-    			   in=new BufferedReader(new InputStreamReader(s.getInputStream()));
+    			   in=new BufferedReader(new InputStreamReader(s.getInputStream(),"UTF8"));
     			   out=s.getOutputStream();
     		  }catch(Exception ex){}
     	 }
     	 //통신 
     	 public void run()
     	 {
+
+			   printLog("Client Thread starts");
+			   
     		   try
     		   {
     			   while(true)
     			   {
-    				    //요청 받는다 
+    				   //요청 받는다 
     				   String msg=in.readLine();
-    				   // 100|id|name|sex|avata
-    				   System.out.println(msg);
+    				   
+    				   printLog(msg);
+    				   
     				   StringTokenizer st=new StringTokenizer(msg,"|");
+    				   
     				   int no=Integer.parseInt(st.nextToken());
     				    //처리
+    				   printLog("no : "+no);
+    				   
+    				   switch(no)
+    				   {
+    				   case BssProtocol.HOST_CONNECTED:
+    					   messageTo(BssProtocol.WELCOME +"|"+"Welcome to the BattleShip in Space.");
+    					   break;
+    				   }
     				   
     			   }
     		   }catch(Exception ex){}
