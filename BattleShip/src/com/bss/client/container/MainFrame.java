@@ -1,6 +1,8 @@
 package com.bss.client.container;
 
 import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -31,6 +33,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	private int mX,mY;
 	private int x, y;
+	private int width, height;
 	
 	public int mouseX, mouseY;
 	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
@@ -39,18 +42,25 @@ public class MainFrame extends JFrame  implements Runnable{
 	{
 		if(inst == null)
 		{
-			inst = new MainFrame();
-			System.out.println("If you see this message, it's not safe.");
+			inst = new MainFrame(800,600);
+			System.out.println("If you got this message, it's not safe.");
 		}
 		return inst;
 	}
 	
-	public MainFrame()
+	public MainFrame(int width, int height)
 	{
 		if(inst == null)
 			inst = this;
 		
-		setSize(1280, 982);
+		this.width = width;
+		this.height = height;
+		
+		
+		
+		setSize(width, height);
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
+	
 		setTitle("BattleShip");
 		
 		loginWindow = new LoginWindowPanel(this);

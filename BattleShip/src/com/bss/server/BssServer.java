@@ -87,14 +87,12 @@ public class BssServer extends JFrame implements Runnable{
 		MatchThread mt = new MatchThread();
 		mt.start();
 	}
-	
 
-	
 	class MatchThread extends Thread
 	{
 		 
 		@Override
-		public void run() {
+		public synchronized void  run() {
 			// TODO Auto-generated method stub
 			printLog("matchThread Start");
 			while(true)
@@ -109,8 +107,20 @@ public class BssServer extends JFrame implements Runnable{
 					c1.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c2.nickName);
 					c2.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c1.nickName);
 					
-					matchQueue.remove(0);
 					matchQueue.remove(1);
+					matchQueue.remove(0);
+										
+					printLog("MatchQue size : " + matchQueue.size());
+				}
+				else
+				{
+					//이거 안하면 제대로 안먹히는거 수정해야함
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -122,7 +132,6 @@ public class BssServer extends JFrame implements Runnable{
     	 Socket s;
     	 BufferedReader in;//읽기
     	 OutputStream out;//쓰기 TCP
-    	 ObjectOutputStream objOut;
     	 
     	 
     	 

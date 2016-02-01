@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,6 +69,26 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		add(btnLogin);
 		add(btnExit);
 		
+		taLogin.setText(createRamdomText(5));
+		
+	}
+	
+	
+	//For testing.. id ÀÔ·ÂÇÏ±â ±ÍÂúÀ¸´Ï±î
+	private String createRamdomText(int charlen)
+	{
+		Random rand = new Random();
+		StringBuffer buf = new StringBuffer();
+		int num;
+		for(int i=0;i<charlen;i++)
+		{
+			num = rand.nextInt(26)+65;
+			buf.append((char)num);
+		}
+		buf.append(rand.nextInt(10));
+		buf.append(rand.nextInt(10));
+		
+		return buf.toString();
 	}
 	
 	public void paintComponent(Graphics g) {

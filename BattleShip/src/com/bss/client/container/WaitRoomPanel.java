@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.QueueDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.common.BssProtocol;
 
@@ -105,6 +107,10 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		{
 			System.out.println("sending message match requeset");
 			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+			b1.setEnabled(false);
+			
+			new QueueDialog();
+			
 		}
 	}
     

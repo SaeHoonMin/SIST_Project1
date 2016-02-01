@@ -10,10 +10,11 @@ import javax.swing.JButton;
 
 public class StyleButton extends JButton implements MouseListener{
 	
-	private int w, h;
-	private int lx,ly;
+
 	private int fontSize;
 	
+
+
 	private Color bgColor;
 	private Color overColor;
 	private Color color;
@@ -28,8 +29,6 @@ public class StyleButton extends JButton implements MouseListener{
 		
 		setFont(new Font("Arial", Font.BOLD,16));
 		fontSize = getFont().getSize();
-		w = getWidth();
-		h = getHeight();
 		
 		setFocusable(false);
 		
@@ -107,6 +106,38 @@ public class StyleButton extends JButton implements MouseListener{
 				}
 			}
 		}).start();
+	}
+	
+	public int getFontSize() {
+		return fontSize;
+	}
+
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public Color getBgColor() {
+		return bgColor;
+	}
+
+	public void setBgColor(Color bgColor) {
+		this.bgColor = bgColor;
+	}
+
+	public Color getOverColor() {
+		return overColor;
+	}
+
+	public void setOverColor(Color overColor) {
+		this.overColor = overColor;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	@Override

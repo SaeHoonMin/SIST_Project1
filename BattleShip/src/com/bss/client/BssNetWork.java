@@ -140,6 +140,7 @@ public class BssNetWork extends Thread{
 					break;
 				
 				case BssProtocol.MATCH_QUE_FOUND:
+					System.out.println("match found received");
 					waitRoom.gameStart();
 					break;
 				}

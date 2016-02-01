@@ -90,7 +90,7 @@ public class BssMain {
 		//mainFrame Start... main game window. 
 		//Includes login, waitroom, game scenes..
 		
-		MainFrame mainFrame = new MainFrame();
+		MainFrame mainFrame = new MainFrame(800,600);
 		
 		
 	}
