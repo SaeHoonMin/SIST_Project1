@@ -19,13 +19,6 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	static MainFrame inst;
 	
-	 
-    //Network
-    Socket s;
-    OutputStream out;
-    BufferedReader in;
-	
-	
 	LoginWindowPanel 	loginWindow;
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
@@ -33,7 +26,6 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	private int mX,mY;
 	private int x, y;
-	private int width, height;
 	
 	public int mouseX, mouseY;
 	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
@@ -42,7 +34,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	{
 		if(inst == null)
 		{
-			inst = new MainFrame(800,600);
+			inst = new MainFrame(1024,768);
 			System.out.println("If you got this message, it's not safe.");
 		}
 		return inst;
@@ -52,11 +44,6 @@ public class MainFrame extends JFrame  implements Runnable{
 	{
 		if(inst == null)
 			inst = this;
-		
-		this.width = width;
-		this.height = height;
-		
-		
 		
 		setSize(width, height);
 		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);

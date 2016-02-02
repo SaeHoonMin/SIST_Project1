@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import com.bss.client.container.GameReadyPanel;
 import com.bss.client.container.WaitRoomPanel;
 import com.bss.common.BssProtocol;
 
@@ -38,6 +39,7 @@ public class BssNetWork extends Thread{
 	private boolean isConnected=false;
 	
 	WaitRoomPanel waitRoom;
+	GameReadyPanel readyRoom;
 	
 	public boolean isConnected()
 	{
@@ -49,9 +51,6 @@ public class BssNetWork extends Thread{
 	{
 		if( inst == null)
 			inst = new BssNetWork();
-		
-		if(inst.isConnected ==false)
-			inst.connection();
 		
 		return inst;
 	}
@@ -80,7 +79,7 @@ public class BssNetWork extends Thread{
 		isConnected = true;
 		new Thread(this).start();
 		
-		sendMessage(BssProtocol.HOST_CONNECTED,null);
+		sendMessage(BssProtocol.HOST_CONNECTION,null);
 	}
 	
 	public void sendMessage(int MSGTYPE, Object obj)
@@ -90,17 +89,26 @@ public class BssNetWork extends Thread{
 		{
 			switch(MSGTYPE)
 			{
-			case BssProtocol.HOST_CONNECTED:
-				System.out.println(BssProtocol.HOST_CONNECTED+"\n");
-				out.write((BssProtocol.HOST_CONNECTED+"\n").getBytes());
+			case BssProtocol.HOST_CONNECTION:
+				out.write((BssProtocol.HOST_CONNECTION+"|"+"\n").getBytes());
 				break;
 			
 			case BssProtocol.MATCH_QUE_REQ:
+				
 				System.out.println(MSGTYPE);
 				out.write((MSGTYPE+"\n").getBytes());
 				if(obj instanceof WaitRoomPanel)
 					waitRoom = (WaitRoomPanel) obj;
 				break;
+				
+			case BssProtocol.MATCH_READY:
+				
+				out.write((MSGTYPE+"\n").getBytes());
+				if(obj instanceof GameReadyPanel)
+					readyRoom = (GameReadyPanel) obj;
+				break;
+				
+			
 			}
 		}
 		else
@@ -143,8 +151,10 @@ public class BssNetWork extends Thread{
 					System.out.println("match found received");
 					waitRoom.gameStart();
 					break;
+				case BssProtocol.MATCH_START:
+					readyRoom.gameStart();
+					break;
 				}
-				
 			}
 		}catch(Exception ex){}
 	}

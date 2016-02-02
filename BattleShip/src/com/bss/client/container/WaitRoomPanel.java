@@ -107,7 +107,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		{
 			System.out.println("sending message match requeset");
 			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
-			b1.setEnabled(false);
+			
+			b1.setPressedState();
 			
 			new QueueDialog();
 			

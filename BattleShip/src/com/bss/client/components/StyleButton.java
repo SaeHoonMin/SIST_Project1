@@ -6,7 +6,14 @@ import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
+import com.bss.client.gameObjects.TileState;
+import com.sun.corba.se.spi.orbutil.fsm.State;
 
 public class StyleButton extends JButton implements MouseListener{
 	
@@ -46,7 +53,20 @@ public class StyleButton extends JButton implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+	
+	}
+	
+	
+	public void setPressedState()
+	{
+		setEnabled(false);
+//		CompoundBorder compound = new CompoundBorder(new LineBorder(new Color(197,219,211), 1), new EmptyBorder(0, 1, 0, 0));
+		setBorder(BorderFactory.createLineBorder(new Color(197,219,211), 3));
+	}
+	public void releasePressedState()
+	{
+		setEnabled(true);
+		setBorder(null);
 	}
 
 	@Override

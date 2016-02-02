@@ -21,7 +21,7 @@ public class QueueDialog extends JDialog implements ActionListener{
 
 	public QueueDialog() {
 		
-		mainFrame.setEnabled(false);
+	//	mainFrame.setEnabled(false);
 		
 		setUndecorated(true);
 		setSize(200,100);

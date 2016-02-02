@@ -110,10 +110,11 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		if(b==btnLogin)
 		{
 			//Connection first..
+			BssNetWork.getInst().connection();
 			if(BssNetWork.getInst().isConnected())
-			{
-				MainFrame.getInst().openWaitRoom();
-			}
+				
+			
+			MainFrame.getInst().openWaitRoom();
 		}
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();

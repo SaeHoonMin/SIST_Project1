@@ -107,6 +107,11 @@ public class BssServer extends JFrame implements Runnable{
 					c1.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c2.nickName);
 					c2.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c1.nickName);
 					
+					new Match(c1,c2);
+					
+					c1.opponent = c2;
+					c2.opponent = c1;
+					
 					matchQueue.remove(1);
 					matchQueue.remove(0);
 										
@@ -128,11 +133,16 @@ public class BssServer extends JFrame implements Runnable{
 	
     class Client extends Thread
     {
+    	
     	 String nickName = "temp";
     	 Socket s;
     	 BufferedReader in;//읽기
     	 OutputStream out;//쓰기 TCP
+    	
+    	 boolean match_ready;
+    	 Client opponent = null;
     	 
+    	 Match match;
     	 
     	 
     	 public Client(Socket s)
@@ -145,43 +155,60 @@ public class BssServer extends JFrame implements Runnable{
     		  }catch(Exception ex){}
     	 }
     	 //통신 
-    	 public void run()
-    	 {
+		public void run() {
 
-			   printLog("Client Thread starts");
-			   
-    		   try
-    		   {
-    			   while(true)
-    			   {
-    				   //요청 받는다 
-    				   String msg=in.readLine();
-    				   
-    				   printLog(msg);
-    				   
-    				   StringTokenizer st=new StringTokenizer(msg,"|");
-    				   
-    				   int no=Integer.parseInt(st.nextToken());
-    				    
-    				   //처리
-    				   switch(no)
-    				   {
-    				   case BssProtocol.HOST_CONNECTED:
-    					   messageTo(BssProtocol.WELCOME +"|"+"Welcome to the BattleShip in Space.");
-    					   break;
-    				   case BssProtocol.MATCH_QUE_REQ:
-    					   printLog("Match Que requested");
-    					   synchronized(this)
-    					   {
-    						   matchQueue.add(this);
-    						   printLog("matchQueue Size : "+matchQueue.size());
-    					   }    					   
-    					   break;
-    				   }
-    				   
-    			   }
-    		   }catch(Exception ex){}
-    	 }
+			printLog("A Client Thread starts");
+
+			try {
+				while (true) {
+					// 요청 받는다
+					String msg = in.readLine();
+
+					printLog(msg);
+
+					StringTokenizer st = new StringTokenizer(msg, "|");
+
+					int no = Integer.parseInt(st.nextToken());
+
+					// 처리
+					switch (no) {
+					case BssProtocol.HOST_CONNECTION:
+						messageTo(BssProtocol.WELCOME + "|" + "Welcome to the BattleShip in Space.");
+						break;
+					case BssProtocol.MATCH_QUE_REQ:
+						printLog("Match Que requested");
+						synchronized (this) {
+							matchQueue.add(this);
+							printLog("matchQueue Size : " + matchQueue.size());
+						}
+						break;
+					case BssProtocol.MATCH_QUE_CANCLED:
+
+						break;
+
+					case BssProtocol.MATCH_READY:
+						// 매치 상태에 있는 두 플레이어중 하나가 준비 완료
+						// -> 상태를 바꾸고, 두명이 다 래디면 게임 시작 메세지 전송
+						synchronized(this)
+						{
+							match_ready = true;
+							printLog("player has pressed ready button");
+						}
+						break;
+					}
+
+				}
+			} catch (Exception ex) {
+
+				printLog("A Client has been disconnected");
+				
+				// 매치가 널이 아니면 상대방에게 캔슬 메세지 보내고
+				// 메치 쓰레드 스탑되게 ...
+				
+				matchQueue.remove(this);
+
+			}
+		}
     	 // 응답  ( 개인 , 전체 )
     	 // 중복제거 ==> 제어문 ==> 메소드 ==> 클래스
     	 public void messageTo(String str)

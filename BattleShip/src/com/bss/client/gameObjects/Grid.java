@@ -66,6 +66,29 @@ public class Grid implements Runnable, Serializable{
 		}
 	}
 	
+	public void setGridEmpty()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				tiles[i][j].setState(TileState.EMPTY);
+			}
+		}
+	}
+	
+	public void setMouseListenerForTile()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				tiles[i][j].setState(TileState.UNKNOWN);
+				tiles[i][j].setMouseListener();
+			}
+		}
+	}
+	
 
 	
 	
@@ -94,14 +117,13 @@ public class Grid implements Runnable, Serializable{
 		return false;
 	}
 
-	
 	/*  
 	 * Cosider Refactoring ..
 	 * 
 	 * complexity too high...
 	 */
 	@Override
-	public synchronized void run() {
+	public void run() {
 		// TODO Auto-generated method stub
 		MainFrame inst = MainFrame.getInst();
 		int x , y;
@@ -116,9 +138,6 @@ public class Grid implements Runnable, Serializable{
 		
 		while(true)
 		{
-			//¹ö±× : ¹è ÀüºÎ ¾ø¾Ù¶§? reserved ÀÜ»ó
-			// ¹ß»ýºóµµ ³·À½
-
 			x = inst.mouseX;
 			y = inst.mouseY;
 			
@@ -395,6 +414,8 @@ public class Grid implements Runnable, Serializable{
 		reserved.clear();
 	}
 
+	
+	
 	public int getStartY() {
 		return startY;
 	}

@@ -36,6 +36,8 @@ public class GamePlayPanel extends JPanel {
 		setSize(1280,frame.getHeight());
 		
 		enemyGrid = new Grid(90,220,this);	
+		enemyGrid.setMouseListenerForTile();
+		
 		myGridInfo = grid;
 		myGrid = new Grid(700,220,this);
 		

@@ -14,12 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.ShipType;
 import com.bss.client.gameObjects.Tile;
+import com.bss.common.BssProtocol;
 
 import resources.ResLoader;
 
@@ -108,6 +110,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		setComponentZOrder(shipContainer,10);
 		
 		grid.startLocateThread();
+		grid.setGridEmpty();
 		startCountDown();
 	}
 	
@@ -155,9 +158,24 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		if(e.getSource() == readyBtn)
 		{
-			MainFrame.getInst().openGameStart(grid);
+			if(grid.getLocatedShip().size()<5)
+			{
+				
+				return;
+			}
+			else
+			{	
+				readyBtn.setPressedState();
+				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
+			}
+			
+			//
 		}
-		
+	}
+	
+	public void gameStart()
+	{
+		MainFrame.getInst().openGameStart(grid);
 	}
 
 }
