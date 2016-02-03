@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.bss.client.gameObjects.ShipType;
 import com.bss.common.BssProtocol;
 
 public class BssServer extends JFrame implements Runnable{
@@ -195,6 +196,29 @@ public class BssServer extends JFrame implements Runnable{
 							printLog("player has pressed ready button");
 						}
 						break;
+						
+					case BssProtocol.ATTACK_PERFORMED:
+						
+						int row = Integer.parseInt(st.nextToken());
+						int col = Integer.parseInt(st.nextToken());
+						
+						System.out.println("send attack_performed to opponent");
+						
+						opponent.messageTo(BssProtocol.ATTACK_PERFORMED+"|"+row+"|"+col);
+						
+						break;
+					
+					case BssProtocol.ATTACK_DONE :
+						
+						int row1 = Integer.parseInt(st.nextToken());
+						int col1 = Integer.parseInt(st.nextToken());
+						String isHit = st.nextToken();
+						String type = st.nextToken();
+						
+						opponent.messageTo(BssProtocol.ATTACK_DONE+"|"
+								+row1+"|"+col1+"|"+isHit+"|"+type);
+						
+						break;
 					}
 
 				}
@@ -215,7 +239,10 @@ public class BssServer extends JFrame implements Runnable{
     	 {
     		  try
     		  {
-    			   out.write((str+"\n").getBytes());
+    			  if(str.charAt(str.length()-1)=='\n')
+    				  out.write(str.getBytes());
+    			  else
+    				  out.write((str+"\n").getBytes());
     		  }catch(Exception ex){}
     	 }
     	 public void messageAll(String str)

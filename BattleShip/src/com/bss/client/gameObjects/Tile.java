@@ -10,7 +10,9 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.container.MainFrame;
+import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
 import resources.ResLoader;
@@ -150,6 +152,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 			 * c2		-> server 	 어디에 맞았다고 판별 및 처리, 서버에 메세지
 			 * server	-> c1 		적중여부, 어떤 배인지 등. 공격한 타일 상태 및 색 변화.
 			 */
+			BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
 		}
 	}
 

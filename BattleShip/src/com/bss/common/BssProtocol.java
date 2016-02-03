@@ -18,9 +18,12 @@ public class BssProtocol{
 	public static final int MATCH_ENDS			= 202;
 	public static final int MATCH_CANCLED		= 203;
 	
-	public static final int ATTACKED				= 300;
-	public static final int TURN_START			= 301;
-	public static final int TURN_ENDS			= 302;
+	
+	public static final int ATTACK_PERFORMED	= 300;
+	public static final int ATTACK_DONE			= 301;
+	
+	public static final int TURN_START			= 305;
+	public static final int TURN_ENDS			= 306;
 	
 
 }

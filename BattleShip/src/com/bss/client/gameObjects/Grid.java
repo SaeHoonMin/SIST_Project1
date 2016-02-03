@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import com.bss.client.container.MainFrame;
 
+import javafx.scene.Parent;
 import resources.ResContainer;
 
 public class Grid implements Runnable, Serializable{
@@ -46,7 +47,6 @@ public class Grid implements Runnable, Serializable{
 				panel.add(tiles[i][j]);
 			}
 		}
-		
 	}
 	
 	public void startLocateThread()
@@ -89,8 +89,34 @@ public class Grid implements Runnable, Serializable{
 		}
 	}
 	
+	
+	//길어질것이다...
+	public AttackResult Attacked(int row, int col)
+	{
+		AttackResult ret;
+		if(tiles[row][col].getLocatedShip()!=null)
+		{
+			tiles[row][col].setState(TileState.INVALID);
+			tiles[row][col].setIcon(ResContainer.tile_invalid_icon);
+			ret = new AttackResult(row,col,true);
+		}
+		else
+		{
+			tiles[row][col].setState(TileState.RESERVED);
+			tiles[row][col].setIcon(ResContainer.tile_reserved_icon);
+			ret = new AttackResult(row,col,false);
+		}
+		panel.repaint();
+		return ret;
+	}
+	
 
 	
+	/*  
+	 * Cosider Refactoring ..
+	 * 
+	 * complexity too high...
+	 */
 	
 	public Tile whichTile(int x, int y)
 	{
@@ -116,12 +142,7 @@ public class Grid implements Runnable, Serializable{
 			return true;
 		return false;
 	}
-
-	/*  
-	 * Cosider Refactoring ..
-	 * 
-	 * complexity too high...
-	 */
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -313,6 +334,7 @@ public class Grid implements Runnable, Serializable{
 		}
 		return false;
 	}
+
 	private void removeLocatedShip(Ship s)
 	{
 		for(int i =0; i<locatedShip.size();i++)
@@ -345,6 +367,7 @@ public class Grid implements Runnable, Serializable{
 			}
 		}
 	}
+	
 	private void unsetReservedTiles(Ship s)
 	{
 		Tile minTile = s.getHeadTile();
@@ -414,8 +437,6 @@ public class Grid implements Runnable, Serializable{
 		reserved.clear();
 	}
 
-	
-	
 	public int getStartY() {
 		return startY;
 	}
@@ -424,5 +445,4 @@ public class Grid implements Runnable, Serializable{
 		return startX;
 	}
 
-	
 }

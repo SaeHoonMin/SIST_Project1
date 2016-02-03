@@ -8,9 +8,18 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.GameReadyPanel;
+import com.bss.client.container.MainFrame;
 import com.bss.client.container.WaitRoomPanel;
+import com.bss.client.gameObjects.AttackResult;
+import com.bss.client.gameObjects.Grid;
+import com.bss.client.gameObjects.Tile;
+import com.bss.client.gameObjects.TileState;
 import com.bss.common.BssProtocol;
+
+import resources.ResContainer;
+
 
 /*
 on the sender's side:
@@ -40,6 +49,7 @@ public class BssNetWork extends Thread{
 	
 	WaitRoomPanel waitRoom;
 	GameReadyPanel readyRoom;
+	Grid	enemyGrid;
 	
 	public boolean isConnected()
 	{
@@ -108,6 +118,26 @@ public class BssNetWork extends Thread{
 					readyRoom = (GameReadyPanel) obj;
 				break;
 				
+			case BssProtocol.ATTACK_PERFORMED:
+				
+				System.out.println("send Attack_performed to Server");
+				
+				Tile t = (Tile) obj;
+				enemyGrid = t.getGrid();
+				out.write((MSGTYPE+"|"+t.getRow()+"|"+t.getCol()+"\n").getBytes());
+				break;
+			
+			case BssProtocol.ATTACK_DONE:
+				
+				AttackResult info = (AttackResult)obj;
+				
+				System.out.println("send attack_done to server.."+(MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"
+						+info.isHit()+"|"+info.getType()+"\n"));
+				
+				out.write((MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"+info.isHit()+"|"+
+						info.getType()+"\n").getBytes());
+				
+				break;
 			
 			}
 		}
@@ -148,15 +178,53 @@ public class BssNetWork extends Thread{
 					break;
 				
 				case BssProtocol.MATCH_QUE_FOUND:
-					System.out.println("match found received");
 					waitRoom.gameStart();
 					break;
+					
 				case BssProtocol.MATCH_START:
 					readyRoom.gameStart();
 					break;
+					
+				case BssProtocol.ATTACK_PERFORMED:
+					
+					System.out.println("received Attack_performed");
+					
+					int row = Integer.parseInt(strTokens.nextToken());
+					int col = Integer.parseInt(strTokens.nextToken());
+					
+					
+					AttackResult info = GamePlayPanel.getInst().getMyGrid().Attacked(row, col);
+					sendMessage(BssProtocol.ATTACK_DONE, info);
+					
+					break;
+				
+				case BssProtocol.ATTACK_DONE:
+					
+					System.out.println("received Attack_done");
+					
+					int row1 = Integer.parseInt(strTokens.nextToken());
+					int col1 = Integer.parseInt(strTokens.nextToken());
+					String isHit = strTokens.nextToken();
+					
+					if(isHit.equals("true"))
+					{
+						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_invalid_icon);
+						enemyGrid.getTileByRC(row1, col1).setState(TileState.INVALID);
+					}
+					else
+					{
+						enemyGrid.getTileByRC(row1, col1).setState(TileState.RESERVED);
+						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_reserved_icon);
+					}
+					System.out.println(row1 + " " + col1 + " " + isHit);
+					
+					break;
 				}
 			}
-		}catch(Exception ex){}
+		}catch(Exception ex){
+			System.out.println("error : " +ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 	
 }

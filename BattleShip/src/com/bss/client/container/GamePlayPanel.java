@@ -17,15 +17,24 @@ import resources.ResLoader;
 
 public class GamePlayPanel extends JPanel {
 	
+	private static GamePlayPanel inst;
+	
 	Image bgImg;
 	
 	Grid enemyGrid;
 	Grid myGridInfo;
 	Grid myGrid;
 	ArrayList<Ship> ships;
+	
+	public static GamePlayPanel getInst()
+	{
+		return inst;
+	}
 
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
+		inst = this;
+		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 		
 		setLayout(null);
@@ -41,6 +50,8 @@ public class GamePlayPanel extends JPanel {
 		myGridInfo = grid;
 		myGrid = new Grid(700,220,this);
 		
+		ShowTileInfo();
+		
 		
 		setShip();
 		enemyGrid.setGridZOrder(getComponentCount()-1);
@@ -51,6 +62,28 @@ public class GamePlayPanel extends JPanel {
 		System.out.println("mygrid "+ getComponentZOrder(myGrid.getTileByRC(0, 0)));
 		
 //		setBackground(Color.CYAN);
+	}
+	public Grid getMyGrid()
+	{
+		return myGridInfo;
+	}
+	
+	public void ShowTileInfo()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				Tile t = myGridInfo.getTileByRC(i, j);
+				if(t.getLocatedShip()!=null)
+				{
+					System.out.print("O ");
+				}
+				else
+					System.out.print("X ");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void paintComponent(Graphics g) {

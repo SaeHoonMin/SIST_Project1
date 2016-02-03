@@ -41,6 +41,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     JComboBox box;
     StyleButton b1;
 
+    QueueDialog qd;
     
     WaitRoomPanel(JFrame parent) 
     {
@@ -110,13 +111,15 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 			
 			b1.setPressedState();
 			
-			new QueueDialog();
+			qd = new QueueDialog();
 			
 		}
 	}
     
 	public void gameStart()
 	{
+		//Error
+	//	qd.dispose();
 		MainFrame.getInst().openGameReady();
 	}
     
