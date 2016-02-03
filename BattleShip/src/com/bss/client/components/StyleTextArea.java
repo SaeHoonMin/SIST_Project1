@@ -48,6 +48,8 @@ public class StyleTextArea extends JTextField implements Runnable, KeyListener {
 			}
 
 			s = getText();
+			
+			
 			if (s.length() > length) {
 //				s = s.substring(0, length);
 //				setText(s);
