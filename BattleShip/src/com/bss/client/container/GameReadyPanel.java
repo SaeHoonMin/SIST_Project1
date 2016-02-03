@@ -45,11 +45,17 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	StyleButton readyBtn;
 	StyleButton resetBtn;
 	
+	private MainFrame mainFrame = MainFrame.getInst();
+	
 	public GameReadyPanel(JFrame frame)
 	{
+		setOpaque(false);
 		setLayout(null);
 		setSize(frame.getWidth(),frame.getHeight());
 		
+
+		int gridX = mainFrame.getWidth()/2 - 500/2 - 50;
+		int gridY = mainFrame.getHeight()/2 -500/2 - 50;
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 	
@@ -66,12 +72,17 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		shipContainer = new JLabel();
 		shipContainer.setIcon(new ImageIcon(img_shipContainer));
-		shipContainer.setLocation(930,256);
-		shipContX = 930; shipContY = 256;
+		shipContainer.setLocation(gridX+500+10,gridY);
+	
+		shipContX = gridX+500+10; shipContY = gridY;
+		
 		shipContainer.setSize(270,360);
 		
 		
-		grid = new Grid(400,256,this);	// Automatically Added to parent(frame)
+		
+		
+	//	grid = new Grid(400,256,this);	// Automatically Added to parent(frame)
+		grid = new Grid(gridX,gridY,this);
 		
 		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, shipContX+150,shipContY+10);	
 		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContX+100,shipContY+70);
@@ -81,10 +92,10 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		
 		readyBtn = new StyleButton("Ready");
-		readyBtn.setBounds(400,780,250,100);
+		readyBtn.setBounds(gridX,gridY+505,249,100);
 		readyBtn.addActionListener(this);
 		resetBtn = new StyleButton("Reset");
-		resetBtn.setBounds(660,780,250,100);
+		resetBtn.setBounds(gridX+251,gridY+505,249,100);
 		
 		add(shipContainer);
 		add(ship);
@@ -116,8 +127,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 	public void paintComponent(Graphics g) {
 		g.drawImage(bgImg, 0, 0,this.getWidth(),this.getHeight(), this);
-		paintChildren(g);
-		setOpaque(false);
+	//	paintChildren(g);
+		
 	}
 	
 	public void startCountDown()

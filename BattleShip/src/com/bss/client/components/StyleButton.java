@@ -154,6 +154,7 @@ public class StyleButton extends JButton implements MouseListener{
 
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
+		label.setFont(new Font("Arial", Font.BOLD, fontSize));
 	}
 
 	public Color getBgColor() {

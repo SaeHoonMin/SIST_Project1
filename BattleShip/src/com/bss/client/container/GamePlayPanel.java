@@ -45,13 +45,17 @@ public class GamePlayPanel extends JPanel {
 		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));
 		
 		
-		setSize(1280,frame.getHeight());
+		setSize(frame.getWidth(),frame.getHeight());
 		
-		enemyGrid = new Grid(90,220,this);	
+		int gridX = (frame.getWidth() -  (1005)) /2;
+		int gridY = frame.getHeight()/2 -500/2 - 50;
+		
+		
+		enemyGrid = new Grid(gridX,gridY,this);	
 		enemyGrid.setMouseListenerForTile();
 		
 		myGridInfo = grid;
-		myGrid = new Grid(700,220,this);
+		myGrid = new Grid(gridX+505,gridY,this);
 		
 		ShowTileInfo();
 		

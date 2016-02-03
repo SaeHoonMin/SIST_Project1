@@ -33,6 +33,7 @@ public class Grid implements Runnable, Serializable{
 	
 	public Grid(int startX, int startY, JPanel panel)
 	{
+		System.out.println(startX + " and " +startY);
 		this.startX=startX;
 		this.startY=startY;
 		this.panel = panel;
