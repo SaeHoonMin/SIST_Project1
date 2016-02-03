@@ -8,14 +8,19 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.bss.client.gameObjects.AttackResult;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.Tile;
+import com.bss.client.gameObjects.TileState;
 
+import resources.ResContainer;
 import resources.ResLoader;
 
 public class GamePlayPanel extends JPanel {
+	
+	private static GamePlayPanel inst;
 	
 	Image bgImg;
 	
@@ -23,9 +28,16 @@ public class GamePlayPanel extends JPanel {
 	Grid myGridInfo;
 	Grid myGrid;
 	ArrayList<Ship> ships;
+	
+	public static GamePlayPanel getInst()
+	{
+		return inst;
+	}
 
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
+		inst = this;
+		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 		
 		setLayout(null);
@@ -36,8 +48,12 @@ public class GamePlayPanel extends JPanel {
 		setSize(1280,frame.getHeight());
 		
 		enemyGrid = new Grid(90,220,this);	
+		enemyGrid.setMouseListenerForTile();
+		
 		myGridInfo = grid;
 		myGrid = new Grid(700,220,this);
+		
+		ShowTileInfo();
 		
 		
 		setShip();
@@ -49,6 +65,52 @@ public class GamePlayPanel extends JPanel {
 		System.out.println("mygrid "+ getComponentZOrder(myGrid.getTileByRC(0, 0)));
 		
 //		setBackground(Color.CYAN);
+	}
+	public Grid getMyGrid()
+	{
+		return myGrid;
+	}
+	
+	//길어질것이다...
+	public AttackResult Attacked(int row, int col)
+	{
+		Tile infoTile = myGridInfo.getTileByRC(row, col);
+		Tile myTile = myGrid.getTileByRC(row, col);
+		
+		AttackResult ret;
+		
+		if(infoTile.getLocatedShip()!=null)
+		{
+			myTile.setState(TileState.INVALID);
+			myTile.setIcon(ResContainer.tile_invalid_icon);
+			ret = new AttackResult(row,col,true);
+		}
+		else
+		{
+			myTile.setState(TileState.RESERVED);
+			myTile.setIcon(ResContainer.tile_reserved_icon);
+			ret = new AttackResult(row,col,false);
+		}
+		return ret;
+	}
+	
+	
+	public void ShowTileInfo()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				Tile t = myGridInfo.getTileByRC(i, j);
+				if(t.getLocatedShip()!=null)
+				{
+					System.out.print("O ");
+				}
+				else
+					System.out.print("X ");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void paintComponent(Graphics g) {

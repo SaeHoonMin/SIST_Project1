@@ -10,7 +10,9 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.container.MainFrame;
+import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
 import resources.ResLoader;
@@ -83,9 +85,17 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 		
 		setIcon(getCurIcon());
 		
-		setState(TileState.EMPTY);
+		state = TileState.NONE;
 		
+	}
+	
+	public void setMouseListener()
+	{
 		addMouseListener(this);
+	}
+	public void releaseMouseListener()
+	{
+		releaseMouseListener();
 	}
 
 	public boolean isHit()
@@ -133,32 +143,42 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(state == TileState.UNKNOWN)
+		{
+			/*
+			 * 타일 공격하면
+			 * c1 		-> server 	어디어디 클릭했다고 서버에 메세지
+			 * server 	-> c2		 서버에서 상대방에게 어디어디 공격왔다고 메세지 
+			 * c2		-> server 	 어디에 맞았다고 판별 및 처리, 서버에 메세지
+			 * server	-> c1 		적중여부, 어떤 배인지 등. 공격한 타일 상태 및 색 변화.
+			 */
+			BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-	/*	
-		if(state == TileState.EMPTY )
+	
+		if(state == TileState.UNKNOWN )
 		{
 			setCurIcon(ResContainer.tile_over_icon);
 			resetIcon();
 		}
-	*/	
+	
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-	/*	
-		if(state == TileState.EMPTY)
+		
+		if(state == TileState.UNKNOWN)
 		{
 			setCurIcon(ResContainer.tile_icon);
 
 			resetIcon();
 		}
-	*/
+	
 		
 	}
 

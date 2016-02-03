@@ -1,5 +1,6 @@
 package com.bss.client.container;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.QueueDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.common.BssProtocol;
 
@@ -37,8 +40,10 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     JTextArea ta;
     JTextField tf;
     JComboBox box;
+    
     StyleButton b1;
 
+    QueueDialog qd;
     
     WaitRoomPanel(JFrame parent) 
     {
@@ -77,10 +82,10 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		
 		p.setLayout(new GridLayout(1,1,5,5));
 		
-		p.add(b1 = new StyleButton("Quick Match"));
-		
+		b1 = new StyleButton("Quick Match");
+		b1.setBounds(516,470,265,80);
 		b1.addActionListener(this);
-		
+		add(b1);
 		
 		setLayout(null);
 		js1.setBounds(10, 15, 500, 350);
@@ -94,8 +99,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		add(js3);
 		add(tf);
 		add(box);
-		add(p);
 	
+		setOpaque(false);
 	 }
 
 	@Override
@@ -105,11 +110,20 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		{
 			System.out.println("sending message match requeset");
 			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+			
+			b1.setPressedState();
+			
+			
+			qd = new QueueDialog();
 		}
 	}
     
 	public void gameStart()
 	{
+		//Error
+		if(qd!=null)
+			qd.dispatchEvent(new ActionEvent(qd.getCancleBtn(),ActionEvent.ACTION_PERFORMED,"haha"));
+		
 		MainFrame.getInst().openGameReady();
 	}
     

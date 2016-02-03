@@ -1,6 +1,8 @@
 package com.bss.client.container;
 
 import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -17,13 +19,6 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	static MainFrame inst;
 	
-	 
-    //Network
-    Socket s;
-    OutputStream out;
-    BufferedReader in;
-	
-	
 	LoginWindowPanel 	loginWindow;
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
@@ -39,18 +34,20 @@ public class MainFrame extends JFrame  implements Runnable{
 	{
 		if(inst == null)
 		{
-			inst = new MainFrame();
-			System.out.println("If you see this message, it's not safe.");
+			inst = new MainFrame(1024,768);
+			System.out.println("If you got this message, it's not safe.");
 		}
 		return inst;
 	}
 	
-	public MainFrame()
+	public MainFrame(int width, int height)
 	{
 		if(inst == null)
 			inst = this;
 		
-		setSize(1280, 982);
+		setSize(width, height);
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
+	
 		setTitle("BattleShip");
 		
 		loginWindow = new LoginWindowPanel(this);

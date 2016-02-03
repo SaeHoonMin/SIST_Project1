@@ -8,8 +8,18 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import com.bss.client.container.GamePlayPanel;
+import com.bss.client.container.GameReadyPanel;
+import com.bss.client.container.MainFrame;
 import com.bss.client.container.WaitRoomPanel;
+import com.bss.client.gameObjects.AttackResult;
+import com.bss.client.gameObjects.Grid;
+import com.bss.client.gameObjects.Tile;
+import com.bss.client.gameObjects.TileState;
 import com.bss.common.BssProtocol;
+
+import resources.ResContainer;
+
 
 /*
 on the sender's side:
@@ -38,6 +48,8 @@ public class BssNetWork extends Thread{
 	private boolean isConnected=false;
 	
 	WaitRoomPanel waitRoom;
+	GameReadyPanel readyRoom;
+	Grid	enemyGrid;
 	
 	public boolean isConnected()
 	{
@@ -49,9 +61,6 @@ public class BssNetWork extends Thread{
 	{
 		if( inst == null)
 			inst = new BssNetWork();
-		
-		if(inst.isConnected ==false)
-			inst.connection();
 		
 		return inst;
 	}
@@ -80,7 +89,7 @@ public class BssNetWork extends Thread{
 		isConnected = true;
 		new Thread(this).start();
 		
-		sendMessage(BssProtocol.HOST_CONNECTED,null);
+		sendMessage(BssProtocol.HOST_CONNECTION,null);
 	}
 	
 	public void sendMessage(int MSGTYPE, Object obj)
@@ -90,17 +99,46 @@ public class BssNetWork extends Thread{
 		{
 			switch(MSGTYPE)
 			{
-			case BssProtocol.HOST_CONNECTED:
-				System.out.println(BssProtocol.HOST_CONNECTED+"\n");
-				out.write((BssProtocol.HOST_CONNECTED+"\n").getBytes());
+			case BssProtocol.HOST_CONNECTION:
+				out.write((BssProtocol.HOST_CONNECTION+"|"+"\n").getBytes());
 				break;
 			
 			case BssProtocol.MATCH_QUE_REQ:
+				
 				System.out.println(MSGTYPE);
 				out.write((MSGTYPE+"\n").getBytes());
 				if(obj instanceof WaitRoomPanel)
 					waitRoom = (WaitRoomPanel) obj;
 				break;
+				
+			case BssProtocol.MATCH_READY:
+				
+				out.write((MSGTYPE+"\n").getBytes());
+				if(obj instanceof GameReadyPanel)
+					readyRoom = (GameReadyPanel) obj;
+				break;
+				
+			case BssProtocol.ATTACK_PERFORMED:
+				
+				System.out.println("send Attack_performed to Server");
+				
+				Tile t = (Tile) obj;
+				enemyGrid = t.getGrid();
+				out.write((MSGTYPE+"|"+t.getRow()+"|"+t.getCol()+"\n").getBytes());
+				break;
+			
+			case BssProtocol.ATTACK_DONE:
+				
+				AttackResult info = (AttackResult)obj;
+				
+				System.out.println("send attack_done to server.."+(MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"
+						+info.isHit()+"|"+info.getType()+"\n"));
+				
+				out.write((MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"+info.isHit()+"|"+
+						info.getType()+"\n").getBytes());
+				
+				break;
+			
 			}
 		}
 		else
@@ -142,10 +180,51 @@ public class BssNetWork extends Thread{
 				case BssProtocol.MATCH_QUE_FOUND:
 					waitRoom.gameStart();
 					break;
-				}
+					
+				case BssProtocol.MATCH_START:
+					readyRoom.gameStart();
+					break;
+					
+				case BssProtocol.ATTACK_PERFORMED:
+					
+					System.out.println("received Attack_performed");
+					
+					int row = Integer.parseInt(strTokens.nextToken());
+					int col = Integer.parseInt(strTokens.nextToken());
+					
+					
+					AttackResult info = GamePlayPanel.getInst().Attacked(row, col);
+					sendMessage(BssProtocol.ATTACK_DONE, info);
+					
+					break;
 				
+				case BssProtocol.ATTACK_DONE:
+					
+					System.out.println("received Attack_done");
+					
+					int row1 = Integer.parseInt(strTokens.nextToken());
+					int col1 = Integer.parseInt(strTokens.nextToken());
+					String isHit = strTokens.nextToken();
+					
+					if(isHit.equals("true"))
+					{
+						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_invalid_icon);
+						enemyGrid.getTileByRC(row1, col1).setState(TileState.INVALID);
+					}
+					else
+					{
+						enemyGrid.getTileByRC(row1, col1).setState(TileState.RESERVED);
+						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_reserved_icon);
+					}
+					System.out.println(row1 + " " + col1 + " " + isHit);
+					
+					break;
+				}
 			}
-		}catch(Exception ex){}
+		}catch(Exception ex){
+			System.out.println("error : " +ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 	
 }

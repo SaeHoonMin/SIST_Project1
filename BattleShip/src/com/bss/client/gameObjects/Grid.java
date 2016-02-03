@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import com.bss.client.container.MainFrame;
 
+import javafx.scene.Parent;
 import resources.ResContainer;
 
 public class Grid implements Runnable, Serializable{
@@ -46,7 +47,6 @@ public class Grid implements Runnable, Serializable{
 				panel.add(tiles[i][j]);
 			}
 		}
-		
 	}
 	
 	public void startLocateThread()
@@ -66,8 +66,38 @@ public class Grid implements Runnable, Serializable{
 		}
 	}
 	
+	public void setGridEmpty()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				tiles[i][j].setState(TileState.EMPTY);
+			}
+		}
+	}
+	
+	public void setMouseListenerForTile()
+	{
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				tiles[i][j].setState(TileState.UNKNOWN);
+				tiles[i][j].setMouseListener();
+			}
+		}
+	}
+	
+	
+
 
 	
+	/*  
+	 * Cosider Refactoring ..
+	 * 
+	 * complexity too high...
+	 */
 	
 	public Tile whichTile(int x, int y)
 	{
@@ -93,15 +123,9 @@ public class Grid implements Runnable, Serializable{
 			return true;
 		return false;
 	}
-
 	
-	/*  
-	 * Cosider Refactoring ..
-	 * 
-	 * complexity too high...
-	 */
 	@Override
-	public synchronized void run() {
+	public void run() {
 		// TODO Auto-generated method stub
 		MainFrame inst = MainFrame.getInst();
 		int x , y;
@@ -116,9 +140,6 @@ public class Grid implements Runnable, Serializable{
 		
 		while(true)
 		{
-			//¹ö±× : ¹è ÀüºÎ ¾ø¾Ù¶§? reserved ÀÜ»ó
-			// ¹ß»ýºóµµ ³·À½
-
 			x = inst.mouseX;
 			y = inst.mouseY;
 			
@@ -294,6 +315,7 @@ public class Grid implements Runnable, Serializable{
 		}
 		return false;
 	}
+
 	private void removeLocatedShip(Ship s)
 	{
 		for(int i =0; i<locatedShip.size();i++)
@@ -326,6 +348,7 @@ public class Grid implements Runnable, Serializable{
 			}
 		}
 	}
+	
 	private void unsetReservedTiles(Ship s)
 	{
 		Tile minTile = s.getHeadTile();
@@ -403,5 +426,4 @@ public class Grid implements Runnable, Serializable{
 		return startX;
 	}
 
-	
 }
