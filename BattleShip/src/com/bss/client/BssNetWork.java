@@ -193,7 +193,7 @@ public class BssNetWork extends Thread{
 					int col = Integer.parseInt(strTokens.nextToken());
 					
 					
-					AttackResult info = GamePlayPanel.getInst().getMyGrid().Attacked(row, col);
+					AttackResult info = GamePlayPanel.getInst().Attacked(row, col);
 					sendMessage(BssProtocol.ATTACK_DONE, info);
 					
 					break;

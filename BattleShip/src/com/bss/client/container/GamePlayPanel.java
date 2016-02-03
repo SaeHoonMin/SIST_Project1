@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.bss.client.gameObjects.AttackResult;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.Tile;
+import com.bss.client.gameObjects.TileState;
 
+import resources.ResContainer;
 import resources.ResLoader;
 
 public class GamePlayPanel extends JPanel {
@@ -65,8 +68,32 @@ public class GamePlayPanel extends JPanel {
 	}
 	public Grid getMyGrid()
 	{
-		return myGridInfo;
+		return myGrid;
 	}
+	
+	//길어질것이다...
+	public AttackResult Attacked(int row, int col)
+	{
+		Tile infoTile = myGridInfo.getTileByRC(row, col);
+		Tile myTile = myGrid.getTileByRC(row, col);
+		
+		AttackResult ret;
+		
+		if(infoTile.getLocatedShip()!=null)
+		{
+			myTile.setState(TileState.INVALID);
+			myTile.setIcon(ResContainer.tile_invalid_icon);
+			ret = new AttackResult(row,col,true);
+		}
+		else
+		{
+			myTile.setState(TileState.RESERVED);
+			myTile.setIcon(ResContainer.tile_reserved_icon);
+			ret = new AttackResult(row,col,false);
+		}
+		return ret;
+	}
+	
 	
 	public void ShowTileInfo()
 	{

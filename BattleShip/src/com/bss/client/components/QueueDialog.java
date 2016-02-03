@@ -18,11 +18,15 @@ public class QueueDialog extends JDialog implements ActionListener{
 	StyleButton cancleBtn;
 	MainFrame mainFrame = MainFrame.getInst();
 	JPanel pane;
+	
+	public StyleButton getCancleBtn()
+	{
+		return cancleBtn;
+	}
 
 	public QueueDialog() {
 		
 	//	mainFrame.setEnabled(false);
-		
 		setUndecorated(true);
 		setSize(200,100);
 	

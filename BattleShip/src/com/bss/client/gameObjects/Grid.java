@@ -90,26 +90,7 @@ public class Grid implements Runnable, Serializable{
 	}
 	
 	
-	//길어질것이다...
-	public AttackResult Attacked(int row, int col)
-	{
-		AttackResult ret;
-		if(tiles[row][col].getLocatedShip()!=null)
-		{
-			tiles[row][col].setState(TileState.INVALID);
-			tiles[row][col].setIcon(ResContainer.tile_invalid_icon);
-			ret = new AttackResult(row,col,true);
-		}
-		else
-		{
-			tiles[row][col].setState(TileState.RESERVED);
-			tiles[row][col].setIcon(ResContainer.tile_reserved_icon);
-			ret = new AttackResult(row,col,false);
-		}
-		panel.repaint();
-		return ret;
-	}
-	
+
 
 	
 	/*  

@@ -1,5 +1,6 @@
 package com.bss.client.container;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -39,6 +40,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     JTextArea ta;
     JTextField tf;
     JComboBox box;
+    
     StyleButton b1;
 
     QueueDialog qd;
@@ -80,10 +82,10 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		
 		p.setLayout(new GridLayout(1,1,5,5));
 		
-		p.add(b1 = new StyleButton("Quick Match"));
-		
+		b1 = new StyleButton("Quick Match");
+		b1.setBounds(516,470,265,80);
 		b1.addActionListener(this);
-		
+		add(b1);
 		
 		setLayout(null);
 		js1.setBounds(10, 15, 500, 350);
@@ -97,8 +99,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		add(js3);
 		add(tf);
 		add(box);
-		add(p);
 	
+		setOpaque(false);
 	 }
 
 	@Override
@@ -111,15 +113,17 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 			
 			b1.setPressedState();
 			
-			qd = new QueueDialog();
 			
+			qd = new QueueDialog();
 		}
 	}
     
 	public void gameStart()
 	{
 		//Error
-	//	qd.dispose();
+		if(qd!=null)
+			qd.dispatchEvent(new ActionEvent(qd.getCancleBtn(),ActionEvent.ACTION_PERFORMED,"haha"));
+		
 		MainFrame.getInst().openGameReady();
 	}
     

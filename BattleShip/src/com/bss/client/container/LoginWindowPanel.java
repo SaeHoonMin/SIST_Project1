@@ -69,6 +69,8 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		add(btnLogin);
 		add(btnExit);
 		
+		setOpaque(false);
+		
 		taLogin.setText(createRamdomText(5));
 		
 	}

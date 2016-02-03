@@ -92,6 +92,6 @@ public class BssMain {
 		
 		MainFrame mainFrame = new MainFrame(1024,768);
 		
-		
 	}
+	
 }
