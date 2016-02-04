@@ -124,7 +124,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 	{
 		//Error
 		if(qd!=null)
-			qd.dispatchEvent(new ActionEvent(qd.getCancleBtn(),ActionEvent.ACTION_PERFORMED,"haha"));
+			qd.dispose();
 		
 		MainFrame.getInst().openGameReady();
 	}

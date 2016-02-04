@@ -17,6 +17,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import sun.awt.FontConfiguration;
+import sun.awt.windows.WFontConfiguration;
+
 public class StyleButton extends JButton implements MouseListener{
 	
 	JLabel label ;
@@ -24,13 +27,14 @@ public class StyleButton extends JButton implements MouseListener{
 	private int fontSize;
 	private Color bgColor;
 	private Color overColor;
-	private Color color;
 	
+	private Color labelColor;
+	private Color labelOverColor;
 	public StyleButton(String text)
 	{	
 		
-		bgColor = new Color(75,180,138,200);
-		overColor = new Color(124,204,172,200);
+		bgColor = new Color(0,0,0,200);
+		overColor = new Color(246,207,58,200);
 		
 		setPreferredSize(new Dimension(150,50));
 		
@@ -38,13 +42,12 @@ public class StyleButton extends JButton implements MouseListener{
 		
 		setBorderPainted(false);
 		setBackground(bgColor);
-		setForeground(color.white);
+		
 		
 		label = new JLabel(text,SwingConstants.CENTER);
-		label.setForeground(Color.white);
+		label.setForeground(new Color(98,228,220));
 		label.setFont(new Font("Arial", Font.BOLD,16));
 		label.setPreferredSize(new Dimension(150,50));		//¹®Á¦
-		
 		
 		fontSize = label.getFont().getSize();
 		
@@ -52,7 +55,8 @@ public class StyleButton extends JButton implements MouseListener{
 		add("Center",label);
 		
 		
-		color = getForeground();
+		labelColor = label.getForeground();
+		labelOverColor = new Color(147,107,108);
 		
 		setOpaque(false);
 		
@@ -95,7 +99,7 @@ public class StyleButton extends JButton implements MouseListener{
 			public void run() {
 				
 				setBackground(overColor);
-				setForeground(Color.white);
+				label.setForeground(labelOverColor);
 				
 				int fSize = fontSize;
 				
@@ -126,7 +130,7 @@ public class StyleButton extends JButton implements MouseListener{
 			public void run() {
 				
 				setBackground(bgColor);
-				setForeground(color);
+				label.setForeground(labelColor);
 
 				int fSize = label.getFont().getSize();
 				
@@ -174,11 +178,11 @@ public class StyleButton extends JButton implements MouseListener{
 	}
 
 	public Color getColor() {
-		return color;
+		return labelColor;
 	}
 
 	public void setColor(Color color) {
-		this.color = color;
+		this.labelColor = color;
 	}
 
 	@Override
