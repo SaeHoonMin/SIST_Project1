@@ -1,6 +1,9 @@
 package com.bss.server;
 
+import java.util.Random;
+
 import com.bss.common.BssProtocol;
+import com.bss.common.MatchState;
 
 public class Match implements Runnable{
 	
@@ -40,7 +43,26 @@ public class Match implements Runnable{
 				c2.messageTo(BssProtocol.MATCH_START+"|");
 				state = MatchState.START;
 			}
-		
+			else if(state == MatchState.START)
+			{
+				Random rand = new Random();
+				int i = rand.nextInt(2);
+				if(i==0)
+				{
+					//c1 first
+					c1.messageTo(BssProtocol.TURN_START+"|");
+					c2.messageTo(BssProtocol.TURN_ENDS+"|");
+				}
+				else
+				{
+					//c2 first
+					c2.messageTo(BssProtocol.TURN_START+"|");
+					c1.messageTo(BssProtocol.TURN_ENDS+"|");
+				}
+			
+				state = MatchState.RUNNING;
+			}
+			
 			
 			
 			try {

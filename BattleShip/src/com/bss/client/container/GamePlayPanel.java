@@ -1,5 +1,6 @@
 package com.bss.client.container;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -8,12 +9,14 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.bss.client.components.TurnPanel;
 import com.bss.client.gameObjects.AttackResult;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
+import com.bss.common.MatchState;
 
 import resources.ResContainer;
 import resources.ResLoader;
@@ -29,6 +32,13 @@ public class GamePlayPanel extends JPanel {
 	Grid myGrid;
 	ArrayList<Ship> ships;
 	
+	TurnPanel turnPanel ;
+	
+	private MatchState matchState;
+	
+	private boolean isMyTurn;
+	private boolean actionAllowed;
+
 	public static GamePlayPanel getInst()
 	{
 		return inst;
@@ -37,6 +47,9 @@ public class GamePlayPanel extends JPanel {
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
 		inst = this;
+		
+		isMyTurn = false;
+		matchState = MatchState.START;
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 		
@@ -50,6 +63,10 @@ public class GamePlayPanel extends JPanel {
 		int gridX = (frame.getWidth() -  (1005)) /2;
 		int gridY = frame.getHeight()/2 -500/2 - 50;
 		
+		turnPanel = new TurnPanel(this);
+		add(turnPanel);
+		setComponentZOrder(turnPanel, getComponentCount()-1);
+		turnPanel.setVisible(false);
 		
 		enemyGrid = new Grid(gridX,gridY,this);	
 		enemyGrid.setMouseListenerForTile();
@@ -59,10 +76,11 @@ public class GamePlayPanel extends JPanel {
 		
 		ShowTileInfo();
 		
-		
 		setShip();
 		enemyGrid.setGridZOrder(getComponentCount()-1);
 		myGrid.setGridZOrder(getComponentCount()-1);
+
+		
 		
 		for(int i=0;i<ships.size();i++)
 			System.out.println("ship " + getComponentZOrder(ships.get(i)));
@@ -145,5 +163,65 @@ public class GamePlayPanel extends JPanel {
 			
 			//배 정보 배치
 		}
+	}
+	
+	public void showMyTurn()
+	{
+		actionAllowed = false;
+		turnPanel.setVisible(true);
+		turnPanel.label.setText("Your Turn");
+		
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		turnPanel.setVisible(false);
+		actionAllowed = true;
+	}
+	public void showEnemyTurn()
+	{
+		actionAllowed = false;
+		setComponentZOrder(turnPanel, 1);
+		turnPanel.label.setText("Enemy Turn");
+		turnPanel.setVisible(true);
+		
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		turnPanel.setVisible(false);
+		actionAllowed = true;
+	}
+	
+	public void setMatchSTate(MatchState state)
+	{
+		matchState = state;
+	}
+	public MatchState getMatchState()
+	{
+		return matchState;
+	}
+
+	public boolean isMyTurn() {
+		return isMyTurn;
+	}
+
+	public void setMyTurn(boolean isMyTurn) {
+		this.isMyTurn = isMyTurn;
+	}
+
+	public boolean isActionAllowed() {
+		return actionAllowed;
+	}
+
+	public void setActionAllowed(boolean actionAllowed) {
+		this.actionAllowed = actionAllowed;
 	}
 }

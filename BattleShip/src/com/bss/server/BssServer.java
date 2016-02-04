@@ -218,6 +218,12 @@ public class BssServer extends JFrame implements Runnable{
 						opponent.messageTo(BssProtocol.ATTACK_DONE+"|"
 								+row1+"|"+col1+"|"+isHit+"|"+type);
 						
+						if(isHit.equals("false"))
+						{
+							opponent.messageTo(BssProtocol.TURN_ENDS+"|");
+							messageTo(BssProtocol.TURN_START+"|");
+						}
+						
 						break;
 					}
 
@@ -227,7 +233,7 @@ public class BssServer extends JFrame implements Runnable{
 				printLog("A Client has been disconnected");
 				
 				// 매치가 널이 아니면 상대방에게 캔슬 메세지 보내고
-				// 메치 쓰레드 스탑되게 ...
+				// 메치 쓰레드 스탑되게. 매치 널로 바꾸고 opponent도 널로.ㅡ
 				
 				matchQueue.remove(this);
 

@@ -23,6 +23,7 @@ public class UIDebugWindow extends JFrame implements Runnable{
 	
 	public UIDebugWindow()
 	{
+		
 		toolkit = Toolkit.getDefaultToolkit();
 		setSize(600,300);
 		setLocation((int) (toolkit.getScreenSize().getWidth()-410),0);

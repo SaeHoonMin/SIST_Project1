@@ -219,6 +219,14 @@ public class BssNetWork extends Thread{
 					System.out.println(row1 + " " + col1 + " " + isHit);
 					
 					break;
+				
+				case BssProtocol.TURN_START:
+					GamePlayPanel.getInst().showMyTurn();
+					GamePlayPanel.getInst().setMyTurn(true);
+					break;
+				case BssProtocol.TURN_ENDS:
+					GamePlayPanel.getInst().showEnemyTurn();
+					GamePlayPanel.getInst().setMyTurn(false);
 				}
 			}
 		}catch(Exception ex){

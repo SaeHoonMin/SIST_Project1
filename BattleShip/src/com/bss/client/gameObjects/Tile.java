@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.MainFrame;
 import com.bss.common.BssProtocol;
 
@@ -20,6 +21,9 @@ import resources.ResLoader;
 public class Tile extends JLabel implements MouseListener, Serializable{
 	
 	private static int width=50, height=50;
+	
+	
+	private static GamePlayPanel gamePlayPanel;	//initialized when entered gameplaypanel
 
 	private ImageIcon curIcon;
 	
@@ -68,6 +72,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	
 	public Tile(int row, int col,Grid grid)
 	{
+		setOpaque(false);
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 		
@@ -143,7 +148,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(state == TileState.UNKNOWN)
+		if(state == TileState.UNKNOWN )
 		{
 			/*
 			 * 타일 공격하면
@@ -152,7 +157,8 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 			 * c2		-> server 	 어디에 맞았다고 판별 및 처리, 서버에 메세지
 			 * server	-> c1 		적중여부, 어떤 배인지 등. 공격한 타일 상태 및 색 변화.
 			 */
-			BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
+			if(GamePlayPanel.getInst()!=null && GamePlayPanel.getInst().isMyTurn())
+				BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
 		}
 	}
 
@@ -160,7 +166,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 	
-		if(state == TileState.UNKNOWN )
+		if(state == TileState.UNKNOWN && GamePlayPanel.getInst().isActionAllowed())
 		{
 			setCurIcon(ResContainer.tile_over_icon);
 			resetIcon();
@@ -172,7 +178,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		if(state == TileState.UNKNOWN)
+		if(state == TileState.UNKNOWN && GamePlayPanel.getInst().isActionAllowed())
 		{
 			setCurIcon(ResContainer.tile_icon);
 
@@ -240,6 +246,14 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 
 	public void setCurIcon(ImageIcon curIcon) {
 		this.curIcon = curIcon;
+	}
+
+	public static GamePlayPanel getGamePlayPanel() {
+		return gamePlayPanel;
+	}
+
+	public static void setGamePlayPanel(GamePlayPanel gamePlayPanel) {
+		Tile.gamePlayPanel = gamePlayPanel;
 	}
 
 }

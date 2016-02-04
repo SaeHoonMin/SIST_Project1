@@ -2,6 +2,7 @@ package com.bss.client.container;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import com.bss.client.BssNetWork;
 import com.bss.client.components.QueueDialog;
 import com.bss.client.components.StyleButton;
+import com.bss.client.components.TurnPanel;
 import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
