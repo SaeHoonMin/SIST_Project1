@@ -64,10 +64,7 @@ public class StyleButton extends JButton implements MouseListener{
 		
 		setLayout(new BorderLayout());
 		add("Center",label);
-		
-		
-
-		
+	
 		setOpaque(false);
 		
 		addMouseListener(this);

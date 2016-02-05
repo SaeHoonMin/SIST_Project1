@@ -118,7 +118,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 				return;
 			}
 			
-			if(BssDebug.TESTING)
+			if(BssDebug.GAMEREADY_TESTING)
 				MainFrame.getInst().openWaitRoom();
 			
 		}

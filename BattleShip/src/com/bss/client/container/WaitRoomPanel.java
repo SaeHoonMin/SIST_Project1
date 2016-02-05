@@ -111,17 +111,23 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == b1)
 		{
+			if(BssDebug.GAMEREADY_TESTING)
+			{
+				gameStart(); return;
+			}
+			
 			System.out.println("sending message match requeset");
 			if(BssNetWork.getInst()!=null)
+			{	
 				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+				qd = new QueueDialog();
+				return;
+			}
 			else
+			{
 				System.out.println("BssNetWork is null.");
-			
-			if(BssDebug.TESTING)
-				gameStart();
-			
-			
-			qd = new QueueDialog();
+				return;
+			}
 		}
 	}
     
