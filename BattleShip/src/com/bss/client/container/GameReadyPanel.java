@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -20,7 +21,6 @@ import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.ShipType;
-import com.bss.client.gameObjects.Tile;
 import com.bss.common.BssProtocol;
 
 import resources.ResLoader;
@@ -41,9 +41,11 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 	double seconds;
 	
+	ArrayList<Ship> ships = new ArrayList<Ship>();
 	
 	StyleButton readyBtn;
 	StyleButton resetBtn;
+	StyleButton autoBtn;
 	
 	private MainFrame mainFrame = MainFrame.getInst();
 	
@@ -90,12 +92,21 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		Ship ship4 = new Ship(ShipType.Cruiser, ShipAngle.H, shipContX+50,shipContY+190);
 		Ship ship5 = new Ship(ShipType.BattleShip,ShipAngle.H,shipContX+20,shipContY+250);
 		
+		ships.add(ship);
+		ships.add(ship2);
+		ships.add(ship3);
+		ships.add(ship4);
+		ships.add(ship5);
 		
 		readyBtn = new StyleButton("Ready");
 		readyBtn.setBounds(gridX,gridY+505,249,100);
 		readyBtn.addActionListener(this);
 		resetBtn = new StyleButton("Reset");
 		resetBtn.setBounds(gridX+251,gridY+505,249,100);
+		resetBtn.addActionListener(this);
+		autoBtn = new StyleButton("Auto");
+		autoBtn.setBounds(gridX+502,gridY+505,249,100);
+		autoBtn.addActionListener(this);
 		
 		add(shipContainer);
 		add(ship);
@@ -106,7 +117,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		add(readyBtn);
 		add(resetBtn);
-		
+		add(autoBtn);
 		add(countDown);
 		
 		/*
@@ -182,6 +193,15 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 			
 			//
 		}
+		else if(e.getSource()==resetBtn)
+		{
+			grid.resetGrid();
+		}
+		else if(e.getSource()==autoBtn)
+		{
+			grid.randomLocate(ships);
+		}
+		
 	}
 	
 	public void gameStart()

@@ -23,6 +23,7 @@ import com.bss.client.BssNetWork;
 import com.bss.client.components.QueueDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.TurnPanel;
+import com.bss.common.BssDebug;
 import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
@@ -111,9 +112,13 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		if(e.getSource() == b1)
 		{
 			System.out.println("sending message match requeset");
-			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+			if(BssNetWork.getInst()!=null)
+				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+			else
+				System.out.println("BssNetWork is null.");
 			
-			b1.setPressedState();
+			if(BssDebug.TESTING)
+				gameStart();
 			
 			
 			qd = new QueueDialog();

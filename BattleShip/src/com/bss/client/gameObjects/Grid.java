@@ -3,12 +3,12 @@ package com.bss.client.gameObjects;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
 import com.bss.client.container.MainFrame;
 
-import javafx.scene.Parent;
 import resources.ResContainer;
 
 public class Grid implements Runnable, Serializable{
@@ -18,6 +18,8 @@ public class Grid implements Runnable, Serializable{
 	private Tile[][] tiles;
 	
 	private ArrayList<Ship> locatedShip = new ArrayList<Ship>();
+	
+
 	
 	private JPanel panel;
 	
@@ -91,9 +93,144 @@ public class Grid implements Runnable, Serializable{
 	}
 	
 	
+	public void randomLocate(ArrayList<Ship> ships)
+	{
+		for(int i = locatedShip.size()-1;i>=0;i--)
+		{
+			Ship s = locatedShip.get(i);
+			if(s.getAngle() == ShipAngle.V)
+				s.rotateShip();
+			unsetReservedTiles(s);
+			locatedShip.remove(i);
+		}
 
-
+		ArrayList<Point> points = new ArrayList<Point>();
+		ArrayList<Point> matchPoints = new ArrayList<Point>();
+		points.ensureCapacity(100);
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				points.add(new Point(i,j));
+			}
+		}
+		
+		Random rand = new Random();
+		int randNum;
+		int rr;
+		int rc;
+		int a ;
+		int index=0;
+		ShipAngle ang;
+		
+		boolean isFit = false;
+		
+		while(true)
+		{
+			if(index==5)
+				break;
+			a = rand.nextInt(2);
+			if(a==1)
+				ang = ShipAngle.H;
+			else
+				ang = ShipAngle.V;
+			
+			randNum = rand.nextInt(points.size());
+			
+			rr = points.get(randNum).x;
+			rc = points.get(randNum).y;
+			
+			if(tiles[rr][rc].getState() != TileState.EMPTY)
+				continue;
+			
+			Ship s = ships.get(index);
+			isFit=true;
+			matchPoints.clear();
+			matchPoints.add(new Point(rr,rc));
+			
+			for (int i = 1; i < s.getTileSize(); i++) {
+				if (ang == ShipAngle.H) 
+				{
+					if (rc+i >=10 || tiles[rr][rc + i].getState() != TileState.EMPTY) 
+					{
+						isFit=false;
+						break;
+					}
+					else
+					{
+						matchPoints.add(new Point(rr,rc+i));
+					}
+				} 
+				else 
+				{
+					if (rr+i >=10 || tiles[rr+i][rc].getState() != TileState.EMPTY) 
+					{
+						isFit=false;
+						break;
+					}
+					else
+					{
+						matchPoints.add(new Point(rr+i,rc));
+					}
+				}
+			}
+			
+			if(isFit==false)
+			{
+				matchPoints.clear();
+				continue;
+			}
+			else
+			{
+				Point p = matchPoints.get(matchPoints.size()-1);
+				if(ang == ShipAngle.V)
+					s.rotateShip();
+				s.setLocation(tiles[rr][rc].getX(), tiles[rr][rc].getY());
+				s.setLocated(true);
+				s.setHeadTile(tiles[rr][rc]);
+				s.setTaileTile(tiles[p.x][p.y]);
 	
+				for(int i=matchPoints.size()-1;i>=0;i--)
+				{
+					Point pt = matchPoints.get(i);
+					
+					tiles[pt.x][pt.y].setLocatedShip(s, i);
+					tiles[pt.x][pt.y].setIcon(ResContainer.tile_located_icon);
+					tiles[pt.x][pt.y].setState(TileState.LOCATED);
+					
+					for(int j=0;i<points.size();j++)
+					{
+						if(points.get(j).x == pt.x && points.get(j).y==pt.y)
+						{
+							points.remove(j);
+							break;
+						}
+					}
+				}
+				
+				setReservedTiles(s);
+
+				locatedShip.add(s);
+	
+				index++;
+			}
+		}
+		
+	}
+	
+	public void resetGrid()
+	{
+		for(int i = locatedShip.size()-1;i>=0;i--)
+		{
+			Ship s = locatedShip.get(i);
+			
+			unsetReservedTiles(s);
+			locatedShip.remove(i);
+			s.returnToSlot();
+		}
+	}
+	
+
 	/*  
 	 * Cosider Refactoring ..
 	 * 
@@ -192,7 +329,6 @@ public class Grid implements Runnable, Serializable{
 			}
 			else if(ship==null && ship_before != null)
 			{
-				//버그 예상..
 				for(int i=0;i<locatedShip.size();i++)
 				{
 					if(locatedShip.get(i)==ship_before)

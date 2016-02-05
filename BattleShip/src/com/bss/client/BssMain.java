@@ -40,6 +40,9 @@ public class BssMain {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"); 
+		
+		
 		/* 로딩화면. */
 		
 		// ResContainer를 가장 처음에 생성하자.

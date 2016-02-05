@@ -14,8 +14,10 @@ import javax.swing.JPanel;
 import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.StyleTextArea;
+import com.bss.common.BssDebug;
 
 import resources.ResLoader;
+import sun.security.util.Debug;
 
 public class LoginWindowPanel extends JPanel implements ActionListener{
 
@@ -111,9 +113,14 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 			//Connection first..
 			BssNetWork.getInst().connection();
 			if(BssNetWork.getInst().isConnected())
-				
+			{
+				MainFrame.getInst().openWaitRoom();
+				return;
+			}
 			
-			MainFrame.getInst().openWaitRoom();
+			if(BssDebug.TESTING)
+				MainFrame.getInst().openWaitRoom();
+			
 		}
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();

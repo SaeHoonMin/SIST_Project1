@@ -17,10 +17,13 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import com.bss.client.container.MainFrame;
 import com.sun.xml.internal.ws.org.objectweb.asm.Type;
 
+import resources.BssColor;
 import resources.ImageUtils;
 import resources.ResContainer;
 import resources.ResLoader;
@@ -43,6 +46,8 @@ implements MouseListener, MouseMotionListener, Serializable{
 	
 	private int tileSize;
 	
+	private int clickCount=0;
+	
 	
 	private ArrayList<Point> offsetPoints = new ArrayList<Point>();
 	private Tile headTile;
@@ -59,6 +64,11 @@ implements MouseListener, MouseMotionListener, Serializable{
 	private Image vImage;
 	private Image hImage;
 	private Image curImage;
+	
+	private Border overBorder;
+	private Border clickBorder;
+	
+	private static MainFrame mInst = MainFrame.getInst();
 	
 	public MouseState getMouseState()
 	{
@@ -113,6 +123,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 		setLocation(100,100);
 		startX=100; startY = 100;
 		
+		createBorder();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -127,8 +138,23 @@ implements MouseListener, MouseMotionListener, Serializable{
 		setLocation(x,y);
 		startX=x; startY = y;
 		
+		createBorder();
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+	
+	private void createBorder()
+	{
+		Border overOut = BorderFactory.createLineBorder(BssColor.YELLOGREEN_T1,2,true);
+		Border overIn = BorderFactory.createLineBorder(BssColor.YELLOGREEN,1);
+		
+		Border clickOut = BorderFactory.createLineBorder(BssColor.ORANGE_T1,2,true);
+		Border clickIn = BorderFactory.createLineBorder(BssColor.ORANGE,1);
+		
+		overBorder = 	BorderFactory.createCompoundBorder(overOut,overIn);
+		clickBorder =BorderFactory.createCompoundBorder(clickOut,clickIn);
+		
+	
 	}
 	
 	private void setShipForm()
@@ -263,18 +289,22 @@ implements MouseListener, MouseMotionListener, Serializable{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getClickCount()==2)
+		{
+			
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		setBorder(overBorder);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		setBorder(null);
 	}
 
 	@Override
@@ -282,11 +312,26 @@ implements MouseListener, MouseMotionListener, Serializable{
 		// TODO Auto-generated method stub
 		if(e.getSource() == this)
 		{
-			
 			/* 순서 절대 주의. */
 			
 			clickedX = e.getX();
 			clickedY = e.getY();
+			
+			if(SwingUtilities.isRightMouseButton(e))
+			{	
+				int temp = clickedX;
+				clickedX = clickedY;
+				clickedY = temp;
+				
+				int mouseX = mInst.mouseX -clickedX;
+				int mouseY = mInst.mouseY -clickedY;
+				
+				rotateShip();
+			
+				setLocation(mouseX,mouseY);
+				
+				
+			}
 			
 			offsetPoints.clear();
 			if (angle == ShipAngle.H) {
@@ -309,7 +354,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 			mState = MouseState.PRESSED;
 			selected = this;
 			
-			setBorder(BorderFactory.createLineBorder(new Color(255,0,0,100), 3));
+			setBorder(clickBorder);
 			
 		}
 	}
@@ -319,10 +364,18 @@ implements MouseListener, MouseMotionListener, Serializable{
 		// TODO Auto-generated method stub
 		if(e.getSource()==this)
 		{
+			
 			mState = MouseState.RELEASED;
 		
 			setIcon(curIcon);
-			setBorder(null);
+			
+			int x = mInst.mouseX;
+			int y = mInst.mouseY;
+			
+			if(x >= getX() && y >=getY() && x<getX()+width && y<getY()+height)
+				setBorder(overBorder);
+			else
+				setBorder(null);
 
 			offsetPoints.clear();
 			
@@ -338,7 +391,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 		{
 			mState = MouseState.DRAGGING;
 			
-			MainFrame mInst = MainFrame.getInst();
+			
 			
 			int mouseX = mInst.mouseX -clickedX;
 			int mouseY = mInst.mouseY -clickedY;

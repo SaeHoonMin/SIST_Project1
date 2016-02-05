@@ -13,10 +13,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import resources.BssColor;
 import sun.awt.FontConfiguration;
 import sun.awt.windows.WFontConfiguration;
 
@@ -30,24 +32,33 @@ public class StyleButton extends JButton implements MouseListener{
 	
 	private Color labelColor;
 	private Color labelOverColor;
+	
+	Border onBorder;
+	Border releaseBorder;
+	
 	public StyleButton(String text)
 	{	
 		
 		bgColor = new Color(0,0,0,200);
 		overColor = new Color(246,207,58,200);
+		labelColor = BssColor.TURQUOISE_MID;
+		labelOverColor = BssColor.ORANGE_T2;
+		
+		onBorder = BorderFactory.createLineBorder(BssColor.ORANGE_T1,2);
+		releaseBorder = BorderFactory.createLineBorder(BssColor.TURQUOISE_MID_T1,2);
 		
 		setPreferredSize(new Dimension(150,50));
-		
-		setFocusable(false);
-		
-		setBorderPainted(false);
+		setFocusable(false);		
+		setBorderPainted(true);
 		setBackground(bgColor);
-		
+		setBorder(releaseBorder);
 		
 		label = new JLabel(text,SwingConstants.CENTER);
-		label.setForeground(new Color(98,228,220));
+		label.setForeground(labelColor);			//청록
 		label.setFont(new Font("Arial", Font.BOLD,16));
 		label.setPreferredSize(new Dimension(150,50));		//문제
+		
+		//label.
 		
 		fontSize = label.getFont().getSize();
 		
@@ -55,8 +66,7 @@ public class StyleButton extends JButton implements MouseListener{
 		add("Center",label);
 		
 		
-		labelColor = label.getForeground();
-		labelOverColor = new Color(147,107,108);
+
 		
 		setOpaque(false);
 		
@@ -68,7 +78,6 @@ public class StyleButton extends JButton implements MouseListener{
 		super.paintComponent(g);
         g.setColor( getBackground() );
         g.fillRect(0, 0, getWidth(), getHeight());
-        
     }
 
 	
@@ -81,14 +90,12 @@ public class StyleButton extends JButton implements MouseListener{
 	
 	public void setPressedState()
 	{
-		setEnabled(false);
-//		CompoundBorder compound = new CompoundBorder(new LineBorder(new Color(197,219,211), 1), new EmptyBorder(0, 1, 0, 0));
-		setBorder(BorderFactory.createLineBorder(new Color(197,219,211), 3));
+		
 	}
+	
 	public void releasePressedState()
 	{
-		setEnabled(true);
-		setBorder(null);
+		
 	}
 
 	@Override
@@ -98,7 +105,7 @@ public class StyleButton extends JButton implements MouseListener{
 		new Thread(new Runnable() {
 			public void run() {
 				
-				setBackground(overColor);
+				setBorder(onBorder);
 				label.setForeground(labelOverColor);
 				
 				int fSize = fontSize;
@@ -129,7 +136,7 @@ public class StyleButton extends JButton implements MouseListener{
 		new Thread(new Runnable() {
 			public void run() {
 				
-				setBackground(bgColor);
+				setBorder(releaseBorder);
 				label.setForeground(labelColor);
 
 				int fSize = label.getFont().getSize();
