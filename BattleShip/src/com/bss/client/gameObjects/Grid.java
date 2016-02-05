@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.MainFrame;
 
 import resources.ResContainer;
@@ -50,6 +51,8 @@ public class Grid implements Runnable, Serializable{
 				panel.add(tiles[i][j]);
 			}
 		}
+		if( panel instanceof GamePlayPanel)
+			Tile.setGamePlayPanel((GamePlayPanel) panel);
 	}
 	
 	public void startLocateThread()

@@ -15,4 +15,7 @@ public class BssColor {
 	public static final Color ORANGE		= new Color(246,207,58);
 	public static final Color ORANGE_T1		= new Color(246,207,58,230);
 	public static final Color ORANGE_T2 = new Color(246,207,58,180);
+	
+	public static final Color BLACK_T1 = new Color(0,0,0,200);
+	public static final Color BLACK_T2 = new Color(0,0,0,180);
 }

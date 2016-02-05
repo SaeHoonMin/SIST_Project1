@@ -95,48 +95,48 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 		state = TileState.NONE;
 		
 		
-		new Thread(new Runnable(){
-			
-			int w = x+getWidth();
-			int h = y+getHeight();
+	}
+	
+	public void setMouseListener()
+	{
+		addMouseListener(this);
+		
+		new Thread(new Runnable() {
+
+			int w = x + getWidth();
+			int h = y + getHeight();
 
 			@Override
 			public void run() {
-				while(true)
-				{
+				while (true) {
 					if (state == TileState.UNKNOWN) {
-						if (mInst.mouseX >= x && mInst.mouseY >= y && mInst.mouseX <= w && mInst.mouseY <= h
+						if (mInst.mouseX >= x && mInst.mouseY >= y && mInst.mouseX < w && mInst.mouseY < h
 								&& isOver == false) {
 							setCurIcon(ResContainer.tile_located_icon);
 							resetIcon();
 							isOver = true;
-						} 
-						else if(mInst.mouseX < x | mInst.mouseY < y 
-								| mInst.mouseX > w | mInst.mouseY > h) 
-						{
-							
+						} else if (mInst.mouseX < x | mInst.mouseY < y | mInst.mouseX > w | mInst.mouseY > h) {
+							if(isOver==true)
+							{
 								isOver = false;
 								setCurIcon(ResContainer.tile_icon);
 								resetIcon();
-							
+							}
 						}
 
 					}
 					try {
-						Thread.sleep(2);
+						Thread.sleep(15);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 
-			}}).start();;
+			}
+		}).start();
 	}
 	
-	public void setMouseListener()
-	{
-		addMouseListener(this);
-	}
 	public void releaseMouseListener()
 	{
 		releaseMouseListener();
@@ -148,30 +148,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 			return false;
 		return true;
 	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-	public int getRow() {
-		return row;
-	}
-
-	public int getCol() {
-		return col;
-	}
-
+	
 	/*
 	 * 
 	 *  Event Handlers...
@@ -197,10 +174,8 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 			 * server	-> c1 		적중여부, 어떤 배인지 등. 공격한 타일 상태 및 색 변화.
 			 */
 			
-			System.out.println("state : " + state);
-			
-			if(GamePlayPanel.getInst()!=null && GamePlayPanel.getInst().isMyTurn() 
-					&& GamePlayPanel.getInst().isActionAllowed())
+			if( gamePlayPanel!=null && gamePlayPanel.isMyTurn() 
+					&& gamePlayPanel.isActionAllowed())
 			{	
 				BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
 				GamePlayPanel.getInst().setActionAllowed(false);
@@ -211,72 +186,25 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-	
-//		if(state == TileState.UNKNOWN && GamePlayPanel.getInst().isActionAllowed())
-//		{
-//			setCurIcon(ResContainer.tile_located_icon);
-//			resetIcon();
-//		}
-	
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		
-//		if(state == TileState.UNKNOWN && GamePlayPanel.getInst().isActionAllowed())
-//		{
-//			
-//			setCurIcon(ResContainer.tile_icon);
-//
-//			resetIcon();
-//		}
-//	
+
 		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-	/*	
-		Tile t;
-		
-		if( e.getSource() instanceof Tile )
-			t = (Tile) e.getSource();
-		else
-			return;
-	
-	//	System.out.printf("(%d,%d,%d,%d),(%d,%d)\n",x,y,x+width,y+height,MainFrame.getInst().mouseX,MainFrame.getInst().mouseY);
-		
-		setCurIcon(ResContainer.tile_pressed_icon);
-		
-		resetIcon();
-		
-	*/
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-	/*	
-		Tile t;
-		
-		if( e.getSource() instanceof Tile )
-			t = (Tile) e.getSource();
-		else
-			return;
-		
-		mouseX = MainFrame.getInst().mouseX;
-		mouseY = MainFrame.getInst().mouseY;
-		
-		if( mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height)
-			setCurIcon(ResContainer.tile_over_icon);
-		else
-		{
-			setCurIcon(ResContainer.tile_icon);
-		}
-		resetIcon();
-	*/
+
 	}
 
 	public TileState getState() {
@@ -303,4 +231,26 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 		Tile.gamePlayPanel = gamePlayPanel;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
 }

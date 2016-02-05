@@ -12,41 +12,28 @@ import javax.swing.SwingConstants;
 
 public class TurnPanel extends JPanel{
 
-	public JLabel label ;
-
+	private JLabel label ;
 	public JPanel parent;
 	
 	public TurnPanel(JPanel parent)
 	{
 		this.parent = parent;
 		
-		//parent.setComponentZOrder(this, 1);
-		
 		setLayout(new BorderLayout());
-		
 		setBackground(new Color(0,0,0,200));
 		
 		label = new JLabel("hahahahah",SwingConstants.CENTER);
 		label.setFont(new Font("Arial",Font.BOLD,30));
 		label.setForeground(Color.white);
-		add("Center",label);
-		setVisible(true);
 		
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				setSize(parent.getSize());
-			}
-			
-		}).start();
+		add("Center",label);
+		
+		setVisible(true);
+		setSize(parent.getSize());
 	}
 	
-	@Override
-	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paintComponent(g);
+	public void setText(String s)
+	{
+		label.setText(s);
 	}
-
 }

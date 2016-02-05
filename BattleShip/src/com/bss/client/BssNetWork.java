@@ -94,57 +94,46 @@ public class BssNetWork extends Thread{
 	
 	public void sendMessage(int MSGTYPE, Object obj)
 	{
-		try{
-		if(isConnected==true)
-		{
-			switch(MSGTYPE)
-			{
-			case BssProtocol.HOST_CONNECTION:
-				out.write((BssProtocol.HOST_CONNECTION+"|"+"\n").getBytes());
-				break;
-			
-			case BssProtocol.MATCH_QUE_REQ:
-				
-				System.out.println(MSGTYPE);
-				out.write((MSGTYPE+"\n").getBytes());
-				if(obj instanceof WaitRoomPanel)
-					waitRoom = (WaitRoomPanel) obj;
-				break;
-				
-			case BssProtocol.MATCH_READY:
-				
-				out.write((MSGTYPE+"\n").getBytes());
-				if(obj instanceof GameReadyPanel)
-					readyRoom = (GameReadyPanel) obj;
-				break;
-				
-			case BssProtocol.ATTACK_PERFORMED:
-				
-				System.out.println("send Attack_performed to Server");
-				
-				Tile t = (Tile) obj;
-				enemyGrid = t.getGrid();
-				out.write((MSGTYPE+"|"+t.getRow()+"|"+t.getCol()+"\n").getBytes());
-				break;
-			
-			case BssProtocol.ATTACK_DONE:
-				
-				AttackResult info = (AttackResult)obj;
-				
-				System.out.println("send attack_done to server.."+(MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"
-						+info.isHit()+"|"+info.getType()+"\n"));
-				
-				out.write((MSGTYPE+"|"+info.getRow()+"|"+info.getCol()+"|"+info.isHit()+"|"+
-						info.getType()+"\n").getBytes());
-				
-				break;
-			
+		try {
+			if (isConnected == true) {
+				switch (MSGTYPE) {
+				case BssProtocol.HOST_CONNECTION:
+					out.write((BssProtocol.HOST_CONNECTION + "|" + "\n").getBytes());
+					break;
+
+				case BssProtocol.MATCH_QUE_REQ:
+
+					System.out.println(MSGTYPE);
+					out.write((MSGTYPE + "\n").getBytes());
+					if (obj instanceof WaitRoomPanel)
+						waitRoom = (WaitRoomPanel) obj;
+					break;
+
+				case BssProtocol.MATCH_READY:
+
+					out.write((MSGTYPE + "\n").getBytes());
+					if (obj instanceof GameReadyPanel)
+						readyRoom = (GameReadyPanel) obj;
+					break;
+
+				case BssProtocol.ATTACK_PERFORMED:
+
+					Tile t = (Tile) obj;
+					enemyGrid = t.getGrid();
+					out.write((MSGTYPE + "|" + t.getRow() + "|" + t.getCol() + "\n").getBytes());
+					break;
+
+				case BssProtocol.ATTACK_DONE:
+
+					AttackResult info = (AttackResult) obj;
+					out.write((MSGTYPE + "|" + info.getRow() + "|" + info.getCol() + "|" + info.isHit() + "|"
+							+ info.getType() + "\n").getBytes());
+					break;
+
+				}
+			} else {
+				System.out.println("not connected to server.");
 			}
-		}
-		else
-		{
-			System.out.println("not connected to server.");
-		}
 		}catch(IOException e)
 		{
 			e.printStackTrace();
@@ -158,7 +147,7 @@ public class BssNetWork extends Thread{
 		
 		String msg;
 		StringTokenizer strTokens ;
-		// TODO Auto-generated method stub
+		
 		try
 		{
 			while(true)
@@ -187,11 +176,8 @@ public class BssNetWork extends Thread{
 					
 				case BssProtocol.ATTACK_PERFORMED:
 					
-					System.out.println("received Attack_performed");
-					
 					int row = Integer.parseInt(strTokens.nextToken());
 					int col = Integer.parseInt(strTokens.nextToken());
-					
 					
 					AttackResult info = GamePlayPanel.getInst().Attacked(row, col);
 					sendMessage(BssProtocol.ATTACK_DONE, info);
@@ -199,8 +185,6 @@ public class BssNetWork extends Thread{
 					break;
 				
 				case BssProtocol.ATTACK_DONE:
-					
-					System.out.println("received Attack_done");
 					
 					int row1 = Integer.parseInt(strTokens.nextToken());
 					int col1 = Integer.parseInt(strTokens.nextToken());
@@ -213,8 +197,8 @@ public class BssNetWork extends Thread{
 					}
 					else
 					{
-						enemyGrid.getTileByRC(row1, col1).setState(TileState.RESERVED);
 						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_reserved_icon);
+						enemyGrid.getTileByRC(row1, col1).setState(TileState.RESERVED);
 					}
 					System.out.println(row1 + " " + col1 + " " + isHit);
 					
@@ -229,6 +213,7 @@ public class BssNetWork extends Thread{
 				case BssProtocol.TURN_ENDS:
 					GamePlayPanel.getInst().showEnemyTurn();
 					GamePlayPanel.getInst().setMyTurn(false);
+					break;
 				}
 			}
 		}catch(Exception ex){

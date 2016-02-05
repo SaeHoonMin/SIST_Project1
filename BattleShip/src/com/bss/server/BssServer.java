@@ -120,7 +120,7 @@ public class BssServer extends JFrame implements Runnable{
 				}
 				else
 				{
-					//이거 안하면 제대로 안먹히는거 수정해야함
+					//이거 안하면 제대로 안먹히는거 
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -201,9 +201,7 @@ public class BssServer extends JFrame implements Runnable{
 						
 						int row = Integer.parseInt(st.nextToken());
 						int col = Integer.parseInt(st.nextToken());
-						
-						System.out.println("send attack_performed to opponent");
-						
+				
 						opponent.messageTo(BssProtocol.ATTACK_PERFORMED+"|"+row+"|"+col);
 						
 						break;
@@ -239,8 +237,6 @@ public class BssServer extends JFrame implements Runnable{
 
 			}
 		}
-    	 // 응답  ( 개인 , 전체 )
-    	 // 중복제거 ==> 제어문 ==> 메소드 ==> 클래스
     	 public void messageTo(String str)
     	 {
     		  try
@@ -270,6 +266,5 @@ public class BssServer extends JFrame implements Runnable{
 			logConsole.append(str+"\n");
 		else
 			logConsole.append(str);
-		
 	}
 }

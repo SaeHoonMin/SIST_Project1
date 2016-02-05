@@ -13,6 +13,9 @@ import javax.swing.SwingConstants;
 
 import com.bss.client.container.MainFrame;
 
+import resources.BssColor;
+import resources.BssFont;
+
 public class QueueDialog extends JDialog implements ActionListener{
 	
 	JLabel msg;
@@ -30,8 +33,7 @@ public class QueueDialog extends JDialog implements ActionListener{
 		
 	//	mainFrame.setEnabled(false);
 		setUndecorated(true);
-		setBackground(new Color(0, 0, 0,200));
-		
+		setBackground(BssColor.BLACK_T2);
 		
 		setSize(200,100);
 	
@@ -42,10 +44,9 @@ public class QueueDialog extends JDialog implements ActionListener{
 		pane.setLayout(null);
 	
 		JLabel msg = new JLabel("Finding a Match..");
-	//	msg.setBackground(new Color(0,0,0,200));
 		msg.setHorizontalAlignment(SwingConstants.CENTER);
 		msg.setForeground(Color.white);
-		msg.setFont(new Font("Arial",Font.BOLD,16));
+		msg.setFont(BssFont.ARIAL_B16);
 		
 		startBtn = new StyleButton("Start");
 		cancleBtn = new StyleButton("Cancle");
@@ -76,10 +77,12 @@ public class QueueDialog extends JDialog implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource() == startBtn)
 		{
-			//메인프레임 재활성화 등등
+			
 		}
 		else if(e.getSource() == cancleBtn)
 		{
+			//메인프레임 재활성화 등등
+			
 			dispose();
 			MainFrame.getInst().setEnabled(true);
 		}

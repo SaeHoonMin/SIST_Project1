@@ -169,7 +169,7 @@ public class GamePlayPanel extends JPanel {
 	{
 		actionAllowed = false;
 		turnPanel.setVisible(true);
-		turnPanel.label.setText("Your Turn");
+		turnPanel.setText("Your Turn");
 		
 		try {
 			Thread.sleep(1500);
@@ -186,7 +186,7 @@ public class GamePlayPanel extends JPanel {
 	{
 		actionAllowed = false;
 		setComponentZOrder(turnPanel, 1);
-		turnPanel.label.setText("Enemy Turn");
+		turnPanel.setText("Enemy Turn");
 		turnPanel.setVisible(true);
 		
 		try {

@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 
 import com.bss.client.components.UIDebugWindow;
 import com.bss.client.gameObjects.Grid;
+import com.bss.common.BssDebug;
 
 public class MainFrame extends JFrame  implements Runnable{
 	
@@ -48,7 +49,7 @@ public class MainFrame extends JFrame  implements Runnable{
 		setSize(width, height);
 		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
 	
-		setTitle("BattleShip");
+		setTitle("BattleShip In Space");
 		
 		loginWindow = new LoginWindowPanel(this);
 		loginWindow.setAlignmentX(0.5f);
@@ -59,8 +60,10 @@ public class MainFrame extends JFrame  implements Runnable{
 		setVisible(true);
 		
 		
-		
-	//	UIDebugWindow debugWindow = new UIDebugWindow();
+		if(BssDebug.UI_DEBUG)
+		{
+			UIDebugWindow debugWindow = new UIDebugWindow();
+		}
 		
 		Thread t = new Thread(this);
 		t.run();
@@ -102,27 +105,24 @@ public class MainFrame extends JFrame  implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while(true)
-		{
-			synchronized(this){
-			mX = MouseInfo.getPointerInfo().getLocation().x;
-			mY = MouseInfo.getPointerInfo().getLocation().y;
-			
-			x = getLocation().x;
-			y = getLocation().y;
-			
-			mouseX = mX-x-xOffset;
-			mouseY = mY-y-yOffset;
-			}
-			
-			/*
+		while (true) {
 			try {
+				synchronized (this) {
+					mX = MouseInfo.getPointerInfo().getLocation().x;
+					mY = MouseInfo.getPointerInfo().getLocation().y;
+
+					x = getLocation().x;
+					y = getLocation().y;
+
+					mouseX = mX - x - xOffset;
+					mouseY = mY - y - yOffset;
+				}
 				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			*/
+
 		}
 	}
 }

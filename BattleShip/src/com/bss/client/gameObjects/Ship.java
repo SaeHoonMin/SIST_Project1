@@ -308,7 +308,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 	}
 
 	@Override
-	public synchronized void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == this)
 		{
@@ -391,11 +391,8 @@ implements MouseListener, MouseMotionListener, Serializable{
 		{
 			mState = MouseState.DRAGGING;
 			
-			
-			
 			int mouseX = mInst.mouseX -clickedX;
 			int mouseY = mInst.mouseY -clickedY;
-		
 		
 			setLocation(mouseX,mouseY);
 		}
@@ -467,9 +464,4 @@ implements MouseListener, MouseMotionListener, Serializable{
 	public void setTaileTile(Tile taileTile) {
 		this.taileTile = taileTile;
 	}
-	
-	
-
-
-
 }

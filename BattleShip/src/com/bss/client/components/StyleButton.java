@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import resources.BssColor;
+import resources.BssFont;
 import sun.awt.FontConfiguration;
 import sun.awt.windows.WFontConfiguration;
 
@@ -105,12 +106,17 @@ public class StyleButton extends JButton implements MouseListener{
 				setBorder(onBorder);
 				label.setForeground(labelOverColor);
 				
-				int fSize = fontSize;
+				int index=0;
 				
 				while (true) {
-					fSize ++;
-					label.setFont(new Font("Arial", Font.BOLD, fSize));
-					repaint();
+					
+					if (index >= BssFont.ARIAL_ARR16_20.length )
+						break;
+					
+					label.setFont(BssFont.ARIAL_ARR16_20[index]);
+					
+					index++;
+					
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException err) {
@@ -118,8 +124,7 @@ public class StyleButton extends JButton implements MouseListener{
 						err.printStackTrace();
 					}
 					
-					if (fSize >= fontSize * 1.3)
-						break;
+					
 				}
 			}
 		}).start();
@@ -136,21 +141,23 @@ public class StyleButton extends JButton implements MouseListener{
 				setBorder(releaseBorder);
 				label.setForeground(labelColor);
 
-				int fSize = label.getFont().getSize();
+				int index = BssFont.ARIAL_ARR16_20.length-1;
 				
 				while (true) {
-					fSize --;
-					label.setFont(new Font("Arial", Font.BOLD, fSize));
-					repaint();
+					
+					if (index < 0)
+						break;
+					
+					label.setFont(BssFont.ARIAL_ARR16_20[index]);
+
+					index--;
+					
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException err) {
 						// TODO Auto-generated catch block
 						err.printStackTrace();
 					}
-					
-					if (fSize <= fontSize )
-						break;
 				}
 			}
 		}).start();
