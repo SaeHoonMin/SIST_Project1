@@ -98,6 +98,23 @@ public class Grid implements Runnable, Serializable{
 		for(int i = locatedShip.size()-1;i>=0;i--)
 		{
 			Ship s = locatedShip.get(i);
+			int r = s.getHeadTile().getRow();
+			int c = s.getHeadTile().getCol();
+			
+			for(int j=0; j<s.getTileSize(); j++)
+			{
+				Tile t ;
+				if(s.getAngle()==ShipAngle.H)
+				{
+					t = tiles[r][c+j];
+				}
+				else
+				{
+					t = tiles[r+j][c];
+				}
+				t.setLocatedShip(null, 0);
+			}
+			
 			if(s.getAngle() == ShipAngle.V)
 				s.rotateShip();
 			unsetReservedTiles(s);
@@ -223,6 +240,22 @@ public class Grid implements Runnable, Serializable{
 		for(int i = locatedShip.size()-1;i>=0;i--)
 		{
 			Ship s = locatedShip.get(i);
+			int r = s.getHeadTile().getRow();
+			int c = s.getHeadTile().getCol();
+			
+			for(int j=0; j<s.getTileSize(); j++)
+			{
+				Tile t ;
+				if(s.getAngle()==ShipAngle.H)
+				{
+					t = tiles[r][c+j];
+				}
+				else
+				{
+					t = tiles[r+j][c];
+				}
+				t.setLocatedShip(null, 0);
+			}
 			
 			unsetReservedTiles(s);
 			locatedShip.remove(i);

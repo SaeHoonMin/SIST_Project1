@@ -60,7 +60,7 @@ public class GamePlayPanel extends JPanel {
 		
 		setSize(frame.getWidth(),frame.getHeight());
 		
-		int gridX = (frame.getWidth() -  (1005)) /2;
+		int gridX = (frame.getWidth() -  (1030)) /2;
 		int gridY = frame.getHeight()/2 -500/2 - 50;
 		
 		turnPanel = new TurnPanel(this);
@@ -72,9 +72,7 @@ public class GamePlayPanel extends JPanel {
 		enemyGrid.setMouseListenerForTile();
 		
 		myGridInfo = grid;
-		myGrid = new Grid(gridX+505,gridY,this);
-		
-		ShowTileInfo();
+		myGrid = new Grid(gridX+530,gridY,this);
 		
 		setShip();
 		enemyGrid.setGridZOrder(getComponentCount()-1);
@@ -86,6 +84,8 @@ public class GamePlayPanel extends JPanel {
 			System.out.println("ship " + getComponentZOrder(ships.get(i)));
 		System.out.println("mygrid "+ getComponentZOrder(myGrid.getTileByRC(0, 0)));
 		
+		
+		showTileInfo();
 //		setBackground(Color.CYAN);
 	}
 	public Grid getMyGrid()
@@ -117,7 +117,7 @@ public class GamePlayPanel extends JPanel {
 	}
 	
 	
-	public void ShowTileInfo()
+	public void showTileInfo()
 	{
 		for(int i=0;i<10;i++)
 		{

@@ -218,6 +218,8 @@ public class BssNetWork extends Thread{
 					}
 					System.out.println(row1 + " " + col1 + " " + isHit);
 					
+					GamePlayPanel.getInst().setActionAllowed(true);
+					
 					break;
 				
 				case BssProtocol.TURN_START:
