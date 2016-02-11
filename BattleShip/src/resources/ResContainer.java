@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class ResContainer {
 	
-	Toolkit toolKit ;
+	private Toolkit toolKit ;
 	
 	/*
 	 * Tile

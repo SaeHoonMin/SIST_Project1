@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import com.bss.client.components.UIDebugWindow;
 import com.bss.client.container.MainFrame;
 
+import resources.BssSprites;
 import resources.ResContainer;
 import resources.ResLoader;
 
@@ -47,7 +48,7 @@ public class BssMain {
 		
 		// ResContainer를 가장 처음에 생성하자.
 		ResContainer resc = new ResContainer();
-		
+		new BssSprites();
 		
 		JFrame jf = new JFrame();
 		

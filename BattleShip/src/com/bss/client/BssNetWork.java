@@ -12,12 +12,15 @@ import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.GameReadyPanel;
 import com.bss.client.container.MainFrame;
 import com.bss.client.container.WaitRoomPanel;
+import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.AttackResult;
+import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
 import com.bss.common.BssProtocol;
 
+import javafx.animation.Animation;
 import resources.ResContainer;
 
 
@@ -42,7 +45,6 @@ public class BssNetWork extends Thread{
 	
 	private Socket s;
 	private OutputStream out;
-	private ObjectOutputStream objOut;
 	private BufferedReader in;
 	
 	private boolean isConnected=false;
@@ -108,6 +110,11 @@ public class BssNetWork extends Thread{
 					if (obj instanceof WaitRoomPanel)
 						waitRoom = (WaitRoomPanel) obj;
 					break;
+					
+				case BssProtocol.MATCH_QUE_CANCLED:
+					
+					out.write((MSGTYPE+"\n").getBytes());
+					break;
 
 				case BssProtocol.MATCH_READY:
 
@@ -129,7 +136,7 @@ public class BssNetWork extends Thread{
 					out.write((MSGTYPE + "|" + info.getRow() + "|" + info.getCol() + "|" + info.isHit() + "|"
 							+ info.getType() + "\n").getBytes());
 					break;
-
+				
 				}
 			} else {
 				System.out.println("not connected to server.");
@@ -153,8 +160,6 @@ public class BssNetWork extends Thread{
 			while(true)
 			{
 				msg = in.readLine();
-				
-				System.out.println(msg);
 				
 				strTokens = new StringTokenizer(msg,"|");
 				
@@ -190,17 +195,19 @@ public class BssNetWork extends Thread{
 					int col1 = Integer.parseInt(strTokens.nextToken());
 					String isHit = strTokens.nextToken();
 					
+					Tile t = enemyGrid.getTileByRC(row1, col1);
+					
 					if(isHit.equals("true"))
 					{
-						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_invalid_icon);
-						enemyGrid.getTileByRC(row1, col1).setState(TileState.INVALID);
+						FixedLocAnimation.Play(AnimName.EXPLOSION_1, GamePlayPanel.getInst(), t.getCenterX(), t.getCenterY());
+						t.setIcon(ResContainer.tile_invalid_icon);
+						t.setState(TileState.INVALID);
 					}
 					else
 					{
-						enemyGrid.getTileByRC(row1, col1).setIcon(ResContainer.tile_reserved_icon);
-						enemyGrid.getTileByRC(row1, col1).setState(TileState.RESERVED);
+						t.setIcon(ResContainer.tile_reserved_icon);
+						t.setState(TileState.RESERVED);
 					}
-					System.out.println(row1 + " " + col1 + " " + isHit);
 					
 					GamePlayPanel.getInst().setActionAllowed(true);
 					

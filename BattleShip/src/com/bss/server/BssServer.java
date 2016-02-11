@@ -184,7 +184,9 @@ public class BssServer extends JFrame implements Runnable{
 						}
 						break;
 					case BssProtocol.MATCH_QUE_CANCLED:
-
+						matchQueue.remove(this);
+						if(opponent!=null)
+							opponent.messageTo(BssProtocol.MATCH_QUE_CANCLED+"|");
 						break;
 
 					case BssProtocol.MATCH_READY:

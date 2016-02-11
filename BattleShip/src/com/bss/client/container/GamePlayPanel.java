@@ -103,6 +103,7 @@ public class GamePlayPanel extends JPanel {
 		
 		if(infoTile.getLocatedShip()!=null)
 		{
+			
 			myTile.setState(TileState.INVALID);
 			myTile.setIcon(ResContainer.tile_invalid_icon);
 			ret = new AttackResult(row,col,true);
@@ -177,7 +178,8 @@ public class GamePlayPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+		
+		//내턴일때 화면 마우스오버 먹히는거 버그 수정
 		
 		turnPanel.setVisible(false);
 		actionAllowed = true;

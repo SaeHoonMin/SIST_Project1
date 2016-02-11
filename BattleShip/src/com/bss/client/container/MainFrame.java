@@ -101,6 +101,17 @@ public class MainFrame extends JFrame  implements Runnable{
 		setContentPane(playPanel);
 		repaint();
 	}
+	
+	public static Point getPointForCenter(int width, int height)
+	{
+		if(inst ==null)
+			return new Point(0,0);
+		
+		int x = inst.getWidth()/2 - width/2 ;
+		int y = (inst.getHeight()-yOffset)/2 - height/2 ;
+		
+		return new Point(x,y);
+	}
 
 	@Override
 	public void run() {

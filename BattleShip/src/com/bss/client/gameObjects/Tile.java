@@ -2,6 +2,7 @@ package com.bss.client.gameObjects;
 
 import java.awt.Image;
 import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -252,5 +253,18 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 
 	public int getCol() {
 		return col;
+	}
+	
+	public Point getCenterXY()
+	{
+		return new Point(x+width/2,y+height/2);
+	}
+	public int getCenterX()
+	{
+		return x+width/2;
+	}
+	public int getCenterY()
+	{
+		return y+height/2;
 	}
 }
