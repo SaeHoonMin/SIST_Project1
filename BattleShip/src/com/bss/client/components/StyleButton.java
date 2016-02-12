@@ -23,30 +23,31 @@ import resources.BssFont;
 import sun.awt.FontConfiguration;
 import sun.awt.windows.WFontConfiguration;
 
-public class StyleButton extends JButton implements MouseListener{
+public class StyleButton extends JButton implements MouseListener {
 	
-	JLabel label ;
+	private JLabel label ;
 	
 	private int fontSize;
 	private Color bgColor;
-	private Color overColor;
-	
 	private Color labelColor;
 	private Color labelOverColor;
 	
-	Border onBorder;
-	Border releaseBorder;
+	private Border onBorder;
+	private Border releaseBorder;
+	private Border disabledBorder;
+	
+//	private Color curColor;
+//	private Font curFont;
 	
 	public StyleButton(String text)
 	{	
-		
-		bgColor = new Color(0,0,0,200);
-		overColor = new Color(246,207,58,200);
+		bgColor = BssColor.BLACK_T1;
 		labelColor = BssColor.TURQUOISE_MID;
 		labelOverColor = BssColor.ORANGE_T2;
 		
 		onBorder = BorderFactory.createLineBorder(BssColor.ORANGE_T1,2);
 		releaseBorder = BorderFactory.createLineBorder(BssColor.TURQUOISE_MID_T1,2);
+		disabledBorder = BorderFactory.createLineBorder(BssColor.GREY_T1,2);
 		
 		setPreferredSize(new Dimension(150,50));
 		setFocusable(false);		
@@ -59,16 +60,31 @@ public class StyleButton extends JButton implements MouseListener{
 		label.setFont(new Font("Arial", Font.BOLD,16));
 		label.setPreferredSize(new Dimension(150,50));		//¹®Á¦
 		
-		//label.
-		
 		fontSize = label.getFont().getSize();
 		
 		setLayout(new BorderLayout());
 		add("Center",label);
 	
 		setOpaque(false);
-		
 		addMouseListener(this);
+	}
+	
+	@Override
+	public void setEnabled(boolean b) {
+		// TODO Auto-generated method stub
+		super.setEnabled(b);
+		if(b == true)
+		{
+			addMouseListener(this);
+			label.setForeground(labelColor);
+			setBorder(releaseBorder);
+		}
+		else 
+		{
+			removeMouseListener(this);
+			setBorder(disabledBorder);
+			label.setForeground(BssColor.GREY_T1);
+		}
 	}
 	
 	protected void paintComponent(Graphics g)
@@ -83,17 +99,6 @@ public class StyleButton extends JButton implements MouseListener{
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 	
-	}
-	
-	
-	public void setPressedState()
-	{
-		
-	}
-	
-	public void releasePressedState()
-	{
-		
 	}
 
 	@Override
@@ -180,14 +185,7 @@ public class StyleButton extends JButton implements MouseListener{
 		this.bgColor = bgColor;
 	}
 
-	public Color getOverColor() {
-		return overColor;
-	}
-
-	public void setOverColor(Color overColor) {
-		this.overColor = overColor;
-	}
-
+	
 	public Color getColor() {
 		return labelColor;
 	}

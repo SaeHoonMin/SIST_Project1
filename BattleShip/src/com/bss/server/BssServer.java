@@ -4,6 +4,7 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -18,6 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.bss.client.gameObjects.ShipType;
+import com.bss.common.AttackResult;
+import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
 
 public class BssServer extends JFrame implements Runnable{
@@ -105,8 +108,8 @@ public class BssServer extends JFrame implements Runnable{
 					Client c1 = matchQueue.get(0);
 					Client c2 = matchQueue.get(1);
 					
-					c1.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c2.nickName);
-					c2.messageTo(BssProtocol.MATCH_QUE_FOUND+"|"+c1.nickName);
+					c1.messageTo(BssProtocol.MATCH_QUE_FOUND);
+					c2.messageTo(BssProtocol.MATCH_QUE_FOUND);
 					
 					new Match(c1,c2);
 					
@@ -137,12 +140,14 @@ public class BssServer extends JFrame implements Runnable{
     	
     	 String nickName = "temp";
     	 Socket s;
-    	 BufferedReader in;//읽기
-    	 OutputStream out;//쓰기 TCP
+    	 ObjectInputStream in;//읽기
+    	 ObjectOutputStream out;//쓰기 TCP
     	
     	 boolean match_ready;
     	 Client opponent = null;
     	 
+    	 BssMsg recvMsg = new BssMsg();
+    	 BssMsg sendMsg = new BssMsg();
     	 Match match;
     	 
     	 
@@ -151,8 +156,8 @@ public class BssServer extends JFrame implements Runnable{
     		  try
     		  {
     			   this.s=s;
-    			   in=new BufferedReader(new InputStreamReader(s.getInputStream(),"UTF8"));
-    			   out=s.getOutputStream();
+    			   in= new ObjectInputStream(s.getInputStream());
+    			   out= new ObjectOutputStream(s.getOutputStream());
     		  }catch(Exception ex){}
     	 }
     	 //통신 
@@ -163,33 +168,29 @@ public class BssServer extends JFrame implements Runnable{
 			try {
 				while (true) {
 					// 요청 받는다
-					String msg = in.readLine();
-
-					printLog(msg);
-
-					StringTokenizer st = new StringTokenizer(msg, "|");
-
-					int no = Integer.parseInt(st.nextToken());
-
+					BssMsg recvMsg = (BssMsg) in.readObject();
+					
+					printLog("msgtype : "+recvMsg.msgType);
+					
 					// 처리
-					switch (no) {
-					case BssProtocol.HOST_CONNECTION:
-						messageTo(BssProtocol.WELCOME + "|" + "Welcome to the BattleShip in Space.");
+					switch (recvMsg.msgType) {
+					case HOST_CONNECTION:
+						messageTo(BssProtocol.WELCOME);
 						break;
-					case BssProtocol.MATCH_QUE_REQ:
+					case MATCH_QUE_REQ:
 						printLog("Match Que requested");
 						synchronized (this) {
 							matchQueue.add(this);
 							printLog("matchQueue Size : " + matchQueue.size());
 						}
 						break;
-					case BssProtocol.MATCH_QUE_CANCLED:
+					case MATCH_QUE_CANCLED:
 						matchQueue.remove(this);
 						if(opponent!=null)
-							opponent.messageTo(BssProtocol.MATCH_QUE_CANCLED+"|");
+							opponent.messageTo(BssProtocol.MATCH_QUE_CANCLED);
 						break;
 
-					case BssProtocol.MATCH_READY:
+					case MATCH_READY:
 						// 매치 상태에 있는 두 플레이어중 하나가 준비 완료
 						// -> 상태를 바꾸고, 두명이 다 래디면 게임 시작 메세지 전송
 						synchronized(this)
@@ -199,34 +200,28 @@ public class BssServer extends JFrame implements Runnable{
 						}
 						break;
 						
-					case BssProtocol.ATTACK_PERFORMED:
+					case ATTACK_PERFORMED:
 						
-						int row = Integer.parseInt(st.nextToken());
-						int col = Integer.parseInt(st.nextToken());
-				
-						opponent.messageTo(BssProtocol.ATTACK_PERFORMED+"|"+row+"|"+col);
+						printLog("attack_performed");
+
+						opponent.messageTo(recvMsg);
 						
 						break;
 					
-					case BssProtocol.ATTACK_DONE :
+					case ATTACK_DONE :
 						
-						int row1 = Integer.parseInt(st.nextToken());
-						int col1 = Integer.parseInt(st.nextToken());
-						String isHit = st.nextToken();
-						String type = st.nextToken();
+						opponent.messageTo(recvMsg);
 						
-						opponent.messageTo(BssProtocol.ATTACK_DONE+"|"
-								+row1+"|"+col1+"|"+isHit+"|"+type);
+						AttackResult ar = (AttackResult) recvMsg.msgObj;
 						
-						if(isHit.equals("false"))
+						if(!ar.isHit)
 						{
-							opponent.messageTo(BssProtocol.TURN_ENDS+"|");
-							messageTo(BssProtocol.TURN_START+"|");
+							opponent.messageTo(BssProtocol.TURN_ENDS);
+							messageTo(BssProtocol.TURN_START);
 						}
 						
 						break;
 					}
-
 				}
 			} catch (Exception ex) {
 
@@ -239,14 +234,20 @@ public class BssServer extends JFrame implements Runnable{
 
 			}
 		}
-    	 public void messageTo(String str)
+		public void messageTo(BssProtocol type)
+		{
+			try{
+				out.writeObject(new BssMsg(type,null));
+			}catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+    	 public void messageTo(BssMsg msg)
     	 {
     		  try
     		  {
-    			  if(str.charAt(str.length()-1)=='\n')
-    				  out.write(str.getBytes());
-    			  else
-    				  out.write((str+"\n").getBytes());
+    			  out.writeObject(msg);
     		  }catch(Exception ex){}
     	 }
     	 public void messageAll(String str)
@@ -255,8 +256,8 @@ public class BssServer extends JFrame implements Runnable{
     		  {
     			   for(int i=0;i<waitVc.size();i++)
     			   {
-    				   Client c=waitVc.elementAt(i);
-    				   c.messageTo(str);
+//    				   Client c=waitVc.elementAt(i);
+//    				   c.messageTo(str);
     			   }
     		  }catch(Exception ex){}
     	 }

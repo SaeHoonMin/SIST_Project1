@@ -2,28 +2,29 @@ package com.bss.common;
 
 import java.io.Serializable;
 
-public class BssProtocol{
+public enum BssProtocol implements Serializable{
 	
-	public static final int HOST_CONNECTION		= 110;
-	public static final int WELCOME				= 112;
+	HOST_CONNECTION,
+	WELCOME,
 	
-	public static final int NULL = 0;
+	NULL,
+
 	
-	public static final int MATCH_QUE_REQ		= 100;		// 매치 탐색 요청 
-	public static final int MATCH_QUE_FOUND		= 101;		// 매치 탐색 성공
-	public static final int MATCH_QUE_CANCLED	= 102;		// 매치 탐색 취소
+	MATCH_QUE_REQ,
+	MATCH_QUE_FOUND,
+	MATCH_QUE_CANCLED,
 	
-	public static final int MATCH_READY			= 200;
-	public static final int MATCH_START			= 201;
-	public static final int MATCH_ENDS			= 202;
-	public static final int MATCH_CANCLED		= 203;
+	MATCH_READY,
+	MATCH_START,
+	MATCH_ENDS	,
+	MATCH_CANCLED,
 	
 	
-	public static final int ATTACK_PERFORMED	= 300;
-	public static final int ATTACK_DONE			= 301;
+	ATTACK_PERFORMED,
+	ATTACK_DONE,
 	
-	public static final int TURN_START			= 305;
-	public static final int TURN_ENDS			= 306;
+	TURN_START,
+	TURN_ENDS,
 	
 
 }

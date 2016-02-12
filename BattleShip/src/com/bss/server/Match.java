@@ -39,8 +39,8 @@ public class Match implements Runnable{
 					&& state == MatchState.READY)
 			{
 				System.out.println("match start");
-				c1.messageTo(BssProtocol.MATCH_START+"|");
-				c2.messageTo(BssProtocol.MATCH_START+"|");
+				c1.messageTo(BssProtocol.MATCH_START);
+				c2.messageTo(BssProtocol.MATCH_START);
 				state = MatchState.START;
 			}
 			else if(state == MatchState.START)
@@ -50,14 +50,14 @@ public class Match implements Runnable{
 				if(i==0)
 				{
 					//c1 first
-					c1.messageTo(BssProtocol.TURN_START+"|");
-					c2.messageTo(BssProtocol.TURN_ENDS+"|");
+					c1.messageTo(BssProtocol.TURN_START);
+					c2.messageTo(BssProtocol.TURN_ENDS);
 				}
 				else
 				{
 					//c2 first
-					c2.messageTo(BssProtocol.TURN_START+"|");
-					c1.messageTo(BssProtocol.TURN_ENDS+"|");
+					c2.messageTo(BssProtocol.TURN_START);
+					c1.messageTo(BssProtocol.TURN_ENDS);
 				}
 			
 				state = MatchState.RUNNING;

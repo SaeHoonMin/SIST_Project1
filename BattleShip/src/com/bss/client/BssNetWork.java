@@ -3,6 +3,7 @@ package com.bss.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -13,11 +14,12 @@ import com.bss.client.container.GameReadyPanel;
 import com.bss.client.container.MainFrame;
 import com.bss.client.container.WaitRoomPanel;
 import com.bss.client.gameObjects.AnimName;
-import com.bss.client.gameObjects.AttackResult;
 import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
+import com.bss.common.AttackResult;
+import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
 
 import javafx.animation.Animation;
@@ -44,9 +46,9 @@ public class BssNetWork extends Thread{
 	private static BssNetWork inst;
 	
 	private Socket s;
-	private OutputStream out;
-	private BufferedReader in;
-	
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
+	private BssMsg msg = new BssMsg();
 	private boolean isConnected=false;
 	
 	WaitRoomPanel waitRoom;
@@ -62,7 +64,10 @@ public class BssNetWork extends Thread{
 	public static BssNetWork getInst()
 	{
 		if( inst == null)
+		{
+			System.out.println("BssNetWork inst is null");
 			inst = new BssNetWork();
+		}
 		
 		return inst;
 	}
@@ -77,11 +82,8 @@ public class BssNetWork extends Thread{
 		
 		try {
 			s = new Socket("localhost", 3355);
-			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-
-			out = s.getOutputStream();
-			//objOut = new ObjectOutputStream(s.getOutputStream());
-
+			out = new ObjectOutputStream(s.getOutputStream());
+			in = new ObjectInputStream(s.getInputStream());
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 			return;
@@ -90,61 +92,68 @@ public class BssNetWork extends Thread{
 		// 통신 시작
 		isConnected = true;
 		new Thread(this).start();
-		
 		sendMessage(BssProtocol.HOST_CONNECTION,null);
 	}
 	
-	public void sendMessage(int MSGTYPE, Object obj)
+	public void sendMessage(BssProtocol type, Object obj)
 	{
+		BssMsg msg = new BssMsg();
+		
+		msg.msgObj = null;
+		msg.msgType = type;
+		
 		try {
 			if (isConnected == true) {
-				switch (MSGTYPE) {
-				case BssProtocol.HOST_CONNECTION:
-					out.write((BssProtocol.HOST_CONNECTION + "|" + "\n").getBytes());
+				switch (type) {
+				case HOST_CONNECTION:
+					
+					
 					break;
 
-				case BssProtocol.MATCH_QUE_REQ:
-
-					System.out.println(MSGTYPE);
-					out.write((MSGTYPE + "\n").getBytes());
+				case MATCH_QUE_REQ:
+					
 					if (obj instanceof WaitRoomPanel)
 						waitRoom = (WaitRoomPanel) obj;
 					break;
 					
-				case BssProtocol.MATCH_QUE_CANCLED:
+				case MATCH_QUE_CANCLED:
 					
-					out.write((MSGTYPE+"\n").getBytes());
 					break;
 
-				case BssProtocol.MATCH_READY:
-
-					out.write((MSGTYPE + "\n").getBytes());
+				case MATCH_READY:
+					
 					if (obj instanceof GameReadyPanel)
 						readyRoom = (GameReadyPanel) obj;
 					break;
 
-				case BssProtocol.ATTACK_PERFORMED:
+				case ATTACK_PERFORMED:
 
 					Tile t = (Tile) obj;
 					enemyGrid = t.getGrid();
-					out.write((MSGTYPE + "|" + t.getRow() + "|" + t.getCol() + "\n").getBytes());
+					System.out.println("msg send");
+					AttackResult atk = new AttackResult(t.getRow(), t.getCol(), false);
+					msg.msgObj = atk;
 					break;
 
-				case BssProtocol.ATTACK_DONE:
+				case ATTACK_DONE:
 
+					System.out.println("attackdone send");
 					AttackResult info = (AttackResult) obj;
-					out.write((MSGTYPE + "|" + info.getRow() + "|" + info.getCol() + "|" + info.isHit() + "|"
-							+ info.getType() + "\n").getBytes());
+					msg.msgObj = obj;
 					break;
 				
 				}
 			} else {
 				System.out.println("not connected to server.");
 			}
+			out.writeObject(msg);
+			
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 	
@@ -152,72 +161,50 @@ public class BssNetWork extends Thread{
 	@Override
 	public void run() {
 		
-		String msg;
-		StringTokenizer strTokens ;
-		
+		BssMsg recvMsg = new BssMsg();
+		BssProtocol type;
 		try
 		{
 			while(true)
 			{
-				msg = in.readLine();
+				recvMsg = (BssMsg) in.readObject();
 				
-				strTokens = new StringTokenizer(msg,"|");
-				
-				int no=Integer.parseInt(strTokens.nextToken());
-				
-				switch(no)
+				switch(recvMsg.msgType)
 				{
-				case BssProtocol.WELCOME:
-					System.out.println(strTokens.nextToken());
+				case WELCOME:
+					System.out.println("Welcome to BattleShip In Space..");
 					break;
 				
-				case BssProtocol.MATCH_QUE_FOUND:
+				case MATCH_QUE_FOUND:
 					waitRoom.gameStart();
 					break;
 					
-				case BssProtocol.MATCH_START:
+				case MATCH_START:
 					readyRoom.gameStart();
 					break;
 					
-				case BssProtocol.ATTACK_PERFORMED:
+				case ATTACK_PERFORMED:
 					
-					int row = Integer.parseInt(strTokens.nextToken());
-					int col = Integer.parseInt(strTokens.nextToken());
+					System.out.println("attack_performed received");
 					
-					AttackResult info = GamePlayPanel.getInst().Attacked(row, col);
+					AttackResult atk = (AttackResult) recvMsg.msgObj;
+					
+					AttackResult info = GamePlayPanel.getInst().Attacked(atk.row, atk.col);
 					sendMessage(BssProtocol.ATTACK_DONE, info);
 					
 					break;
 				
-				case BssProtocol.ATTACK_DONE:
+				case ATTACK_DONE:
 					
-					int row1 = Integer.parseInt(strTokens.nextToken());
-					int col1 = Integer.parseInt(strTokens.nextToken());
-					String isHit = strTokens.nextToken();
-					
-					Tile t = enemyGrid.getTileByRC(row1, col1);
-					
-					if(isHit.equals("true"))
-					{
-						FixedLocAnimation.Play(AnimName.EXPLOSION_1, GamePlayPanel.getInst(), t.getCenterX(), t.getCenterY());
-						t.setIcon(ResContainer.tile_invalid_icon);
-						t.setState(TileState.INVALID);
-					}
-					else
-					{
-						t.setIcon(ResContainer.tile_reserved_icon);
-						t.setState(TileState.RESERVED);
-					}
-					
-					GamePlayPanel.getInst().setActionAllowed(true);
+					GamePlayPanel.getInst().AttackDone((AttackResult) recvMsg.msgObj);
 					
 					break;
 				
-				case BssProtocol.TURN_START:
+				case TURN_START:
 					GamePlayPanel.getInst().showMyTurn();
 					GamePlayPanel.getInst().setMyTurn(true);
 					break;
-				case BssProtocol.TURN_ENDS:
+				case TURN_ENDS:
 					GamePlayPanel.getInst().showEnemyTurn();
 					GamePlayPanel.getInst().setMyTurn(false);
 					break;

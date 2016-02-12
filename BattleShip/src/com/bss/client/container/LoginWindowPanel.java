@@ -38,7 +38,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		setOpaque(false);
 		setLayout(null);
 		
-		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/1.jpg"));
+		img = Toolkit.getDefaultToolkit().createImage(ResLoader.getResURL("images/login_bg.gif"));
 		
 		taLogin = new StyleTextField(150,40);
 		
@@ -106,19 +106,24 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		else
 			return;
 		
-		if(b==btnLogin)
-		{
-			//Connection first..
-			BssNetWork.getInst().connection();
-			if(BssNetWork.getInst().isConnected())
-			{
+		if (b == btnLogin) {
+			 
+			System.out.println("loginbtn clicked");
+			
+			// Connection first..
+			BssNetWork inst = BssNetWork.getInst();
+			
+			System.out.println("got inst");
+			inst.connection();
+			System.out.println("connection called");
+			if (inst.isConnected()) {
 				MainFrame.getInst().openWaitRoom();
 				return;
 			}
-			
-			if(BssDebug.GAMEREADY_TESTING)
+
+			if (BssDebug.GAMEREADY_TESTING)
 				MainFrame.getInst().openWaitRoom();
-			
+
 		}
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();

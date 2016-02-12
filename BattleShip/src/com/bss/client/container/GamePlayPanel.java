@@ -10,12 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.bss.client.components.TurnPanel;
-import com.bss.client.gameObjects.AttackResult;
+import com.bss.client.gameObjects.AnimName;
+import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
+import com.bss.client.gameObjects.ShipType;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
+import com.bss.common.AttackResult;
 import com.bss.common.MatchState;
 
 import resources.ResContainer;
@@ -103,10 +106,52 @@ public class GamePlayPanel extends JPanel {
 		
 		if(infoTile.getLocatedShip()!=null)
 		{
+			Ship ship = infoTile.getLocatedShip();
 			
-			myTile.setState(TileState.INVALID);
-			myTile.setIcon(ResContainer.tile_invalid_icon);
-			ret = new AttackResult(row,col,true);
+			if( ship.attacked() != 0)
+			{
+				FixedLocAnimation.Play(AnimName.EXPLOSION_1, this, myTile.getX()+25, myTile.getY()+25);
+				myTile.setState(TileState.INVALID);
+				myTile.setIcon(ResContainer.tile_invalid_icon);
+				ret = new AttackResult(row,col,true);
+			}
+			else
+			{
+				myTile.setState(TileState.INVALID);
+				myTile.setIcon(ResContainer.tile_invalid_icon);
+				
+				Tile head = ship.getHeadTile();
+				Tile tail = ship.getTaileTile();
+				
+				for(int i = head.getRow(); i<=tail.getRow(); i++)
+				{
+					for(int j= head.getCol(); j<=tail.getCol(); j++)
+					{
+						Tile temp = myGrid.getTileByRC(i, j);
+						FixedLocAnimation.Play(AnimName.EXPLOSION_2, this, temp.getX()+25, temp.getY()+25);
+					}
+				}
+				for(int i = head.getRow()-1; i<=tail.getRow()+1; i++)
+				{
+					for(int j= head.getCol()-1; j<=tail.getCol()+1; j++)
+					{
+						if( i>=0 && i<10 && j>=0 && j<10)
+						{
+							Tile temp2 = myGrid.getTileByRC(i, j);
+							if(temp2.getState() != TileState.INVALID)
+							{
+								temp2.setIcon(ResContainer.tile_reserved_icon);
+								temp2.setState(TileState.RESERVED);
+							}
+								
+						}
+					}
+				}
+				
+				
+				ret = new AttackResult(row, col, true, 
+						ship.getType(),head.getRow(),head.getCol(),tail.getRow(),tail.getCol(),ship.getAngle());
+			}
 		}
 		else
 		{
@@ -117,6 +162,68 @@ public class GamePlayPanel extends JPanel {
 		return ret;
 	}
 	
+	public void AttackDone(AttackResult result)
+	{
+		int row1 = result.row;
+		int col1 = result.col;
+		boolean isHit = result.isHit;
+		
+		Tile t = enemyGrid.getTileByRC(row1, col1);
+		
+		if(isHit)
+		{
+			if(result.type == null){
+				FixedLocAnimation.Play(AnimName.EXPLOSION_1, GamePlayPanel.getInst(), t.getCenterX(), t.getCenterY());
+				t.setIcon(ResContainer.tile_invalid_icon);
+				t.setState(TileState.INVALID);
+			}
+			else
+			{
+				Tile shipTile = enemyGrid.getTileByRC(result.headRow, result.headCol);
+				Ship s = new Ship(result.type,result.ang);
+				
+				s.setLocation(shipTile.getX(), shipTile.getY());
+				s.setEnabled(false);
+				add(s);
+				setComponentZOrder(s, 1);
+				
+				for(int i = result.headRow; i<=result.tailRow; i++)
+				{
+					for(int j= result.headCol; j<=result.tailCol; j++)
+					{
+						Tile temp = enemyGrid.getTileByRC(i, j);
+						FixedLocAnimation.Play(AnimName.EXPLOSION_2, this, temp.getX()+25, temp.getY()+25);
+						temp.setIcon(ResContainer.tile_invalid_icon);
+						temp.setState(TileState.INVALID);
+					}
+				}
+				for(int i = result.headRow-1; i<=result.tailRow+1; i++)
+				{
+					for(int j= result.headCol-1; j<=result.tailCol+1; j++)
+					{
+						if( i>=0 && i<10 && j>=0 && j<10)
+						{
+							Tile temp2 = enemyGrid.getTileByRC(i, j);
+							if(temp2.getState() != TileState.INVALID)
+							{
+								temp2.setIcon(ResContainer.tile_reserved_icon);
+								temp2.setState(TileState.RESERVED);
+							}
+								
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			t.setIcon(ResContainer.tile_reserved_icon);
+			t.setState(TileState.RESERVED);
+		}
+		
+		GamePlayPanel.getInst().setActionAllowed(true);
+		
+	}
 	
 	public void showTileInfo()
 	{

@@ -31,7 +31,6 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 	
 	public static WaitRoomPanel inst ;
 
-    private boolean actionAllowed = true;
 	private StyleButton quickMatchBtn;
     private QueueDialog qd;
     
@@ -55,9 +54,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == quickMatchBtn && actionAllowed==true)
+		if(e.getSource() == quickMatchBtn )
 		{
-			actionAllowed = false;
 			if(BssDebug.GAMEREADY_TESTING)
 			{
 				gameStart(); return;
@@ -65,6 +63,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 
 			if(BssNetWork.getInst()!=null)
 			{	
+				quickMatchBtn.setEnabled(false);
 				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
 				qd = new QueueDialog();
 				return;
@@ -84,14 +83,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 		setOpaque(false);
 	}
     
-    public boolean isActionAllowed() {
- 		return actionAllowed;
- 	}
 
- 	public void setActionAllowed(boolean actionAllowed) {
- 		this.actionAllowed = actionAllowed;
- 	}
-    
 	public void gameStart()
 	{
 		//Error
@@ -99,6 +91,11 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 			qd.dispose();
 		
 		MainFrame.getInst().openGameReady();
+	}
+	
+	public StyleButton getQuickMatchBtn()
+	{
+		return quickMatchBtn;
 	}
     
 }

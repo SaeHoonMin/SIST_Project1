@@ -65,6 +65,7 @@ public class FixedLocAnimation extends Thread{
 				i++;
 				if(i>=size)
 				{
+					label.setIcon(null);
 					break;
 				}
 				Thread.sleep(time);

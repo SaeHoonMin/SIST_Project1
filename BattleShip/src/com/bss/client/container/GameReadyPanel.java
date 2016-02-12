@@ -187,7 +187,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 			}
 			else
 			{	
-				readyBtn.setPressedState();
+				readyBtn.setEnabled(false);
 				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
 			}
 			

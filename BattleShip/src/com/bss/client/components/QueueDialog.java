@@ -91,7 +91,7 @@ public class QueueDialog extends JDialog implements ActionListener{
 			BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_CANCLED,null);
 			dispose();
 			MainFrame.getInst().setEnabled(true);
-			WaitRoomPanel.inst.setActionAllowed(true);
+			WaitRoomPanel.inst.getQuickMatchBtn().setEnabled(true);
 		}
 	}
 

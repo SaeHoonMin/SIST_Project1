@@ -46,9 +46,6 @@ implements MouseListener, MouseMotionListener, Serializable{
 	
 	private int tileSize;
 	
-	private int clickCount=0;
-	
-	
 	private ArrayList<Point> offsetPoints = new ArrayList<Point>();
 	private Tile headTile;
 	private Tile taileTile;
@@ -69,6 +66,8 @@ implements MouseListener, MouseMotionListener, Serializable{
 	private Border clickBorder;
 	
 	private static MainFrame mInst = MainFrame.getInst();
+	
+	private int hitPoint;
 	
 	public MouseState getMouseState()
 	{
@@ -252,8 +251,16 @@ implements MouseListener, MouseMotionListener, Serializable{
 			curImage = vImage;
 		}
 		
+		hitPoint = tileSize;
+		
 		setSize(width,height);
 		setIcon(curIcon);
+	}
+	
+	public int attacked()
+	{
+		hitPoint--;
+		return hitPoint;
 	}
 	
 	
