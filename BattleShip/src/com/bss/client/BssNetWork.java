@@ -130,14 +130,12 @@ public class BssNetWork extends Thread{
 
 					Tile t = (Tile) obj;
 					enemyGrid = t.getGrid();
-					System.out.println("msg send");
 					AttackResult atk = new AttackResult(t.getRow(), t.getCol(), false);
 					msg.msgObj = atk;
 					break;
 
 				case ATTACK_DONE:
 
-					System.out.println("attackdone send");
 					AttackResult info = (AttackResult) obj;
 					msg.msgObj = obj;
 					break;
@@ -184,8 +182,6 @@ public class BssNetWork extends Thread{
 					break;
 					
 				case ATTACK_PERFORMED:
-					
-					System.out.println("attack_performed received");
 					
 					AttackResult atk = (AttackResult) recvMsg.msgObj;
 					

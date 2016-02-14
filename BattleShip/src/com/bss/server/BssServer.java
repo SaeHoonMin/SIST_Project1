@@ -174,9 +174,11 @@ public class BssServer extends JFrame implements Runnable{
 					
 					// Ã³¸®
 					switch (recvMsg.msgType) {
+					
 					case HOST_CONNECTION:
 						messageTo(BssProtocol.WELCOME);
 						break;
+						
 					case MATCH_QUE_REQ:
 						printLog("Match Que requested");
 						synchronized (this) {

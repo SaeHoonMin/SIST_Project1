@@ -18,6 +18,8 @@ public class ResContainer {
 	public static Image bg_login;
 	public static Image bg_waitRoom;
 	
+	public static Image matchFinding;
+	
 	public static Image shipContainer;
 	
 	public static Image tile;
@@ -58,6 +60,8 @@ public class ResContainer {
 	public static ImageIcon ship4h_icon;
 	public static ImageIcon ship5v_icon;
 	public static ImageIcon ship5h_icon;
+	
+	public static ImageIcon matchFinding_Icon;
 	
 	public ResContainer()
 	{
@@ -108,6 +112,11 @@ public class ResContainer {
 		
 		ship5v_icon = new ImageIcon(ship5v);
 		ship5h_icon = new ImageIcon(ship5h);
+		
+		
+		matchFinding =  toolKit.getImage(ResLoader.getResURL("images/280_210Match_Find.gif"));
+		
+		matchFinding_Icon = new ImageIcon(matchFinding);
 	}
 	
 }

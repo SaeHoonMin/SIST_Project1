@@ -23,6 +23,7 @@ import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.ShipType;
 import com.bss.common.BssProtocol;
 
+import resources.BssColor;
 import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel implements ActionListener{
@@ -33,11 +34,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	Image img_shipContainer;
 	Image bgImg;
 	
-	
 	Grid grid;
-	
-	int shipContX;
-	int shipContY;
 	
 	double seconds;
 	
@@ -74,11 +71,10 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		shipContainer = new JLabel();
 		shipContainer.setIcon(new ImageIcon(img_shipContainer));
-		shipContainer.setLocation(gridX+500+10,gridY);
+		shipContainer.setBackground(BssColor.BLACK_T1);
 	
-		shipContX = gridX+500+10; shipContY = gridY;
 		
-		shipContainer.setSize(270,360);
+		shipContainer.setSize(250,260);
 		
 		
 		
@@ -86,17 +82,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	//	grid = new Grid(400,256,this);	// Automatically Added to parent(frame)
 		grid = new Grid(gridX,gridY,this);
 		
-		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, shipContX+150,shipContY+10);	
-		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContX+100,shipContY+70);
-		Ship ship3 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContX+100,shipContY+130);
-		Ship ship4 = new Ship(ShipType.Cruiser, ShipAngle.H, shipContX+50,shipContY+190);
-		Ship ship5 = new Ship(ShipType.BattleShip,ShipAngle.H,shipContX+20,shipContY+250);
-		
-		ships.add(ship);
-		ships.add(ship2);
-		ships.add(ship3);
-		ships.add(ship4);
-		ships.add(ship5);
+
 		
 		readyBtn = new StyleButton("Ready");
 		readyBtn.setBounds(gridX,gridY+505,249,100);
@@ -107,6 +93,21 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		autoBtn = new StyleButton("Auto");
 		autoBtn.setBounds(gridX+502,gridY+505,249,100);
 		autoBtn.addActionListener(this);
+		
+		
+		shipContainer.setLocation(autoBtn.getX(),autoBtn.getY()-5-shipContainer.getHeight());
+		
+		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, shipContainer.getX()+150,shipContainer.getY()+5);	
+		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+55);
+		Ship ship3 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+105);
+		Ship ship4 = new Ship(ShipType.Cruiser, ShipAngle.H, shipContainer.getX()+45,shipContainer.getY()+155);
+		Ship ship5 = new Ship(ShipType.BattleShip,ShipAngle.H,shipContainer.getX(),shipContainer.getY()+205);
+		
+		ships.add(ship);
+		ships.add(ship2);
+		ships.add(ship3);
+		ships.add(ship4);
+		ships.add(ship5);
 		
 		add(shipContainer);
 		add(ship);
@@ -188,6 +189,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 			else
 			{	
 				readyBtn.setEnabled(false);
+				autoBtn.setEnabled(false);
+				resetBtn.setEnabled(false);
 				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
 			}
 			

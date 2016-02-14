@@ -69,6 +69,11 @@ public class StyleButton extends JButton implements MouseListener {
 		addMouseListener(this);
 	}
 	
+	public void setText(String s)
+	{
+		label.setText(s);
+	}
+	
 	@Override
 	public void setEnabled(boolean b) {
 		// TODO Auto-generated method stub

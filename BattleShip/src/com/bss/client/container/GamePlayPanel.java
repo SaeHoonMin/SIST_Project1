@@ -80,16 +80,8 @@ public class GamePlayPanel extends JPanel {
 		setShip();
 		enemyGrid.setGridZOrder(getComponentCount()-1);
 		myGrid.setGridZOrder(getComponentCount()-1);
-
 		
-		
-		for(int i=0;i<ships.size();i++)
-			System.out.println("ship " + getComponentZOrder(ships.get(i)));
-		System.out.println("mygrid "+ getComponentZOrder(myGrid.getTileByRC(0, 0)));
-		
-		
-		showTileInfo();
-//		setBackground(Color.CYAN);
+//		showTileInfo();
 	}
 	public Grid getMyGrid()
 	{
@@ -183,7 +175,8 @@ public class GamePlayPanel extends JPanel {
 				Ship s = new Ship(result.type,result.ang);
 				
 				s.setLocation(shipTile.getX(), shipTile.getY());
-				s.setEnabled(false);
+				s.removeMouseListener(s);
+				s.removeMouseMotionListener(s);
 				add(s);
 				setComponentZOrder(s, 1);
 				

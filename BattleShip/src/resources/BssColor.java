@@ -4,6 +4,10 @@ import java.awt.Color;
 
 public class BssColor {
 	
+	public static final Color MATCHFINDING_BACK 		= new Color(14,34,37);
+	public static final Color MATCHFINDING_BACK_T1 	= new Color(14,34,37,230);
+	public static final Color MATCHFINDING_BACK_T2 	= new Color(14,34,37,180);
+	
 	public static final Color TURQUOISE_MID 		= new Color(72, 209, 204);
 	public static final Color TURQUOISE_MID_T1 	= new Color(72, 209, 204,230);
 	public static final Color TURQUOISE_MID_T2 	= new Color(72, 209, 204,180);

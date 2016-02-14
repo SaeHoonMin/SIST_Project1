@@ -1,5 +1,6 @@
 package com.bss.client.container;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -30,9 +31,14 @@ import resources.ResLoader;
 public class WaitRoomPanel extends JPanel implements ActionListener{
 	
 	public static WaitRoomPanel inst ;
+	
+	private boolean isFindingMatch = false;
 
 	private StyleButton quickMatchBtn;
     private QueueDialog qd;
+    private JLabel loadingLabel;
+    
+    private JPanel panel; 
     
     WaitRoomPanel(JFrame parent) 
     {
@@ -41,14 +47,32 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     	setSize(1280,parent.getHeight());
     	setLayout(null);
 		
+    	loadingLabel = new JLabel(){
+    		@Override
+    		protected void paintComponent(Graphics g) {
+    			// TODO Auto-generated method stub
+    			super.paintComponent(g);
+    			g.setColor(getBackground());
+    			g.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    		}
+    	};
+    	
+    	loadingLabel.setSize(280,210);
+    	loadingLabel.setBackground(BssColor.MATCHFINDING_BACK_T1);
+    	loadingLabel.setOpaque(true);
+    	loadingLabel.setIcon(null);
+    	loadingLabel.setBorder(BorderFactory.createLineBorder(BssColor.TURQUOISE_MID_T2,2));
+    	
 		quickMatchBtn = new StyleButton("Quick Match");
-		quickMatchBtn.setSize(330,100);
-		System.out.println("quickMatchBtn size : "+quickMatchBtn.getSize());
+		quickMatchBtn.setSize(280,70);
 		quickMatchBtn.setLocation(MainFrame.getPointForCenter(quickMatchBtn.getWidth(), quickMatchBtn.getHeight()));
 		quickMatchBtn.addActionListener(this);
-		add(quickMatchBtn);
+    	loadingLabel.setLocation(quickMatchBtn.getX(), quickMatchBtn.getY() - 5 - 210);
 		
-		setOpaque(false);
+		add(quickMatchBtn);
+		add(loadingLabel);
+		
+		setOpaque(false);	
 	 }
 
 	@Override
@@ -63,10 +87,26 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 
 			if(BssNetWork.getInst()!=null)
 			{	
-				quickMatchBtn.setEnabled(false);
-				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
-				qd = new QueueDialog();
-				return;
+				if(isFindingMatch == false){
+					System.out.println("clicked");
+					loadingLabel.setBorder(BorderFactory.createLineBorder(BssColor.ORANGE,2));
+					loadingLabel.setIcon(ResContainer.matchFinding_Icon);
+					BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_REQ, this);
+					quickMatchBtn.setText("Cancel");
+					isFindingMatch = true;
+					return;
+				}
+				else
+				{
+					loadingLabel.setBorder(BorderFactory.createLineBorder(BssColor.TURQUOISE_MID,2));
+					loadingLabel.setIcon(null);
+					loadingLabel.setVisible(false);
+					loadingLabel.setVisible(true);
+					quickMatchBtn.setText("Quick Match");
+					BssNetWork.getInst().sendMessage(BssProtocol.MATCH_QUE_CANCLED,null);
+					isFindingMatch = false;
+					return;
+				}
 			}
 			else
 			{
