@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
-import com.bss.client.components.QueueDialog;
+import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.common.BssDebug;
@@ -35,7 +35,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 	private boolean isFindingMatch = false;
 
 	private StyleButton quickMatchBtn;
-    private QueueDialog qd;
+    private MessageDialog qd;
     private JLabel loadingLabel;
     
     private JPanel panel; 

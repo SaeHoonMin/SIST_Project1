@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
@@ -51,7 +52,6 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		setOpaque(false);
 		setLayout(null);
 		setSize(frame.getWidth(),frame.getHeight());
-		
 
 		int gridX = mainFrame.getWidth()/2 - 500/2 - 50;
 		int gridY = mainFrame.getHeight()/2 -500/2 - 50;
@@ -61,13 +61,14 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));	
 		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
 		
+		
 		countDown = new JLabel();
 		countDown.setHorizontalAlignment(JLabel.CENTER);
 		countDown.setText(String.valueOf(60));
 		countDown.setForeground(new Color(255,255,255));
 		countDown.setFont(new Font("Arial",Font.BOLD,30));
 		countDown.setBorder(BorderFactory.createLineBorder(new Color(100,255,100,100),5));
-		countDown.setBounds(1025, 160, 100, 100);
+		countDown.setBounds(gridX-105, gridY, 100, 100);
 		
 		shipContainer = new JLabel();
 		shipContainer.setIcon(new ImageIcon(img_shipContainer));
@@ -75,9 +76,6 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 		
 		shipContainer.setSize(250,260);
-		
-		
-		
 		
 	//	grid = new Grid(400,256,this);	// Automatically Added to parent(frame)
 		grid = new Grid(gridX,gridY,this);
@@ -134,6 +132,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		grid.startLocateThread();
 		grid.setGridEmpty();
+		
+		BssNetWork.getInst().setReadyRoom(this);
 		startCountDown();
 	}
 	
@@ -160,8 +160,13 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 						seconds-=1;
 						countDown.setText(String.valueOf((int)seconds));
 						if(seconds<=0)
+						{
+							grid.randomLocate(ships);
 							break;
+						}
 					}
+					
+					ready();
 					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -173,6 +178,18 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	}
 
 	
+	public void opponentReady()
+	{
+		
+	}
+	
+	public void ready()
+	{
+		readyBtn.setEnabled(false);
+		autoBtn.setEnabled(false);
+		resetBtn.setEnabled(false);
+		BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
+	}
 	
 	
 	@Override
@@ -182,19 +199,9 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		if(e.getSource() == readyBtn)
 		{
 			if(grid.getLocatedShip().size()<5)
-			{
-				
 				return;
-			}
 			else
-			{	
-				readyBtn.setEnabled(false);
-				autoBtn.setEnabled(false);
-				resetBtn.setEnabled(false);
-				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
-			}
-			
-			//
+				ready();
 		}
 		else if(e.getSource()==resetBtn)
 		{
@@ -210,6 +217,12 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	public void gameStart()
 	{
 		MainFrame.getInst().openGameStart(grid);
+	}
+	
+	public void out()
+	{
+		MessageDialog.Show("Your Opponent Has Left");
+		MainFrame.getInst().openWaitRoom();
 	}
 
 }

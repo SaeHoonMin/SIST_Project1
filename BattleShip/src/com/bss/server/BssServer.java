@@ -199,6 +199,7 @@ public class BssServer extends JFrame implements Runnable{
 						{
 							match_ready = true;
 							printLog("player has pressed ready button");
+							opponent.messageTo(BssProtocol.OPPONENT_READY);
 						}
 						break;
 						
@@ -223,17 +224,26 @@ public class BssServer extends JFrame implements Runnable{
 						}
 						
 						break;
+						
+					case MATCH_ENDS :
+						opponent = null;
+						match = null;
+						match_ready =false;
+						break;
 					}
 				}
 			} catch (Exception ex) {
 
 				printLog("A Client has been disconnected");
 				
-				// 매치가 널이 아니면 상대방에게 캔슬 메세지 보내고
-				// 메치 쓰레드 스탑되게. 매치 널로 바꾸고 opponent도 널로.ㅡ
-				
+				if(match!=null)
+				{
+					opponent.messageTo(BssProtocol.MATCH_CANCLED);
+					opponent.match = null;
+					opponent.match_ready = false;
+					opponent = null;
+				}
 				matchQueue.remove(this);
-
 			}
 		}
 		public void messageTo(BssProtocol type)

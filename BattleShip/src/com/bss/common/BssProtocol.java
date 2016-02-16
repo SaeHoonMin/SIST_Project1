@@ -19,6 +19,7 @@ public enum BssProtocol implements Serializable{
 	MATCH_ENDS	,
 	MATCH_CANCLED,
 	
+	OPPONENT_READY,
 	
 	ATTACK_PERFORMED,
 	ATTACK_DONE,

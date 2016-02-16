@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.bss.client.BssNetWork;
 import com.bss.client.components.TurnPanel;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.FixedLocAnimation;
@@ -19,6 +20,7 @@ import com.bss.client.gameObjects.ShipType;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
 import com.bss.common.AttackResult;
+import com.bss.common.BssProtocol;
 import com.bss.common.MatchState;
 
 import resources.ResContainer;
@@ -39,13 +41,59 @@ public class GamePlayPanel extends JPanel {
 	
 	private MatchState matchState;
 	
-	private boolean isMyTurn;
-	private boolean actionAllowed;
+	private boolean isMyTurn = false;
+	private boolean actionAllowed =  false;
+	
+	private int myShipCount=5;
+	private int enemyShipCount=5;
+	
+	private BssNetWork netWork;
+	
+	public int getMyShipCount()
+	{
+		return myShipCount;
+	}
 
 	public static GamePlayPanel getInst()
 	{
 		return inst;
 	}
+	
+	public void lose()
+	{
+		actionAllowed = false;
+		turnPanel.setVisible(true);
+		turnPanel.setText("You\nLose    ");
+
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		turnPanel.setVisible(false);
+		netWork.sendMessage(BssProtocol.MATCH_ENDS, null);
+		MainFrame.getInst().openWaitRoom();
+	}
+	
+	public void freeWin()
+	{
+		actionAllowed = false;
+		turnPanel.setVisible(true);
+		turnPanel.setText("Victory!\nYour opponent has left.");
+
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		turnPanel.setVisible(false);
+		MainFrame.getInst().openWaitRoom();
+	}
+	
+	
+	
 
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
@@ -81,7 +129,10 @@ public class GamePlayPanel extends JPanel {
 		enemyGrid.setGridZOrder(getComponentCount()-1);
 		myGrid.setGridZOrder(getComponentCount()-1);
 		
-//		showTileInfo();
+		
+		netWork = BssNetWork.getInst();
+		netWork.setGamePlay(this);
+		
 	}
 	public Grid getMyGrid()
 	{
@@ -140,6 +191,7 @@ public class GamePlayPanel extends JPanel {
 					}
 				}
 				
+				myShipCount--;
 				
 				ret = new AttackResult(row, col, true, 
 						ship.getType(),head.getRow(),head.getCol(),tail.getRow(),tail.getCol(),ship.getAngle());
@@ -206,6 +258,29 @@ public class GamePlayPanel extends JPanel {
 						}
 					}
 				}
+
+				enemyShipCount--;
+				if (enemyShipCount == 0) {
+					
+					actionAllowed = false;
+					turnPanel.setVisible(true);
+					turnPanel.setText("Victory!");
+
+					try {
+						Thread.sleep(1500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					turnPanel.setVisible(false);
+
+					netWork.sendMessage(BssProtocol.MATCH_ENDS, null);
+					
+					MainFrame.getInst().openWaitRoom();
+					
+				}
+
 			}
 		}
 		else

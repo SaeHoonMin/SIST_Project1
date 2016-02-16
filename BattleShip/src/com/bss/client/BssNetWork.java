@@ -48,12 +48,13 @@ public class BssNetWork extends Thread{
 	private Socket s;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private BssMsg msg = new BssMsg();
 	private boolean isConnected=false;
 	
-	WaitRoomPanel waitRoom;
-	GameReadyPanel readyRoom;
-	Grid	enemyGrid;
+	private WaitRoomPanel waitRoom;
+	private GameReadyPanel readyRoom;
+	private GamePlayPanel gamePlay;
+	
+
 	
 	public boolean isConnected()
 	{
@@ -122,24 +123,23 @@ public class BssNetWork extends Thread{
 
 				case MATCH_READY:
 					
-					if (obj instanceof GameReadyPanel)
-						readyRoom = (GameReadyPanel) obj;
 					break;
 
 				case ATTACK_PERFORMED:
 
 					Tile t = (Tile) obj;
-					enemyGrid = t.getGrid();
 					AttackResult atk = new AttackResult(t.getRow(), t.getCol(), false);
 					msg.msgObj = atk;
 					break;
 
 				case ATTACK_DONE:
-
-					AttackResult info = (AttackResult) obj;
+					
 					msg.msgObj = obj;
 					break;
 				
+				case MATCH_ENDS :
+					
+					break;
 				}
 			} else {
 				System.out.println("not connected to server.");
@@ -152,9 +152,7 @@ public class BssNetWork extends Thread{
 		}
 		
 		
-	}
-
-	
+	}	
 	
 	@Override
 	public void run() {
@@ -185,31 +183,61 @@ public class BssNetWork extends Thread{
 					
 					AttackResult atk = (AttackResult) recvMsg.msgObj;
 					
-					AttackResult info = GamePlayPanel.getInst().Attacked(atk.row, atk.col);
+					AttackResult info = gamePlay.Attacked(atk.row, atk.col);
 					sendMessage(BssProtocol.ATTACK_DONE, info);
+					
+					if( gamePlay.getMyShipCount()==0)
+					{
+						 gamePlay.lose();
+					}
 					
 					break;
 				
 				case ATTACK_DONE:
 					
-					GamePlayPanel.getInst().AttackDone((AttackResult) recvMsg.msgObj);
-					
+					 gamePlay.AttackDone((AttackResult) recvMsg.msgObj);
 					break;
 				
 				case TURN_START:
-					GamePlayPanel.getInst().showMyTurn();
-					GamePlayPanel.getInst().setMyTurn(true);
+					gamePlay.showMyTurn();
+					gamePlay.setMyTurn(true);
 					break;
 				case TURN_ENDS:
-					GamePlayPanel.getInst().showEnemyTurn();
-					GamePlayPanel.getInst().setMyTurn(false);
+					gamePlay.showEnemyTurn();
+					gamePlay.setMyTurn(false);
 					break;
+					
+				case MATCH_CANCLED :
+					
+					if(gamePlay != null)
+					{
+						gamePlay.freeWin();
+						gamePlay = null;
+					}
+					else if(readyRoom != null)
+					{
+						readyRoom.out();
+						setReadyRoom(null);
+					}
+					
+					break;
+					
+				case OPPONENT_READY :
+					readyRoom.opponentReady();
 				}
 			}
 		}catch(Exception ex){
 			System.out.println("error : " +ex.getMessage());
 			ex.printStackTrace();
 		}
+	}
+	
+	public void setGamePlay(GamePlayPanel gamePlay) {
+		this.gamePlay = gamePlay;
+	}
+
+	public void setReadyRoom(GameReadyPanel readyRoom) {
+		this.readyRoom = readyRoom;
 	}
 	
 }

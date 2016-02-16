@@ -32,7 +32,6 @@ public class FixedLocAnimation extends Thread{
 		label.setSize(w,h);
 		label.setLocation(x-w/2,y-h/2);
 		
-		System.out.println("anim's zorder : "+panel.getComponentZOrder(label));
 		panel.setComponentZOrder(label, 0);
 		
 		parent = panel;
@@ -72,6 +71,7 @@ public class FixedLocAnimation extends Thread{
 			}
 			isOver=true;
 			label.setIcon(null);
+			label.setVisible(false);
 			parent.remove(label);
 			
 		}catch(Exception e)
