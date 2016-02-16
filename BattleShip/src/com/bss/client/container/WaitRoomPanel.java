@@ -135,6 +135,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 
 			if(BssNetWork.getInst()!=null)
 			{	
+				//**** 매치 찾기 버튼 *****//
 				if(isFindingMatch == false){
 					
 					Thread t = 
@@ -184,9 +185,11 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 					isFindingMatch = true;
 					return;
 				}
+				//********매치 취소 버튼 *******//
 				else
 				{
-					loadingLabel.setBorder(BorderFactory.createLineBorder(BssColor.TURQUOISE_MID,2));
+					loadingLabel.setBorder(BorderFactory.createLineBorder(BssColor.GREY_T1,2));
+					loadingLabel.setBackground(BssColor.BLACK_T2);
 					loadingLabel.setIcon(null);
 					
 					Thread t = new Thread(new Runnable() {
