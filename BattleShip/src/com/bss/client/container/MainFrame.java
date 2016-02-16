@@ -88,9 +88,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	{
 		readyPanel = new GameReadyPanel(this);
 		remove(waitRoom);
-		
 		setContentPane(readyPanel);
-		repaint();
 	}
 	//GameReady -> GameStart
 	public void openGameStart(Grid grid)

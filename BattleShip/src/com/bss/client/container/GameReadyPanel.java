@@ -25,6 +25,7 @@ import com.bss.client.gameObjects.ShipType;
 import com.bss.common.BssProtocol;
 
 import resources.BssColor;
+import resources.ResContainer;
 import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel implements ActionListener{
@@ -45,6 +46,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	StyleButton resetBtn;
 	StyleButton autoBtn;
 	
+	Image warpImg = null;
+	
 	private MainFrame mainFrame = MainFrame.getInst();
 	
 	public GameReadyPanel(JFrame frame)
@@ -56,10 +59,69 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		int gridX = mainFrame.getWidth()/2 - 500/2 - 50;
 		int gridY = mainFrame.getHeight()/2 -500/2 - 50;
 		
+		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 	
 		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));	
 		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
+		
+		
+		
+		
+		warpImg = ResContainer.img_warp;
+		JPanel warpPanel = new JPanel(){
+    		@Override
+    		protected void paintComponent(Graphics g) {
+				if(warpImg!=null)
+    				g.drawImage(warpImg, 0, 0,getWidth(),getHeight(), this);
+				else
+				{
+					  g.setColor( getBackground() );
+    			      g.fillRect(0, 0, getWidth(), getHeight());
+				}
+    		}
+    	};
+    	warpPanel.setBackground(new Color(0,0,0,0));
+    	warpPanel.setOpaque(false);
+    	warpPanel.setSize(getSize());
+    	add(warpPanel);
+    	Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				int i = 210;
+				int r, g, b, a=250;
+				r = BssColor.WARP_BG.getRed();
+				g = BssColor.WARP_BG.getGreen();
+				b = BssColor.WARP_BG.getBlue();
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				warpImg = null;
+				
+				while (true) {
+					warpPanel.setBackground(new Color(r,g,b,a));
+					a -=5;
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (a<0)
+						break;
+				}
+				remove(warpPanel);
+				startCountDown();
+			}
+		});
+		t.start();
 		
 		
 		countDown = new JLabel();
@@ -134,11 +196,11 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		grid.setGridEmpty();
 		
 		BssNetWork.getInst().setReadyRoom(this);
-		startCountDown();
+		
 	}
 	
 	public void paintComponent(Graphics g) {
-		g.drawImage(bgImg, 0, 0,this.getWidth(),this.getHeight(), this);
+		g.drawImage(bgImg, 0, 0,1280,900, this);
 	//	paintChildren(g);
 		
 	}

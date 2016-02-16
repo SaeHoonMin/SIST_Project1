@@ -253,10 +253,6 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 
 	public void gameStart()
 	{
-		//Error
-		if(qd!=null)
-			qd.dispose();
-		
 		MainFrame.getInst().openGameReady();
 	}
 	
