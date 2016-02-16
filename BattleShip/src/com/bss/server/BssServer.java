@@ -29,8 +29,8 @@ public class BssServer extends JFrame implements Runnable{
 	JScrollPane scrollPanel;
 	
     ServerSocket ss;
-    Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
     
+    Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
     ArrayList<Client> matchQueue = new ArrayList<Client>();
     
     
@@ -72,6 +72,8 @@ public class BssServer extends JFrame implements Runnable{
 
 				Client client = new Client(s);
 				client.start();
+				
+				waitVc.add(client);
 
 			}
 		} catch (Exception ex) {
@@ -177,6 +179,7 @@ public class BssServer extends JFrame implements Runnable{
 					
 					case HOST_CONNECTION:
 						messageTo(BssProtocol.WELCOME);
+						messageAll(new BssMsg(BssProtocol.CLIENT_COUNT,String.valueOf(waitVc.size())));
 						break;
 						
 					case MATCH_QUE_REQ:
@@ -199,6 +202,7 @@ public class BssServer extends JFrame implements Runnable{
 						{
 							match_ready = true;
 							printLog("player has pressed ready button");
+							opponent.messageTo(BssProtocol.OPPONENT_READY);
 						}
 						break;
 						
@@ -223,17 +227,28 @@ public class BssServer extends JFrame implements Runnable{
 						}
 						
 						break;
+						
+					case MATCH_ENDS :
+						opponent = null;
+						match = null;
+						match_ready =false;
+						break;
 					}
 				}
 			} catch (Exception ex) {
 
 				printLog("A Client has been disconnected");
 				
-				// 매치가 널이 아니면 상대방에게 캔슬 메세지 보내고
-				// 메치 쓰레드 스탑되게. 매치 널로 바꾸고 opponent도 널로.ㅡ
-				
+				if(match!=null)
+				{
+					opponent.messageTo(BssProtocol.MATCH_CANCLED);
+					opponent.match = null;
+					opponent.match_ready = false;
+					opponent = null;
+				}
 				matchQueue.remove(this);
-
+				waitVc.remove(this);
+				messageAll(new BssMsg(BssProtocol.CLIENT_COUNT,waitVc.size()));
 			}
 		}
 		public void messageTo(BssProtocol type)
@@ -252,14 +267,15 @@ public class BssServer extends JFrame implements Runnable{
     			  out.writeObject(msg);
     		  }catch(Exception ex){}
     	 }
-    	 public void messageAll(String str)
+    	 public void messageAll(BssMsg msg)
     	 {
+    		 printLog(msg.msgType + " "+msg.msgObj.toString());
     		  try
     		  {
     			   for(int i=0;i<waitVc.size();i++)
     			   {
-//    				   Client c=waitVc.elementAt(i);
-//    				   c.messageTo(str);
+    				   Client c=waitVc.elementAt(i);
+    				   c.messageTo(msg);
     			   }
     		  }catch(Exception ex){}
     	 }

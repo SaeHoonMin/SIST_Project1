@@ -18,6 +18,8 @@ public class ResContainer {
 	public static Image bg_login;
 	public static Image bg_waitRoom;
 	
+	public static Image img_warp;
+	
 	public static Image matchFinding;
 	
 	public static Image shipContainer;
@@ -70,6 +72,7 @@ public class ResContainer {
 		//frame background images
 		bg_login = toolKit.getImage(ResLoader.getResURL("images/bg.jpg"));
 		bg_waitRoom = toolKit.getImage(ResLoader.getResURL("images/1.jpg"));
+		img_warp = toolKit.getImage(ResLoader.getResURL("images/warp.gif"));
 		
 		//Tile Images
 		tile = toolKit.getImage(ResLoader.getResURL("images/Tile.png"));

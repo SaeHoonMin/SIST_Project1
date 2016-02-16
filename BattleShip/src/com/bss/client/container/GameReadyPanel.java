@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
@@ -24,6 +25,7 @@ import com.bss.client.gameObjects.ShipType;
 import com.bss.common.BssProtocol;
 
 import resources.BssColor;
+import resources.ResContainer;
 import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel implements ActionListener{
@@ -44,6 +46,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	StyleButton resetBtn;
 	StyleButton autoBtn;
 	
+	Image warpImg = null;
+	
 	private MainFrame mainFrame = MainFrame.getInst();
 	
 	public GameReadyPanel(JFrame frame)
@@ -51,15 +55,74 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		setOpaque(false);
 		setLayout(null);
 		setSize(frame.getWidth(),frame.getHeight());
-		
 
 		int gridX = mainFrame.getWidth()/2 - 500/2 - 50;
 		int gridY = mainFrame.getHeight()/2 -500/2 - 50;
+		
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 	
 		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));	
 		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
+		
+		
+		
+		
+		warpImg = ResContainer.img_warp;
+		JPanel warpPanel = new JPanel(){
+    		@Override
+    		protected void paintComponent(Graphics g) {
+				if(warpImg!=null)
+    				g.drawImage(warpImg, 0, 0,getWidth(),getHeight(), this);
+				else
+				{
+					  g.setColor( getBackground() );
+    			      g.fillRect(0, 0, getWidth(), getHeight());
+				}
+    		}
+    	};
+    	warpPanel.setBackground(new Color(0,0,0,0));
+    	warpPanel.setOpaque(false);
+    	warpPanel.setSize(getSize());
+    	add(warpPanel);
+    	Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				int i = 210;
+				int r, g, b, a=250;
+				r = BssColor.WARP_BG.getRed();
+				g = BssColor.WARP_BG.getGreen();
+				b = BssColor.WARP_BG.getBlue();
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				warpImg = null;
+				
+				while (true) {
+					warpPanel.setBackground(new Color(r,g,b,a));
+					a -=5;
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (a<0)
+						break;
+				}
+				remove(warpPanel);
+				startCountDown();
+			}
+		});
+		t.start();
+		
 		
 		countDown = new JLabel();
 		countDown.setHorizontalAlignment(JLabel.CENTER);
@@ -67,7 +130,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		countDown.setForeground(new Color(255,255,255));
 		countDown.setFont(new Font("Arial",Font.BOLD,30));
 		countDown.setBorder(BorderFactory.createLineBorder(new Color(100,255,100,100),5));
-		countDown.setBounds(1025, 160, 100, 100);
+		countDown.setBounds(gridX-105, gridY, 100, 100);
 		
 		shipContainer = new JLabel();
 		shipContainer.setIcon(new ImageIcon(img_shipContainer));
@@ -75,9 +138,6 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 		
 		shipContainer.setSize(250,260);
-		
-		
-		
 		
 	//	grid = new Grid(400,256,this);	// Automatically Added to parent(frame)
 		grid = new Grid(gridX,gridY,this);
@@ -134,11 +194,13 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		grid.startLocateThread();
 		grid.setGridEmpty();
-		startCountDown();
+		
+		BssNetWork.getInst().setReadyRoom(this);
+		
 	}
 	
 	public void paintComponent(Graphics g) {
-		g.drawImage(bgImg, 0, 0,this.getWidth(),this.getHeight(), this);
+		g.drawImage(bgImg, 0, 0,1280,900, this);
 	//	paintChildren(g);
 		
 	}
@@ -160,8 +222,13 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 						seconds-=1;
 						countDown.setText(String.valueOf((int)seconds));
 						if(seconds<=0)
+						{
+							grid.randomLocate(ships);
 							break;
+						}
 					}
+					
+					ready();
 					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -173,6 +240,18 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	}
 
 	
+	public void opponentReady()
+	{
+		
+	}
+	
+	public void ready()
+	{
+		readyBtn.setEnabled(false);
+		autoBtn.setEnabled(false);
+		resetBtn.setEnabled(false);
+		BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
+	}
 	
 	
 	@Override
@@ -182,19 +261,9 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		if(e.getSource() == readyBtn)
 		{
 			if(grid.getLocatedShip().size()<5)
-			{
-				
 				return;
-			}
 			else
-			{	
-				readyBtn.setEnabled(false);
-				autoBtn.setEnabled(false);
-				resetBtn.setEnabled(false);
-				BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
-			}
-			
-			//
+				ready();
 		}
 		else if(e.getSource()==resetBtn)
 		{
@@ -210,6 +279,12 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	public void gameStart()
 	{
 		MainFrame.getInst().openGameStart(grid);
+	}
+	
+	public void out()
+	{
+		MessageDialog.Show("Your Opponent Has Left");
+		MainFrame.getInst().openWaitRoom();
 	}
 
 }
