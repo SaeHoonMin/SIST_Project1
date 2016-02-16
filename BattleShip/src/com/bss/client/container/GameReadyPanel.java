@@ -47,7 +47,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	StyleButton autoBtn;
 	
 	Image warpImg = null;
-	
+	JPanel warpPanel;
 	private MainFrame mainFrame = MainFrame.getInst();
 	
 	public GameReadyPanel(JFrame frame)
@@ -69,7 +69,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		
 		warpImg = ResContainer.img_warp;
-		JPanel warpPanel = new JPanel(){
+		warpPanel = new JPanel(){
     		@Override
     		protected void paintComponent(Graphics g) {
 				if(warpImg!=null)
@@ -97,19 +97,19 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 				b = BssColor.WARP_BG.getBlue();
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
 				warpImg = null;
-				
+				warpPanel.repaint();
 				while (true) {
 					warpPanel.setBackground(new Color(r,g,b,a));
 					a -=5;
 					try {
-						Thread.sleep(10);
+						Thread.sleep(12);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

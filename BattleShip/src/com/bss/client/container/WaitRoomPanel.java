@@ -158,15 +158,14 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 								i+=5;
 								a+=5;
 								try {
-									Thread.sleep(3);
+									Thread.sleep(1);
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								if(i>210)
 									break;
-								loadingLabel.setVisible(false);
-								loadingLabel.setVisible(true);
+								loadingLabel.repaint();
 							}
 
 							warpImg = ResContainer.img_warp;
@@ -212,15 +211,14 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 	
 								a -=5;
 								try {
-									Thread.sleep(3);
+									Thread.sleep(1);
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								if (i < 0)
 									break;
-								loadingLabel.setVisible(false);
-								loadingLabel.setVisible(true);
+								loadingLabel.repaint();
 							}
 							quickMatchBtn.setEnabled(true);
 						}

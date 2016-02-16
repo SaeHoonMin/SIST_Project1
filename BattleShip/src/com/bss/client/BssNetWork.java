@@ -226,9 +226,9 @@ public class BssNetWork extends Thread{
 					readyRoom.opponentReady();
 					
 				case CLIENT_COUNT :
-					System.out.println("Client Count received "+ recvMsg.msgObj.toString());
-					if(waitRoom!=null)
-						waitRoom.setEnemyCount(recvMsg.msgObj.toString());
+//					System.out.println("Client Count received "+ recvMsg.msgObj.toString());
+//					if(waitRoom!=null)
+//						waitRoom.setEnemyCount(recvMsg.msgObj.toString());
 				}
 			}
 		}catch(Exception ex){
