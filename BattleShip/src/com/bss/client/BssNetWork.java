@@ -224,6 +224,11 @@ public class BssNetWork extends Thread{
 					
 				case OPPONENT_READY :
 					readyRoom.opponentReady();
+					
+				case CLIENT_COUNT :
+					System.out.println("Client Count received "+ recvMsg.msgObj.toString());
+					if(waitRoom!=null)
+						waitRoom.setEnemyCount(recvMsg.msgObj.toString());
 				}
 			}
 		}catch(Exception ex){
@@ -238,6 +243,11 @@ public class BssNetWork extends Thread{
 
 	public void setReadyRoom(GameReadyPanel readyRoom) {
 		this.readyRoom = readyRoom;
+	}
+	
+	public void setWaitRoom(WaitRoomPanel waitRoom)
+	{
+		this.waitRoom = waitRoom;
 	}
 	
 }

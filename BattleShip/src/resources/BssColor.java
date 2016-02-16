@@ -24,4 +24,6 @@ public class BssColor {
 	public static final Color BLACK_T2 			= new Color(0,0,0,180);
 	
 	public static final Color GREY_T1				= new Color(50,50,50,200);
+	
+	public static final Color WARP_BG				= new Color(26,13,36);
 }

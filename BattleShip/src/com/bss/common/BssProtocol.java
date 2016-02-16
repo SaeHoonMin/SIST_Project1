@@ -9,7 +9,6 @@ public enum BssProtocol implements Serializable{
 	
 	NULL,
 
-	
 	MATCH_QUE_REQ,
 	MATCH_QUE_FOUND,
 	MATCH_QUE_CANCLED,
@@ -27,5 +26,6 @@ public enum BssProtocol implements Serializable{
 	TURN_START,
 	TURN_ENDS,
 	
+	CLIENT_COUNT
 
 }
