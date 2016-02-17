@@ -48,6 +48,8 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
     private Image bgImg;
     private Image warpImg  = null;
     
+    private Thread t; 
+    
     WaitRoomPanel(JFrame parent) 
     {		
     	inst = this;
@@ -138,7 +140,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 				//**** 매치 찾기 버튼 *****//
 				if(isFindingMatch == false){
 					
-					Thread t = 
+					t = 
 					new Thread(new Runnable(){
 
 						int i=0;
@@ -191,7 +193,7 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 					loadingLabel.setBackground(BssColor.BLACK_T2);
 					loadingLabel.setIcon(null);
 					
-					Thread t = new Thread(new Runnable() {
+					t = new Thread(new Runnable() {
 
 						@Override
 						public void run() {
@@ -251,6 +253,11 @@ public class WaitRoomPanel extends JPanel implements ActionListener{
 
 	public void gameStart()
 	{
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		MainFrame.getInst().openGameReady();
 	}
 	

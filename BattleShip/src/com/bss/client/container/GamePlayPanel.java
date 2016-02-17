@@ -10,7 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
-import com.bss.client.components.TurnPanel;
+import com.bss.client.components.GridHighlight;
+import com.bss.client.components.WhiteFullScreenPane;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
@@ -35,9 +36,10 @@ public class GamePlayPanel extends JPanel {
 	Grid enemyGrid;
 	Grid myGridInfo;
 	Grid myGrid;
+	GridHighlight ghlight;
 	ArrayList<Ship> ships;
 	
-	TurnPanel turnPanel ;
+	WhiteFullScreenPane turnPanel ;
 	
 	private MatchState matchState;
 	
@@ -59,6 +61,11 @@ public class GamePlayPanel extends JPanel {
 		return inst;
 	}
 	
+	
+	/*
+	 * 
+	 *   lose & freewin &... -> 중복 코드!
+	 */
 	public void lose()
 	{
 		actionAllowed = false;
@@ -75,7 +82,6 @@ public class GamePlayPanel extends JPanel {
 		netWork.sendMessage(BssProtocol.MATCH_ENDS, null);
 		MainFrame.getInst().openWaitRoom();
 	}
-	
 	public void freeWin()
 	{
 		actionAllowed = false;
@@ -114,7 +120,7 @@ public class GamePlayPanel extends JPanel {
 		int gridX = (frame.getWidth() -  (1030)) /2;
 		int gridY = frame.getHeight()/2 -500/2 - 50;
 		
-		turnPanel = new TurnPanel(this);
+		turnPanel = new WhiteFullScreenPane(this);
 		add(turnPanel);
 		setComponentZOrder(turnPanel, getComponentCount()-1);
 		turnPanel.setVisible(false);
@@ -126,6 +132,11 @@ public class GamePlayPanel extends JPanel {
 		myGrid = new Grid(gridX+530,gridY,this);
 		
 		setShip();
+		
+		ghlight = new GridHighlight(this);
+		add(ghlight);
+		ghlight.setLocation(myGrid.getStartX()-6, myGrid.getStartY()-6);
+		
 		enemyGrid.setGridZOrder(getComponentCount()-1);
 		myGrid.setGridZOrder(getComponentCount()-1);
 		
@@ -354,6 +365,8 @@ public class GamePlayPanel extends JPanel {
 			e.printStackTrace();
 		}
 		
+		ghlight.moveToGrid(myGrid);
+		
 		//내턴일때 화면 마우스오버 먹히는거 버그 수정
 		
 		turnPanel.setVisible(false);
@@ -372,6 +385,8 @@ public class GamePlayPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		ghlight.moveToGrid(enemyGrid);
 		
 		turnPanel.setVisible(false);
 		actionAllowed = true;

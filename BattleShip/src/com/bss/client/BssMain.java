@@ -34,7 +34,6 @@ import resources.ResContainer;
 import resources.ResLoader;
 
 public class BssMain {
-
 	
 	static Image img;
 	
@@ -42,7 +41,6 @@ public class BssMain {
 		// TODO Auto-generated method stub
 		
 		Integer timerinterval = (Integer) Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"); 
-		
 		
 		/* 로딩화면. */
 		

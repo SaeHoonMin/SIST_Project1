@@ -94,7 +94,6 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		
 		g.drawImage(img, 0, 0,this.getWidth(),this.getHeight(), this);
 		
-		
 	}
 
 	@Override
@@ -108,14 +107,11 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		
 		if (b == btnLogin) {
 			 
-			System.out.println("loginbtn clicked");
 			
 			// Connection first..
 			BssNetWork inst = BssNetWork.getInst();
 			
-			System.out.println("got inst");
 			inst.connection();
-			System.out.println("connection called");
 			if (inst.isConnected()) {
 				MainFrame.getInst().openWaitRoom();
 				return;

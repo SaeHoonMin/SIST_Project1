@@ -97,7 +97,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 				b = BssColor.WARP_BG.getBlue();
 
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1500);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -109,7 +109,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 					warpPanel.setBackground(new Color(r,g,b,a));
 					a -=5;
 					try {
-						Thread.sleep(12);
+						Thread.sleep(15);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

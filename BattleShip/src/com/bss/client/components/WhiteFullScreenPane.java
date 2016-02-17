@@ -10,12 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class TurnPanel extends JPanel{
+public class WhiteFullScreenPane extends JPanel{
 
 	private JLabel label ;
 	public JPanel parent;
 	
-	public TurnPanel(JPanel parent)
+	public WhiteFullScreenPane(JPanel parent)
 	{
 		this.parent = parent;
 		
