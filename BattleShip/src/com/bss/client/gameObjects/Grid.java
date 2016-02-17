@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.MainFrame;
+import com.bss.client.container.PanelState;
 
 import resources.ResContainer;
 
@@ -258,6 +259,7 @@ public class Grid implements Runnable, Serializable{
 					t = tiles[r+j][c];
 				}
 				t.setLocatedShip(null, 0);
+				System.out.println("resetGrid : t set to null");
 			}
 			
 			unsetReservedTiles(s);
@@ -309,10 +311,10 @@ public class Grid implements Runnable, Serializable{
 		
 		Ship ship;
 		Ship ship_before =null;
-		ArrayList<Point> opp;
+		ArrayList<Point> opp = null;
 		ArrayList<Tile> reservedTiles = new ArrayList<Tile>();
 		
-		while(true)
+		while(MainFrame.getPanelState() == PanelState.GAMEREADY)
 		{
 			x = inst.mouseX;
 			y = inst.mouseY;
@@ -374,7 +376,8 @@ public class Grid implements Runnable, Serializable{
 						break;
 					}
 				}
-				
+		
+//				System.out.println(ship+" "+ship_before+" count:"+count+" shipbeforetiesize:"+ship_before.getTileSize());
 				ship_before.returnToSlot();
 				ship_before = null;
 				
@@ -387,6 +390,8 @@ public class Grid implements Runnable, Serializable{
 				count=1;
 				
 				opp = ship.getOffsetPoints();
+			//	System.out.println("opp size : "+opp.size());
+				
 				Tile addingTile;
 				TileState tState = t.getState();
 				
@@ -404,6 +409,7 @@ public class Grid implements Runnable, Serializable{
 				
 				for (int i = 0; i < opp.size(); i++) {
 					Point p = opp.get(i);
+					System.out.println(p);
 					addingTile = whichTile(x + p.x, y + p.y);
 					if (addingTile != null && addingTile.getState() == TileState.EMPTY) {
 						for (int j = 0; j < reservedTiles.size(); j++) {
@@ -417,6 +423,11 @@ public class Grid implements Runnable, Serializable{
 							reservedTiles.add(addingTile);
 						}
 						count++;
+					}
+					else{
+//						System.out.println(addingTile+" and ");
+//						if(addingTile!=null)
+//							System.out.println(addingTile.getState());
 					}
 
 				}

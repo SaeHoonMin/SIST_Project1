@@ -61,7 +61,6 @@ public class GamePlayPanel extends JPanel {
 		return inst;
 	}
 	
-	
 	/*
 	 * 
 	 *   lose & freewin &... -> 중복 코드!
@@ -143,7 +142,7 @@ public class GamePlayPanel extends JPanel {
 		
 		netWork = BssNetWork.getInst();
 		netWork.setGamePlay(this);
-		
+		showTileInfo();
 	}
 	public Grid getMyGrid()
 	{

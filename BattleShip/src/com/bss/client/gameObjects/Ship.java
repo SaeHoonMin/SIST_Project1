@@ -140,6 +140,8 @@ implements MouseListener, MouseMotionListener, Serializable{
 		createBorder();
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		selected = null;
 	}
 	
 	private void createBorder()
@@ -360,7 +362,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 			
 			mState = MouseState.PRESSED;
 			selected = this;
-			
+			System.out.println("ship selected");
 			setBorder(clickBorder);
 			
 		}
@@ -387,6 +389,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 			offsetPoints.clear();
 			
 			selected=null;
+			System.out.println("ship null");
 		}
 	}
 

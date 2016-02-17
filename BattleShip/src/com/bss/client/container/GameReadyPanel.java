@@ -22,6 +22,7 @@ import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
 import com.bss.client.gameObjects.ShipType;
+import com.bss.client.gameObjects.Tile;
 import com.bss.common.BssProtocol;
 
 import resources.BssColor;
@@ -197,6 +198,21 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		BssNetWork.getInst().setReadyRoom(this);
 		
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				Tile ti = grid.getTileByRC(i, j);
+				if(ti.getLocatedShip()!=null)
+				{
+					System.out.print("O ");
+				}
+				else
+					System.out.print("X ");
+			}
+			System.out.println();
+		}
+		grid.resetGrid();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -216,7 +232,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 					
 					seconds = 60;
 					
-					while(true)
+					while(MainFrame.getPanelState() == PanelState.GAMEREADY)
 					{
 						Thread.sleep(1000);
 						seconds-=1;
@@ -247,9 +263,15 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 	
 	public void ready()
 	{
+		for(int i=0; i<ships.size();i++)
+		{
+			ships.get(i).removeMouseListener(ships.get(i));
+			ships.get(i).removeMouseMotionListener(ships.get(i));
+		}
 		readyBtn.setEnabled(false);
 		autoBtn.setEnabled(false);
 		resetBtn.setEnabled(false);
+		
 		BssNetWork.getInst().sendMessage(BssProtocol.MATCH_READY,this);
 	}
 	

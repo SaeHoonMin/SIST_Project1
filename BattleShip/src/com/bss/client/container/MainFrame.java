@@ -1,5 +1,6 @@
 package com.bss.client.container;
 
+import java.awt.Component;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	private int mX,mY;
 	private int x, y;
+	private static PanelState panelState;
 	
 	public int mouseX, mouseY;
 	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
@@ -39,6 +41,11 @@ public class MainFrame extends JFrame  implements Runnable{
 			System.out.println("If you got this message, it's not safe.");
 		}
 		return inst;
+	}
+	
+	public static PanelState getPanelState()
+	{
+		return panelState;
 	}
 	
 	public MainFrame(int width, int height)
@@ -77,29 +84,49 @@ public class MainFrame extends JFrame  implements Runnable{
 	}
 	public void openWaitRoom()
 	{
+		removePanels();
+		panelState = PanelState.WAITROOM;
 		waitRoom = new WaitRoomPanel(this);
-		remove(loginWindow);
 		setContentPane(waitRoom);
-		repaint();
 	}
 	
 	//WaitRoom -> GameReady
 	public void openGameReady()
 	{
+		removePanels();
+		panelState = PanelState.GAMEREADY;
 		readyPanel = new GameReadyPanel(this);
-		remove(waitRoom);
 		setContentPane(readyPanel);
 	}
 	//GameReady -> GameStart
 	public void openGameStart(Grid grid)
 	{
+		removePanels();
+		panelState = PanelState.GAMEPLAY;
 		playPanel = new GamePlayPanel(grid, this);
-		remove(readyPanel);
-		
 		setContentPane(playPanel);
-		repaint();
 	}
 	
+	public void removePanels()
+	{
+		if(playPanel != null)
+		{
+			remove(playPanel);
+			playPanel = null;
+		}
+		if(waitRoom != null)
+		{
+			remove(waitRoom);
+			waitRoom = null;
+		}
+		if(readyPanel != null)
+		{
+			remove(readyPanel);
+			readyPanel = null;
+		}
+	}
+	
+
 	public static Point getPointForCenter(int width, int height)
 	{
 		if(inst ==null)
