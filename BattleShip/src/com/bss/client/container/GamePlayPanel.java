@@ -61,44 +61,7 @@ public class GamePlayPanel extends JPanel {
 		return inst;
 	}
 	
-	/*
-	 * 
-	 *   lose & freewin &... -> 중복 코드!
-	 */
-	public void lose()
-	{
-		actionAllowed = false;
-		turnPanel.setVisible(true);
-		turnPanel.setText("You\nLose    ");
 
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		turnPanel.setVisible(false);
-		netWork.sendMessage(BssProtocol.MATCH_ENDS, null);
-		MainFrame.getInst().openWaitRoom();
-	}
-	public void freeWin()
-	{
-		actionAllowed = false;
-		turnPanel.setVisible(true);
-		turnPanel.setText("Victory!\nYour opponent has left.");
-
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		turnPanel.setVisible(false);
-		MainFrame.getInst().openWaitRoom();
-	}
-	
-	
-	
 
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
@@ -137,6 +100,7 @@ public class GamePlayPanel extends JPanel {
 		ghlight.setLocation(myGrid.getStartX()-6, myGrid.getStartY()-6);
 		
 		enemyGrid.setGridZOrder(getComponentCount()-1);
+		enemyGrid.setEnemyTileAction();
 		myGrid.setGridZOrder(getComponentCount()-1);
 		
 		
@@ -305,6 +269,7 @@ public class GamePlayPanel extends JPanel {
 	
 	public void showTileInfo()
 	{
+		System.out.println("tile mapping info");
 		for(int i=0;i<10;i++)
 		{
 			for(int j=0;j<10;j++)
@@ -389,6 +354,42 @@ public class GamePlayPanel extends JPanel {
 		
 		turnPanel.setVisible(false);
 		actionAllowed = true;
+	}
+	
+	/*
+	 * 
+	 *   lose & freewin &... -> 중복 코드!
+	 */
+	public void lose()
+	{
+		actionAllowed = false;
+		turnPanel.setVisible(true);
+		turnPanel.setText("You\nLose    ");
+
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		turnPanel.setVisible(false);
+		netWork.sendMessage(BssProtocol.MATCH_ENDS, null);
+		MainFrame.getInst().openWaitRoom();
+	}
+	public void freeWin()
+	{
+		actionAllowed = false;
+		turnPanel.setVisible(true);
+		turnPanel.setText("Victory!\nYour opponent has left.");
+
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		turnPanel.setVisible(false);
+		MainFrame.getInst().openWaitRoom();
 	}
 	
 	public void setMatchSTate(MatchState state)

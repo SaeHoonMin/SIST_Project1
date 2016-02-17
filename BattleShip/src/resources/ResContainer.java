@@ -15,6 +15,9 @@ public class ResContainer {
 	 * Tile
 	 */
 	/* Images... */
+	
+	public static Image target_cursor;
+	
 	public static Image bg_login;
 	public static Image bg_waitRoom;
 	
@@ -68,6 +71,8 @@ public class ResContainer {
 	public ResContainer()
 	{
 		toolKit = Toolkit.getDefaultToolkit();
+		
+		target_cursor = toolKit.getImage(ResLoader.getResURL("images/target_cursor.png"));
 		
 		//frame background images
 		bg_login = toolKit.getImage(ResLoader.getResURL("images/bg.jpg"));

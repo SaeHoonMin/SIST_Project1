@@ -198,21 +198,6 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		BssNetWork.getInst().setReadyRoom(this);
 		
-		for(int i=0;i<10;i++)
-		{
-			for(int j=0;j<10;j++)
-			{
-				Tile ti = grid.getTileByRC(i, j);
-				if(ti.getLocatedShip()!=null)
-				{
-					System.out.print("O ");
-				}
-				else
-					System.out.print("X ");
-			}
-			System.out.println();
-		}
-		grid.resetGrid();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -239,7 +224,10 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 						countDown.setText(String.valueOf((int)seconds));
 						if(seconds<=0)
 						{
-							grid.randomLocate(ships);
+							if(grid.getLocatedShip().size()<5)
+							{
+								grid.randomLocate(ships);
+							}
 							break;
 						}
 					}

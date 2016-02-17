@@ -1,6 +1,7 @@
 package com.bss.client.container;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import com.bss.client.components.UIDebugWindow;
 import com.bss.client.gameObjects.Grid;
 import com.bss.common.BssDebug;
+import resources.ResContainer;
 
 public class MainFrame extends JFrame  implements Runnable{
 	
@@ -32,6 +34,9 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	public int mouseX, mouseY;
 	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
+	
+	Cursor defaultCursor = Cursor.getDefaultCursor();
+	Cursor targetCursor;
 	
 	public static MainFrame getInst()
 	{
@@ -50,6 +55,9 @@ public class MainFrame extends JFrame  implements Runnable{
 	
 	public MainFrame(int width, int height)
 	{
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+	    targetCursor = toolkit.createCustomCursor(ResContainer.target_cursor, new Point(13,13), "Target");
+	  
 		if(inst == null)
 			inst = this;
 		
@@ -160,5 +168,14 @@ public class MainFrame extends JFrame  implements Runnable{
 			}
 
 		}
+	}
+	
+	public void setDefaultCursor()
+	{
+		 setCursor(defaultCursor);
+	}
+	public void setTargetCursor()
+	{
+		setCursor(targetCursor);
 	}
 }

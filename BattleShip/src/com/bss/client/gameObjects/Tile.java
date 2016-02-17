@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import com.bss.client.BssNetWork;
 import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.MainFrame;
+import com.bss.client.container.PanelState;
 import com.bss.common.BssProtocol;
 
 import resources.ResContainer;
@@ -101,7 +102,6 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	public void setMouseListener()
 	{
 		addMouseListener(this);
-		
 		new Thread(new Runnable() {
 
 			int w = x + getWidth();
@@ -109,7 +109,7 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 
 			@Override
 			public void run() {
-				while (true) {
+				while (mInst.getPanelState()==PanelState.GAMEPLAY) {
 					if (state == TileState.UNKNOWN) {
 						if (mInst.mouseX >= x && mInst.mouseY >= y && mInst.mouseX < w && mInst.mouseY < h
 								&& isOver == false) {
@@ -136,12 +136,10 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 
 			}
 		}).start();
+
 	}
 	
-	public void releaseMouseListener()
-	{
-		releaseMouseListener();
-	}
+	
 
 	public boolean isHit()
 	{
@@ -159,6 +157,8 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 	public void resetIcon()
 	{
 		setIcon(getCurIcon());
+		
+		
 	}
 	
 	

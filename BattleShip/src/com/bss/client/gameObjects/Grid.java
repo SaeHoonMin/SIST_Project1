@@ -11,6 +11,7 @@ import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.MainFrame;
 import com.bss.client.container.PanelState;
 
+import jdk.nashorn.internal.objects.annotations.Where;
 import resources.ResContainer;
 
 public class Grid implements Runnable, Serializable{
@@ -37,7 +38,6 @@ public class Grid implements Runnable, Serializable{
 	
 	public Grid(int startX, int startY, JPanel panel)
 	{
-		System.out.println(startX + " and " +startY);
 		this.startX=startX;
 		this.startY=startY;
 		this.panel = panel;
@@ -259,7 +259,6 @@ public class Grid implements Runnable, Serializable{
 					t = tiles[r+j][c];
 				}
 				t.setLocatedShip(null, 0);
-				System.out.println("resetGrid : t set to null");
 			}
 			
 			unsetReservedTiles(s);
@@ -409,7 +408,6 @@ public class Grid implements Runnable, Serializable{
 				
 				for (int i = 0; i < opp.size(); i++) {
 					Point p = opp.get(i);
-					System.out.println(p);
 					addingTile = whichTile(x + p.x, y + p.y);
 					if (addingTile != null && addingTile.getState() == TileState.EMPTY) {
 						for (int j = 0; j < reservedTiles.size(); j++) {
@@ -584,6 +582,38 @@ public class Grid implements Runnable, Serializable{
 			}
 			
 		}
+	}
+	
+	public void setEnemyTileAction()
+	{
+		new Thread(new Runnable() {
+			MainFrame mInst = MainFrame.getInst();
+			Tile t;
+			Tile t_before;
+			@Override
+			public void run() {
+				
+				while (MainFrame.getPanelState() == PanelState.GAMEPLAY) {
+					t =  whichTile(mInst.mouseX, mInst.mouseY);
+					if(t!=null)
+					{
+						if(t.getState() == TileState.UNKNOWN)
+							mInst.setTargetCursor();
+						else
+							mInst.setDefaultCursor();
+					}
+					else {
+						mInst.setDefaultCursor();
+					}
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 	}
 	
 	private void clearReservedTiles(ArrayList<Tile> reserved)

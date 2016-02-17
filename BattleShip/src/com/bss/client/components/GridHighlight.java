@@ -9,6 +9,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import com.bss.client.container.MainFrame;
+import com.bss.client.container.PanelState;
 import com.bss.client.gameObjects.Grid;
 
 import resources.BssColor;
@@ -57,7 +59,7 @@ public class GridHighlight extends JPanel implements Runnable{
 			@Override
 			public void run() {
 				try{
-					while(true)
+					while(MainFrame.getPanelState() == PanelState.GAMEPLAY)
 					{
 						setBorder(borders.get(i));
 						i+=phase;
