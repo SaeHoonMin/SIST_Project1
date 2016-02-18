@@ -2,6 +2,7 @@ package com.bss.client.container;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import javax.swing.JFrame;
 
 import com.bss.client.components.UIDebugWindow;
+import com.bss.client.gameObjects.BssSettings;
 import com.bss.client.gameObjects.Grid;
 import com.bss.common.BssDebug;
 import resources.ResContainer;
@@ -27,7 +29,7 @@ public class MainFrame extends JFrame  implements Runnable{
 	WaitRoomPanel		waitRoom;
 	GameReadyPanel		readyPanel;
 	GamePlayPanel		playPanel;
-	
+	Register 			register;
 	private int mX,mY;
 	private int x, y;
 	private static PanelState panelState;
@@ -97,6 +99,24 @@ public class MainFrame extends JFrame  implements Runnable{
 		waitRoom = new WaitRoomPanel(this);
 		setContentPane(waitRoom);
 	}
+	public void settingsWin(){
+		this.setSize(1280,800);
+		Dimension screen =Toolkit.getDefaultToolkit().getScreenSize(); // 모니터화면의 해상도 얻기
+		Dimension mf_size = super.getSize();
+		int left = (screen.width / 2) - (mf_size.width / 2);
+		int top = (screen.height / 2) - (mf_size.height /2 );
+		super.setLocation(left,  top); 
+	}
+	
+	public void settingsfull(){
+	/*	GraphicsDevice device = GraphicsEnvironment.
+		getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		device.setFullScreenWindow(this);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);*/
+		Dimension res = Toolkit.getDefaultToolkit().getScreenSize(); 
+		this.setBounds(0, 0, res.width,res.height);
+	}
+	
 	
 	//WaitRoom -> GameReady
 	public void openGameReady()
@@ -113,6 +133,14 @@ public class MainFrame extends JFrame  implements Runnable{
 		panelState = PanelState.GAMEPLAY;
 		playPanel = new GamePlayPanel(grid, this);
 		setContentPane(playPanel);
+	}
+	
+	public void openSetting(){
+		BssSettings bSet = new BssSettings();
+		
+	}
+	public void openRegister(){
+		register = new Register();
 	}
 	
 	public void removePanels()

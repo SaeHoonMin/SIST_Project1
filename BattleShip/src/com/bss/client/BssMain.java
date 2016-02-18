@@ -25,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import com.bss.client.components.UIDebugWindow;
 import com.bss.client.container.MainFrame;
@@ -87,6 +88,9 @@ public class BssMain {
 		
 		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 		
+		try {
+			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel"); 
+		} catch (Exception e) {} 
 		/*********/ 
 		
 		//mainFrame Start... main game window. 

@@ -96,6 +96,13 @@ public class BssNetWork extends Thread{
 		sendMessage(BssProtocol.HOST_CONNECTION,null);
 	}
 	
+	//회원가입 정보
+		public void memInfo(String info){
+			try{
+			out.write((info).getBytes());
+			}catch(Exception ex){}
+		}
+	
 	public void sendMessage(BssProtocol type, Object obj)
 	{
 		BssMsg msg = new BssMsg();
