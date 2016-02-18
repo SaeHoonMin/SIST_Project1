@@ -58,6 +58,8 @@ public class GamePlayPanel extends JPanel {
 	
 	private BssNetWork netWork;
 	
+	Thread countThread;
+	
 	public int getMyShipCount()
 	{
 		return myShipCount;
@@ -146,14 +148,14 @@ public class GamePlayPanel extends JPanel {
 			Tile t = enemyGrid.getTileByRC(r, c);
 			if(t.getState() == TileState.UNKNOWN){
 				BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, t);
-				GamePlayPanel.getInst().setActionAllowed(false);
+				setActionAllowed(false);
 				break;
 			}
 		}
 	}
 	
 	public void startCountDown() {
-		new Thread(new Runnable() {
+		countThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -173,13 +175,18 @@ public class GamePlayPanel extends JPanel {
 				}
 				}catch (Exception e)
 				{
-					e.printStackTrace();
+					
 				}
 				countDown.setText("");
 			}
 
-		}).start();
-
+		});
+		countThread.start();
+	}
+	public void stopCountDown()
+	{
+		countThread.interrupt();
+		countDown.setText("");
 	}
 
 	

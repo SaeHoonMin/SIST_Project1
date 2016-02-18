@@ -179,7 +179,9 @@ public class Tile extends JLabel implements MouseListener, Serializable{
 					&& gamePlayPanel.isActionAllowed())
 			{	
 				BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, this);
+				
 				GamePlayPanel.getInst().setActionAllowed(false);
+				GamePlayPanel.getInst().stopCountDown();
 			}
 		}
 	}
