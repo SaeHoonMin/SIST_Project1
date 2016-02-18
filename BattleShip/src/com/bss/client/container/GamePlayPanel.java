@@ -5,11 +5,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.CountDown;
 import com.bss.client.components.GridHighlight;
 import com.bss.client.components.WhiteFullScreenPane;
 import com.bss.client.gameObjects.AnimName;
@@ -17,6 +21,7 @@ import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Ship;
 import com.bss.client.gameObjects.ShipAngle;
+import com.bss.client.gameObjects.ShipColor;
 import com.bss.client.gameObjects.ShipType;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
@@ -38,6 +43,8 @@ public class GamePlayPanel extends JPanel {
 	Grid myGrid;
 	GridHighlight ghlight;
 	ArrayList<Ship> ships;
+	
+	CountDown countDown;
 	
 	WhiteFullScreenPane turnPanel ;
 	
@@ -61,8 +68,6 @@ public class GamePlayPanel extends JPanel {
 		return inst;
 	}
 	
-
-
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
 		inst = this;
@@ -79,8 +84,8 @@ public class GamePlayPanel extends JPanel {
 		
 		setSize(frame.getWidth(),frame.getHeight());
 		
-		int gridX = (frame.getWidth() -  (1030)) /2;
-		int gridY = frame.getHeight()/2 -500/2 - 50;
+		int gridX = (frame.getWidth() -  (1100)) /2;
+		int gridY = frame.getHeight()/2 -500/2 - 30;
 		
 		turnPanel = new WhiteFullScreenPane(this);
 		add(turnPanel);
@@ -91,8 +96,9 @@ public class GamePlayPanel extends JPanel {
 		enemyGrid.setMouseListenerForTile();
 		
 		myGridInfo = grid;
-		myGrid = new Grid(gridX+530,gridY,this);
+		myGrid = new Grid(gridX+600,gridY,this);
 		
+	
 		setShip();
 		
 		ghlight = new GridHighlight(this);
@@ -104,14 +110,78 @@ public class GamePlayPanel extends JPanel {
 		myGrid.setGridZOrder(getComponentCount()-1);
 		
 		
+		JLabel ourLabel = new JLabel();
+		ourLabel.setIcon(new ImageIcon(ResContainer.ourForces));
+		ourLabel.setLocation(myGrid.getStartX()-50, myGrid.getStartY()-45);
+		ourLabel.setSize(600,600);
+		ourLabel.setVisible(true);
+		ourLabel.setOpaque(false);		
+		add(ourLabel);
+		
+		countDown = new CountDown();
+		countDown.setLocation(frame.getWidth()/2 - 100/2, gridY-95);
+		countDown.setText("");
+		add(countDown);
+		
+		
+		
 		netWork = BssNetWork.getInst();
 		netWork.setGamePlay(this);
 		showTileInfo();
 	}
+	
 	public Grid getMyGrid()
 	{
 		return myGrid;
 	}
+	
+	private void randomAttack()
+	{
+		Random rand =new Random();
+		int r,c;
+		while(true)
+		{
+			r = rand.nextInt(10);
+			c = rand.nextInt(10);
+			Tile t = enemyGrid.getTileByRC(r, c);
+			if(t.getState() == TileState.UNKNOWN){
+				BssNetWork.getInst().sendMessage(BssProtocol.ATTACK_PERFORMED, t);
+				GamePlayPanel.getInst().setActionAllowed(false);
+				break;
+			}
+		}
+	}
+	
+	public void startCountDown() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				countDown.setText("15");
+				int i = 15;
+				try{
+				while(actionAllowed)
+				{
+					countDown.setText(String.valueOf(i));
+					i--;
+					if(i<0)
+					{
+						randomAttack();
+						break;
+					}
+					Thread.sleep(1000);
+				}
+				}catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				countDown.setText("");
+			}
+
+		}).start();
+
+	}
+
 	
 	//길어질것이다...
 	public AttackResult Attacked(int row, int col)
@@ -198,7 +268,7 @@ public class GamePlayPanel extends JPanel {
 			else
 			{
 				Tile shipTile = enemyGrid.getTileByRC(result.headRow, result.headCol);
-				Ship s = new Ship(result.type,result.ang);
+				Ship s = new Ship(result.type,result.ang,ShipColor.RED);
 				
 				s.setLocation(shipTile.getX(), shipTile.getY());
 				s.removeMouseListener(s);
@@ -254,7 +324,7 @@ public class GamePlayPanel extends JPanel {
 					MainFrame.getInst().openWaitRoom();
 					
 				}
-
+				
 			}
 		}
 		else
@@ -263,6 +333,7 @@ public class GamePlayPanel extends JPanel {
 			t.setState(TileState.RESERVED);
 		}
 		
+		startCountDown();
 		GamePlayPanel.getInst().setActionAllowed(true);
 		
 	}
@@ -335,6 +406,7 @@ public class GamePlayPanel extends JPanel {
 		
 		turnPanel.setVisible(false);
 		actionAllowed = true;
+		startCountDown();
 	}
 	public void showEnemyTurn()
 	{

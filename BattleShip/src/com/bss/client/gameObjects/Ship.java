@@ -127,6 +127,25 @@ implements MouseListener, MouseMotionListener, Serializable{
 		addMouseMotionListener(this);
 	}
 	
+	public Ship(ShipType type, ShipAngle angle, ShipColor sColor )
+	{
+		this.type = type;
+		this.angle = angle;
+		
+		if(sColor==ShipColor.BLUE)
+			setShipForm();
+		else
+			setShipFormRed();
+		
+		//getScaled
+		setLocation(100,100);
+		startX=100; startY = 100;
+		
+		createBorder();
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+	
 	public Ship(ShipType type, ShipAngle angle, int x, int y)
 	{
 		this.type = type;
@@ -164,10 +183,10 @@ implements MouseListener, MouseMotionListener, Serializable{
 		{
 			tileSize = 5;
 			
-			vImage = ResContainer.ship5v;
-			hImage = ResContainer.ship5h;
-			vIcon = ResContainer.ship5v_icon;
-			hIcon = ResContainer.ship5h_icon;
+			vImage = ResContainer.ship5v_b;
+			hImage = ResContainer.ship5h_b;
+			vIcon = ResContainer.ship5v_b_icon;
+			hIcon = ResContainer.ship5h_b_icon;
 			
 			if(angle==ShipAngle.H)
 			{
@@ -184,10 +203,10 @@ implements MouseListener, MouseMotionListener, Serializable{
 		{
 			tileSize = 4;
 			
-			vImage = ResContainer.ship4v;
-			hImage = ResContainer.ship4h;
-			vIcon = ResContainer.ship4v_icon;
-			hIcon = ResContainer.ship4h_icon;
+			vImage = ResContainer.ship4v_b;
+			hImage = ResContainer.ship4h_b;
+			vIcon = ResContainer.ship4v_b_icon;
+			hIcon = ResContainer.ship4h_b_icon;
 			
 			if(angle==ShipAngle.H)
 			{
@@ -200,14 +219,34 @@ implements MouseListener, MouseMotionListener, Serializable{
 				height = 200;
 			}
 		}
-		else if(type==ShipType.Destoryer)
+		else if(type==ShipType.Destoryer1)
 		{
 			tileSize = 3;
 			
-			vImage = ResContainer.ship3v;
-			hImage = ResContainer.ship3h;
-			vIcon = ResContainer.ship3v_icon;
-			hIcon = ResContainer.ship3h_icon;
+			vImage = ResContainer.ship3v_b1;
+			hImage = ResContainer.ship3h_b1;
+			vIcon = ResContainer.ship3v_b1_icon;
+			hIcon = ResContainer.ship3h_b1_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 150;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 150;
+			}
+		}
+		else if(type==ShipType.Destoryer2)
+		{
+			tileSize = 3;
+			
+			vImage = ResContainer.ship3v_b2;
+			hImage = ResContainer.ship3h_b2;
+			vIcon = ResContainer.ship3v_b2_icon;
+			hIcon = ResContainer.ship3h_b2_icon;
 			
 			if(angle==ShipAngle.H)
 			{
@@ -224,10 +263,10 @@ implements MouseListener, MouseMotionListener, Serializable{
 		{
 			tileSize = 2;
 			
-			vImage = ResContainer.ship2v;
-			hImage = ResContainer.ship2h;
-			vIcon = ResContainer.ship2v_icon;
-			hIcon = ResContainer.ship2h_icon;
+			vImage = ResContainer.ship2v_b;
+			hImage = ResContainer.ship2h_b;
+			vIcon = ResContainer.ship2v_b_icon;
+			hIcon = ResContainer.ship2h_b_icon;
 			
 			if(angle==ShipAngle.H)
 			{
@@ -258,7 +297,126 @@ implements MouseListener, MouseMotionListener, Serializable{
 		setSize(width,height);
 		setIcon(curIcon);
 	}
-	
+	private void setShipFormRed()
+	{
+		if(type == ShipType.BattleShip)
+		{
+			tileSize = 5;
+			
+			vImage = ResContainer.ship5v_r;
+			hImage = ResContainer.ship5h_r;
+			vIcon = ResContainer.ship5v_r_icon;
+			hIcon = ResContainer.ship5h_r_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 250;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 250;
+			}
+		}
+		else if(type==ShipType.Cruiser)
+		{
+			tileSize = 4;
+			
+			vImage = ResContainer.ship4v_r;
+			hImage = ResContainer.ship4h_r;
+			vIcon = ResContainer.ship4v_r_icon;
+			hIcon = ResContainer.ship4h_r_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 200;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 200;
+			}
+		}
+		else if(type==ShipType.Destoryer1)
+		{
+			tileSize = 3;
+			
+			vImage = ResContainer.ship3v_r1;
+			hImage = ResContainer.ship3h_r1;
+			vIcon = ResContainer.ship3v_r1_icon;
+			hIcon = ResContainer.ship3h_r1_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 150;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 150;
+			}
+		}
+		else if(type==ShipType.Destoryer2)
+		{
+			tileSize = 3;
+			
+			vImage = ResContainer.ship3v_r2;
+			hImage = ResContainer.ship3h_r2;
+			vIcon = ResContainer.ship3v_r2_icon;
+			hIcon = ResContainer.ship3h_r2_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 150;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 150;
+			}
+		}
+		else if(type==ShipType.Frigate)
+		{
+			tileSize = 2;
+			
+			vImage = ResContainer.ship2v_r;
+			hImage = ResContainer.ship2h_r;
+			vIcon = ResContainer.ship2v_r_icon;
+			hIcon = ResContainer.ship2h_r_icon;
+			
+			if(angle==ShipAngle.H)
+			{
+				width = 100;
+				height = 50;
+			}
+			else
+			{
+				width = 50;
+				height = 100;
+			}
+			
+		}
+		
+		if(angle == ShipAngle.H)
+		{
+			curIcon = hIcon;
+			curImage = hImage;
+		}
+		else
+		{
+			curIcon = vIcon;
+			curImage = vImage;
+		}
+		
+		hitPoint = tileSize;
+		
+		setSize(width,height);
+		setIcon(curIcon);
+	}
 	public int attacked()
 	{
 		hitPoint--;

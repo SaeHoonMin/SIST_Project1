@@ -7,8 +7,6 @@ public enum BssProtocol implements Serializable{
 	HOST_CONNECTION,
 	WELCOME,
 	
-	NULL,
-
 	MATCH_QUE_REQ,
 	MATCH_QUE_FOUND,
 	MATCH_QUE_CANCLED,

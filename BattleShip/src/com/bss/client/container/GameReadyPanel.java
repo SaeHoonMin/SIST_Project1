@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.CountDown;
 import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.gameObjects.Grid;
@@ -125,13 +126,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		t.start();
 		
 		
-		countDown = new JLabel();
-		countDown.setHorizontalAlignment(JLabel.CENTER);
-		countDown.setText(String.valueOf(60));
-		countDown.setForeground(new Color(255,255,255));
-		countDown.setFont(new Font("Arial",Font.BOLD,30));
-		countDown.setBorder(BorderFactory.createLineBorder(new Color(100,255,100,100),5));
-		countDown.setBounds(gridX-105, gridY, 100, 100);
+		countDown = new CountDown();
+		countDown.setBounds(gridX-105, gridY, 100,100);
 		
 		shipContainer = new JLabel();
 		shipContainer.setIcon(new ImageIcon(img_shipContainer));
@@ -159,8 +155,8 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		shipContainer.setLocation(autoBtn.getX(),autoBtn.getY()-5-shipContainer.getHeight());
 		
 		Ship ship = new Ship(ShipType.Frigate, ShipAngle.H, shipContainer.getX()+150,shipContainer.getY()+5);	
-		Ship ship2 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+55);
-		Ship ship3 = new Ship(ShipType.Destoryer, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+105);
+		Ship ship2 = new Ship(ShipType.Destoryer1, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+55);
+		Ship ship3 = new Ship(ShipType.Destoryer2, ShipAngle.H,shipContainer.getX()+100,shipContainer.getY()+105);
 		Ship ship4 = new Ship(ShipType.Cruiser, ShipAngle.H, shipContainer.getX()+45,shipContainer.getY()+155);
 		Ship ship5 = new Ship(ShipType.BattleShip,ShipAngle.H,shipContainer.getX(),shipContainer.getY()+205);
 		
