@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.bss.client.gameObjects.ShipType;
+import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.AttackResult;
 import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
@@ -31,11 +32,14 @@ public class BssServer extends JFrame implements Runnable{
     ServerSocket ss;
     
     Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
+    Vector<UserInfo> userVc=new Vector<UserInfo>();
     ArrayList<Client> matchQueue = new ArrayList<Client>();
     
     
     public BssServer()
     {
+    	DBA member = new DBA();  
+    	member.battleshipTable();
     	logConsole = new JTextArea();
     	scrollPanel = new JScrollPane(logConsole);
 
@@ -139,8 +143,8 @@ public class BssServer extends JFrame implements Runnable{
 	
     class Client extends Thread
     {
-    	
-    	 String nickName = "temp";
+    	 String userId=		"";
+    	 String nickName = "";
     	 Socket s;
     	 ObjectInputStream in;//읽기
     	 ObjectOutputStream out;//쓰기 TCP
@@ -177,6 +181,20 @@ public class BssServer extends JFrame implements Runnable{
 					// 처리
 					switch (recvMsg.msgType) {
 					
+					case USERINFO:
+//						userVc.add((UserInfo) recvMsg.msgObj); //유저아이디담기
+//						System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
+						
+						for(int i=0;i<userVc.size();i++){
+							if(userVc.elementAt(i).toString().equals(recvMsg.msgObj.toString())){
+							messageTo(BssProtocol.EXIT);
+						}
+						}
+						userVc.addElement((UserInfo)recvMsg.msgObj);
+						printLog((userVc.elementAt(0).toString()));
+						break;
+						
+						
 					case HOST_CONNECTION:
 						messageTo(BssProtocol.WELCOME);
 						messageAll(new BssMsg(BssProtocol.CLIENT_COUNT,String.valueOf(waitVc.size())));

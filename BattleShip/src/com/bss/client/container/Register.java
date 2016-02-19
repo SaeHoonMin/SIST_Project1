@@ -17,7 +17,7 @@ public class Register extends JFrame implements ActionListener {
 	JLabel la_information,la1_id,la2_pwd,la3_pwd2,la4_email;
 	JTextArea ta1_register;
 	JButton b_ok,b_cancel,b_check;
-
+	String idcheck="";
 	
 	public Register(){
 		
@@ -116,13 +116,27 @@ public class Register extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		DBA member = new DBA();  //객체생성해줘야한다.
+	
 		
-		//////////////////////////
 		if(e.getSource()==b_check){
-			member.allUserInfo();
-//			member.deleteAlluser(); // 유저삭제
+			try {
+				if(member.idCheck(tf1_id.getText())){
+					JOptionPane.showMessageDialog(this, "중복된 아이디가 존재합니다.");
+					tf1_id.requestFocus();
+				}
+				else if(tf1_id.getText().length()<5 || tf1_id.getText().length()>12){
+					JOptionPane.showMessageDialog(this, "아이디는 5~12글자 사이로 입력하세요.");
+					tf1_id.requestFocus();
+				}
+				else {
+					JOptionPane.showMessageDialog(this, "사용할 수 있는 아이디입니다.");
+					idcheck=tf1_id.getText();
+					this.idcheck = idcheck;
+					pf1_pwd.requestFocus();
+				}
+			} catch (SQLException e1) {}
 		}
-		/////////////////////////////////
+		
 		
 		if(e.getSource()==b_ok){
 	
@@ -133,15 +147,20 @@ public class Register extends JFrame implements ActionListener {
 			String pwd2 = new String(b);
 			
 			try{
-			if(member.idCheck(tf1_id.getText())){
+				
+			/*if(member.idCheck(tf1_id.getText())){
 				JOptionPane.showMessageDialog(this, "중복된 아이디가 존재합니다.");
 				tf1_id.requestFocus();
 			}
 			else if(tf1_id.getText().length()<4 || tf1_id.getText().length()>12){
 				JOptionPane.showMessageDialog(this, "아이디는 5~12글자 사이로 입력하세요.");
 				tf1_id.requestFocus();
+			}*/
+			if(!idcheck.equals(tf1_id.getText())){
+				JOptionPane.showMessageDialog(this, "중복확인을 해주세요.");
+				tf1_id.requestFocus();
+				System.out.println(idcheck);
 			}
-		
 			
 			else if(tf1_id.getText().equals("")||pf1_pwd.equals("")||
 			    		pf2_pwd.equals("")||tf2_email.getText().equals("")){
@@ -155,7 +174,7 @@ public class Register extends JFrame implements ActionListener {
 				pf2_pwd.setText("");
 				pf2_pwd.requestFocus();
 			}
-			else if(pwd1.length()<7){
+			else if(pwd1.length()<8){
 				JOptionPane.showMessageDialog(this, "비밀번호는 8글자 이상 입력하세요.");
 				pf1_pwd.setText(""); 
 				pf2_pwd.setText(""); 
@@ -169,14 +188,12 @@ public class Register extends JFrame implements ActionListener {
 	
 			else{
 			
-			info= BssProtocol.INSERTUSERINFO+"|"+tf1_id.getText()+"|"+pwd1+"|"+tf2_email.getText();
-			
-			System.out.println(info);
-		
+			info= tf1_id.getText()+"|"+pwd1+"|"+tf2_email.getText();
 			
 			member.insertMember(info);
 			
 			JOptionPane.showMessageDialog(this, "회원가입 완료");
+			
 			
 			member.allUserInfo(); //테이블 데이터 읽어오기
 			

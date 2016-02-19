@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import javax.swing.JOptionPane;
+
 import com.bss.client.container.GamePlayPanel;
 import com.bss.client.container.GameReadyPanel;
 import com.bss.client.container.MainFrame;
@@ -18,6 +20,7 @@ import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
+import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.AttackResult;
 import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
@@ -79,7 +82,7 @@ public class BssNetWork extends Thread{
 		inst = this;
 	}
 
-	public void connection() {
+	public void connection(String id) {
 		
 		try {
 			s = new Socket("localhost", 3355);
@@ -93,15 +96,11 @@ public class BssNetWork extends Thread{
 		// 통신 시작
 		isConnected = true;
 		new Thread(this).start();
-		sendMessage(BssProtocol.HOST_CONNECTION,null);
+		sendMessage(BssProtocol.HOST_CONNECTION,id);
 	}
 	
 	//회원가입 정보
-		public void memInfo(String info){
-			try{
-			out.write((info).getBytes());
-			}catch(Exception ex){}
-		}
+	
 	
 	public void sendMessage(BssProtocol type, Object obj)
 	{
@@ -113,9 +112,11 @@ public class BssNetWork extends Thread{
 		try {
 			if (isConnected == true) {
 				switch (type) {
+				case USERINFO:
+					msg.msgObj=obj;
+					break;
+					
 				case HOST_CONNECTION:
-					
-					
 					break;
 
 				case MATCH_QUE_REQ:
@@ -176,6 +177,12 @@ public class BssNetWork extends Thread{
 				{
 				case WELCOME:
 					System.out.println("Welcome to BattleShip In Space..");
+					
+					break;
+					
+				case EXIT:
+					JOptionPane.showMessageDialog(null, "현재 아이디가 접속중입니다.");
+					System.exit(0);
 					break;
 				
 				case MATCH_QUE_FOUND:

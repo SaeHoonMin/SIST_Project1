@@ -1,15 +1,27 @@
 package com.bss.client.gameObjects;
 
-public class UserInfo {
+import java.io.Serializable;
+
+public class UserInfo implements Serializable{
 	
 	private static UserInfo inst = null;
 	
 	private String userID;
+	private String pwd;
 	private String nickName;
 	
+	public UserInfo(String id){
+		userID=id;
+	}
 	
-	public static UserInfo getInst()
-	{
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return userID;
+	}
+	
+	/*public static UserInfo getInst(){
 		if(inst == null)
 		{
 			System.out.println("create Instance Fisrt!");
@@ -24,6 +36,6 @@ public class UserInfo {
 		inst = this;
 		
 		
-	}
+	}*/
 
 }

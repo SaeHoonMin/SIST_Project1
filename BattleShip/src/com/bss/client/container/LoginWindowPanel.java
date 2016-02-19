@@ -16,8 +16,11 @@ import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.StylePasswordField;
 import com.bss.client.components.StyleTextField;
+import com.bss.client.gameObjects.Grid;
+import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.BssDebug;
-import com.bss.server.DBA;
+import com.bss.common.BssProtocol;
+import com.bss.server.*;
 
 import resources.ResLoader;
 import sun.security.util.Debug;
@@ -36,6 +39,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 	private StyleTextField taLogin;
 	private StylePasswordField taPass;
 	private JLabel label ;
+	public String userid;
 
 	public LoginWindowPanel(JFrame parent)
 	{
@@ -125,10 +129,12 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 
 			// Connection first..
 			BssNetWork inst = BssNetWork.getInst();
-			
-			inst.connection();
+			inst.connection(taLogin.getField().getText());
 			if (inst.isConnected()) {
+				BssNetWork.getInst().sendMessage(BssProtocol.USERINFO, new UserInfo(taLogin.getField().getText()));
 				MainFrame.getInst().openWaitRoom();
+				//유저정보보내기
+				
 				return;
 			}
 

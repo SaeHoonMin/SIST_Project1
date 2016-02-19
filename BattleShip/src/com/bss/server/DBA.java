@@ -46,18 +46,22 @@ public class DBA{
 	  }
 	   }
 	 
+	 
+	 public void dbDisConnection(){
+	    try{
+	    	if(pstmt!=null) pstmt.close();
+	    	if(con!=null) con.close();
+	    }catch(Exception ex){}
+	 }
+
 	 //회원가입
    public void insertMember(String info){
 	  	System.out.println(info); 
 	   	dbConnect();
 	 
 	   	StringTokenizer st = new StringTokenizer(info, "|");
-	   	System.out.println(st.nextToken());
-	    String id="114|123|123|123@";		
-		String[] split = info.split("|");
-		   
+	   	
 	    String sql ="insert into BattleShip values(?,?,?)";  //회원 추가
-	    
 	    
 	    try{
 	    pstmt = con.prepareStatement(sql);
@@ -72,6 +76,9 @@ public class DBA{
 	   e.printStackTrace();
 	   System.out.println("새로운 레코드 추가에 실패");
 	  }
+	    finally{
+	    	dbDisConnection();
+	    }
 	    }
    
  //서버 실행시 자동으로 배틀쉽 테이블을 만들어줌.
@@ -85,6 +92,8 @@ public class DBA{
 		   
 	   }catch(SQLException e){
 		   System.out.println("테이블이 존재합니다.");
+	   }finally{
+		   dbDisConnection();
 	   }
 	   
    }
@@ -96,8 +105,11 @@ public class DBA{
 	   try{
 		   pstmt = con.prepareStatement(query);
 		   rs=pstmt.executeQuery();
-		   System.out.println("레코드삭제");
+		   System.out.println("유저목록 전체삭제");
 	   }catch(Exception ex){}
+	   finally{
+		   dbDisConnection();
+	   }
    }
    	/////////////////////////////////////////////필요없는 메소드
 
@@ -110,7 +122,7 @@ public class DBA{
 		   String alluser="";
 		   query="select id,pwd,email from BattleShip";
 		   try{
-			   System.out.println("레코드 검색시작");
+			   System.out.println("전체 유저 검색시작");
 		   pstmt = con.prepareStatement(query);
 		   rs=pstmt.executeQuery();
 		   
@@ -120,12 +132,16 @@ public class DBA{
 		   System.out.println(alluser);
 		 
 		   }catch(Exception ex){}
+		   finally{
+			   dbDisConnection();
+		   }
 	   }///////////////////////////////필요없는 메소드
 	
 
 	   //아이디 중복체크
 	   public Boolean idCheck(String id) throws SQLException{
-		    dbConnect();
+		    
+		   	dbConnect();
 		    ResultSet rs = null;
 		    System.out.println(id);
 		    int Cnt = 0;
@@ -134,10 +150,10 @@ public class DBA{
 		    pstmt.setString(1,id);
 		    rs=pstmt.executeQuery();
 		    /*rs = pstmt.executeQuery();*/
-		    
 		    while(rs.next()){
 		     Cnt++;
 		    }
+		    dbDisConnection();
 		    if(Cnt > 0){
 		    System.out.println("아이디있음");
 		    return true;
@@ -159,9 +175,11 @@ public class DBA{
 		    while(rs.next()){
 		    	if(rs.getString("id").equals(id)&&rs.getString("pwd").equals(pwd)){
 		    		System.out.println("로그인 성공");
+		    		dbDisConnection();
 		    		return true;
 		    	}
 		    }
+		    dbDisConnection();
 		    return false;
 	   }
 	   

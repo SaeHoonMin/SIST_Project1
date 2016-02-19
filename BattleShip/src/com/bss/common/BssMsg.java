@@ -7,10 +7,9 @@ public class BssMsg implements Serializable {
 	public BssProtocol msgType;
 	
 	public Object msgObj;
-	
+	public String userinfo;
 	public BssMsg()
 	{
-		
 	}
 	public BssMsg(BssProtocol type, Object obj)
 	{
