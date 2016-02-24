@@ -1,12 +1,16 @@
 package com.bss.client;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.StringTokenizer;
 
 import javax.swing.*;
@@ -51,6 +55,7 @@ public class BssNetWork extends Thread {
 	private WaitRoomPanel waitRoom;
 	private GameReadyPanel readyRoom;
 	private GamePlayPanel gamePlay;
+	private LoginWindowPanel loginpanel;
 
 	public boolean isConnected() {
 		return isConnected;
@@ -71,13 +76,33 @@ public class BssNetWork extends Thread {
 	}
 
 	public void connection() {
-
+		String ip = null, port = null;
+		File file = new File("./settings/info.txt");
 		try {
-			s = new Socket("localhost", 3355);
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String sLine = null;
+
+			while ((sLine = br.readLine()) != null) {
+				StringTokenizer st = new StringTokenizer(sLine, "|");
+				ip = st.nextToken();
+				port = st.nextToken();
+			}
+			SocketAddress socketAddress = new InetSocketAddress(ip, Integer.parseInt(port));
+			s = new Socket();
+			try {
+				s.connect(socketAddress, 3);
+			} catch (Exception ex) {
+			}
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
 		} catch (Exception ex) {
-			System.out.println("Connection()에러 ");
+			System.out.println(ex.getMessage());
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 
@@ -154,7 +179,14 @@ public class BssNetWork extends Thread {
 			out.writeObject(msg);
 
 		} catch (Exception ex) {
-			System.out.println("Connection()에러 ");
+			System.out.println("네트워크 오류");
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
 	}

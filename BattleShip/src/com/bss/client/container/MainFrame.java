@@ -21,157 +21,149 @@ import com.bss.client.gameObjects.Grid;
 import com.bss.common.BssDebug;
 import resources.ResContainer;
 
-public class MainFrame extends JFrame  implements Runnable{
-	
+public class MainFrame extends JFrame implements Runnable {
+
 	static MainFrame inst;
-	
-	LoginWindowPanel 	loginWindow;
-	WaitRoomPanel		waitRoom;
-	GameReadyPanel		readyPanel;
-	GamePlayPanel		playPanel;
-	Register 			register;
-	private int mX,mY;
+
+	LoginWindowPanel loginWindow;
+	WaitRoomPanel waitRoom;
+	GameReadyPanel readyPanel;
+	GamePlayPanel playPanel;
+	Register register;
+	private int mX, mY;
 	private int x, y;
 	private static PanelState panelState;
-	
+
 	public int mouseX, mouseY;
-	public static int xOffset = 8 ,yOffset = 31;		//x,y coordinates offset. must sub this value
-	
+	public static int xOffset = 8, yOffset = 31; // x,y coordinates offset. must
+													// sub this value
+
 	Cursor defaultCursor = Cursor.getDefaultCursor();
 	Cursor targetCursor;
-	
-	public static MainFrame getInst()
-	{
-		if(inst == null)
-		{
-			inst = new MainFrame(1024,768);
+
+	public static MainFrame getInst() {
+		if (inst == null) {
+			inst = new MainFrame(1024, 768);
 			System.out.println("If you got this message, it's not safe.");
 		}
 		return inst;
 	}
-	
-	public static PanelState getPanelState()
-	{
+
+	public static PanelState getPanelState() {
 		return panelState;
 	}
-	
-	public MainFrame(int width, int height)
-	{
+
+	public MainFrame(int width, int height) {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-	    targetCursor = toolkit.createCustomCursor(ResContainer.target_cursor, new Point(13,13), "Target");
-	  
-		if(inst == null)
+		targetCursor = toolkit.createCustomCursor(ResContainer.target_cursor, new Point(13, 13), "Target");
+
+		if (inst == null)
 			inst = this;
-		
+
 		setSize(width, height);
-		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width)/2 - getWidth()/2, (Toolkit.getDefaultToolkit().getScreenSize().height)/2 - getHeight()/2);
-	
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width) / 2 - getWidth() / 2,
+				(Toolkit.getDefaultToolkit().getScreenSize().height) / 2 - getHeight() / 2);
+
 		setTitle("BattleShip In Space");
-		
+
 		loginWindow = new LoginWindowPanel(this);
 		loginWindow.setAlignmentX(0.5f);
 		loginWindow.setAlignmentX(0.5f);
 		add(loginWindow);
-		
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-		
-		
-		if(BssDebug.UI_DEBUG)
-		{
+
+		if (BssDebug.UI_DEBUG) {
 			UIDebugWindow debugWindow = new UIDebugWindow();
 		}
-		
+
 		Thread t = new Thread(this);
 		t.run();
 	}
-	
-	
-	public void quitGame()
-	{
+
+	public void quitGame() {
 		dispose();
 		System.exit(0);
 	}
-	public void openWaitRoom()
-	{
+
+	public void openWaitRoom() {
 		removePanels();
 		panelState = PanelState.WAITROOM;
 		waitRoom = new WaitRoomPanel(this);
 		setContentPane(waitRoom);
 	}
-	public void settingsWin(){
-		this.setSize(1280,800);
-		Dimension screen =Toolkit.getDefaultToolkit().getScreenSize(); // 모니터화면의 해상도 얻기
+
+	public void settingsWin() {
+		this.setSize(1280, 800);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize(); // 모니터화면의
+																		// 해상도
+																		// 얻기
 		Dimension mf_size = super.getSize();
 		int left = (screen.width / 2) - (mf_size.width / 2);
-		int top = (screen.height / 2) - (mf_size.height /2 );
-		super.setLocation(left,  top); 
+		int top = (screen.height / 2) - (mf_size.height / 2);
+		super.setLocation(left, top);
 	}
-	
-	public void settingsfull(){
-	/*	GraphicsDevice device = GraphicsEnvironment.
-		getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		device.setFullScreenWindow(this);
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);*/
-		Dimension res = Toolkit.getDefaultToolkit().getScreenSize(); 
-		this.setBounds(0, 0, res.width,res.height);
+
+	public void settingsfull() {
+		/*
+		 * GraphicsDevice device = GraphicsEnvironment.
+		 * getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		 * device.setFullScreenWindow(this);
+		 * this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		 */
+		Dimension res = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setBounds(0, 0, res.width, res.height);
 	}
-	
-	
-	//WaitRoom -> GameReady
-	public void openGameReady()
-	{
+
+	// WaitRoom -> GameReady
+	public void openGameReady() {
 		removePanels();
 		panelState = PanelState.GAMEREADY;
 		readyPanel = new GameReadyPanel(this);
 		setContentPane(readyPanel);
 	}
-	//GameReady -> GameStart
-	public void openGameStart(Grid grid)
-	{
+
+	// GameReady -> GameStart
+	public void openGameStart(Grid grid) {
 		removePanels();
 		panelState = PanelState.GAMEPLAY;
 		playPanel = new GamePlayPanel(grid, this);
 		setContentPane(playPanel);
 	}
-	
-	public void openSetting(){
+
+	public void openSetting() {
 		BssSettings bSet = new BssSettings();
-		
+
 	}
-	public void openRegister(){
+
+	public void openRegister() {
 		register = new Register();
 	}
-	
-	public void removePanels()
-	{
-		if(playPanel != null)
-		{
+
+	public void removePanels() {
+		if (playPanel != null) {
 			remove(playPanel);
 			playPanel = null;
 		}
-		if(waitRoom != null)
-		{
+		if (waitRoom != null) {
 			remove(waitRoom);
 			waitRoom = null;
 		}
-		if(readyPanel != null)
-		{
+		if (readyPanel != null) {
 			remove(readyPanel);
 			readyPanel = null;
 		}
 	}
-	
 
-	public static Point getPointForCenter(int width, int height)
-	{
-		if(inst ==null)
-			return new Point(0,0);
-		
-		int x = inst.getWidth()/2 - width/2 ;
-		int y = (inst.getHeight()-yOffset)/2 - height/2 ;
-		
-		return new Point(x,y);
+	public static Point getPointForCenter(int width, int height) {
+		if (inst == null)
+			return new Point(0, 0);
+
+		int x = inst.getWidth() / 2 - width / 2;
+		int y = (inst.getHeight() - yOffset) / 2 - height / 2;
+
+		return new Point(x, y);
 	}
 
 	@Override
@@ -197,13 +189,12 @@ public class MainFrame extends JFrame  implements Runnable{
 
 		}
 	}
-	
-	public void setDefaultCursor()
-	{
-		 setCursor(defaultCursor);
+
+	public void setDefaultCursor() {
+		setCursor(defaultCursor);
 	}
-	public void setTargetCursor()
-	{
+
+	public void setTargetCursor() {
 		setCursor(targetCursor);
 	}
 }

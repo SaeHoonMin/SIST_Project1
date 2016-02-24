@@ -23,7 +23,6 @@ import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.AttackResult;
 import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
-import com.sun.beans.decoder.ValueObject;
 
 public class BssServer extends JFrame implements Runnable {
 
@@ -31,11 +30,11 @@ public class BssServer extends JFrame implements Runnable {
 	JScrollPane scrollPanel;
 
 	ServerSocket ss;
-	DBA member = new DBA();
+	Database member = new Database();
 	Vector<Client> waitVc = new Vector<Client>();// 접속자 정보 저장
 	Vector<UserInfo> userVc = new Vector<UserInfo>();
 	ArrayList<Client> matchQueue = new ArrayList<Client>();
-	String alluser = "";
+
 	public BssServer() {
 
 		member.battleshipTable();
@@ -156,7 +155,7 @@ public class BssServer extends JFrame implements Runnable {
 
 		// 통신
 		public void run() {
-			DBA member = new DBA();
+			Database member = new Database();
 			printLog("A Client Thread starts");
 
 			try {
@@ -210,7 +209,6 @@ public class BssServer extends JFrame implements Runnable {
 					}
 
 					case USERINFO:
-				
 						// userVc.add((UserInfo) recvMsg.msgObj); //유저아이디담기
 						// System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
 						for (int i = 0; i < userVc.size(); i++) {
@@ -221,11 +219,10 @@ public class BssServer extends JFrame implements Runnable {
 
 						userVc.addElement((UserInfo) recvMsg.msgObj);
 						for (int i = 0; i < userVc.size(); i++) {
-						String p=userVc.get(i).toString();
-						printLog(p);
+							String p = userVc.get(i).toString();
+							printLog(p);
 						}
-						printLog("접속한 인원 수: "+String.valueOf(userVc.size())); // 접속한 유저수
-						
+						printLog("접속자 수:"+String.valueOf(userVc.size()));
 						break;
 
 					case MATCH_QUE_REQ:
@@ -293,10 +290,14 @@ public class BssServer extends JFrame implements Runnable {
 				waitVc.remove(this);
 				try {
 					userVc.removeElementAt(userVc.size() - 1);
-						printLog("접속한 인원 수: "+String.valueOf(userVc.size())); // 접속한 유저수
+					for (int i = 0; i < userVc.size(); i++) {
+						String p = userVc.get(i).toString();
+						printLog(p);
+					}
+					printLog("접속자 수:"+String.valueOf(userVc.size()));
 				} catch (Exception e) {
 				}
-
+			
 				messageAll(new BssMsg(BssProtocol.CLIENT_COUNT, waitVc.size()));
 			}
 		}
