@@ -6,7 +6,19 @@ public enum BssProtocol implements Serializable{
 	
 	HOST_CONNECTION,
 	WELCOME,
+	INSERTUSERINFO,   //유저 가입정보
+	ID_OVERLAP,//id중복
 	
+	ID_CHECK,
+	ID_TRUE,
+	ID_FALSE,
+	LOGIN_CHECK,
+	LOGIN_TRUE,
+	LOGIN_FALSE,
+	USERINFO, // 접속한 유저정보
+	EXIT,
+	
+	REGISTER,
 	MATCH_QUE_REQ,
 	MATCH_QUE_FOUND,
 	MATCH_QUE_CANCLED,
