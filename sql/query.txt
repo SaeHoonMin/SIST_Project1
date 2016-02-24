@@ -1,0 +1,1 @@
+create table Battleship(id varchar(20) not null, pwd varchar2(20) not null,email varchar2(30)); 
