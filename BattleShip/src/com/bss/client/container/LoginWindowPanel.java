@@ -5,12 +5,15 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import com.bss.client.BssNetWork;
 import com.bss.client.components.StyleButton;
@@ -25,21 +28,21 @@ import com.bss.server.*;
 import resources.ResLoader;
 import sun.security.util.Debug;
 
-public class LoginWindowPanel extends JPanel implements ActionListener{
+public class LoginWindowPanel extends JPanel implements ActionListener,KeyListener{
 
 	private Image img;
 	
 	private JPanel bgPanel; 
 	
-	private StyleButton btnLogin ;
+	public StyleButton btnLogin ;
 	private StyleButton btnSetting;
 	private StyleButton btnExit ;
 	private StyleButton btnSignup;
 	
-	private StyleTextField taLogin;
-	private StylePasswordField taPass;
+	public StyleTextField taLogin;
+	public StylePasswordField taPass;
 	private JLabel label ;
-	public String userid;
+	static Boolean login_check;
 
 	public LoginWindowPanel(JFrame parent)
 	{
@@ -50,11 +53,14 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		
 		taLogin = new StyleTextField(150,40);
 		
-		
 		taLogin = new StyleTextField(150,40);
 		taPass = new StylePasswordField(150, 40);
 		btnLogin = new StyleButton("Login");
+		taPass.getField().addKeyListener((KeyListener) this);
+		
+		
 		btnLogin.addActionListener(this);
+		
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener(this);
 		btnSetting = new StyleButton("Settings");
@@ -84,7 +90,12 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		add(btnExit);
 		add(btnSignup);
 		btnSetting.addActionListener(this);
+		
 
+	}
+	public static void login_Check(Boolean login_check){
+		LoginWindowPanel.login_check = login_check;
+		
 	}
 	
 	
@@ -114,38 +125,73 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource()==taPass||e.getSource()==taLogin){
+			System.out.println("sdsd");
+		}
 		
-		DBA member = new DBA();
+		
 		StyleButton b = null;
+		StylePasswordField p = null;
+		
+		
 		if( e.getSource() instanceof StyleButton )
 			 b = (StyleButton) e.getSource();
 		else
 			return;
-		
+	
 		if (b == btnLogin) {
-			
-			try{		
-				if(member.login(taLogin.getField().getText(),taPass.getField().getText())){
-
-			// Connection first..
 			BssNetWork inst = BssNetWork.getInst();
-			inst.connection(taLogin.getField().getText());
+//			inst.connection(taLogin.getField().getText());
+			inst.connection();
+	
+			if(inst.isConnected()){
+			String login_info=taLogin.getField().getText()+"|"+taPass.getField().getText();
+			
+			System.out.println(login_info);
+			BssNetWork.getInst().sendMessage(BssProtocol.LOGIN_CHECK,login_info);
+			while(true){
+				if(login_check!=null){
+					break;
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			}
+			
+	try{		
+				
+		if(login_check){
+			// Connection first..
 			if (inst.isConnected()) {
 				BssNetWork.getInst().sendMessage(BssProtocol.USERINFO, new UserInfo(taLogin.getField().getText()));
 				MainFrame.getInst().openWaitRoom();
 				//유저정보보내기
-				
 				return;
 			}
-
+			
 			if (BssDebug.GAMEREADY_TESTING)
-				MainFrame.getInst().openWaitRoom();
-
+			MainFrame.getInst().openWaitRoom();
 		}
-				else{
-					JOptionPane.showMessageDialog(this, "아이디 혹은 비밀번호가 틀립니다.");
-				}
-			}catch (Exception ex){}
+		else{
+			JOptionPane.showMessageDialog(this, "아이디 혹은 비밀번호가 틀립니다.");
+		}
+		login_check=null;
+	}catch (Exception ex){
+		JOptionPane.showMessageDialog(this,"서버의 주소 또는 포트번호가 다릅니다.");
+		try {
+			Thread.sleep(10);
+			
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+			
+			
 		}
 		else if(b==btnSetting){
 			MainFrame.getInst().openSetting();
@@ -157,6 +203,29 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();
 	
-	}	
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.VK_ENTER){
+			btnLogin.doClick();
+		}
+		
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

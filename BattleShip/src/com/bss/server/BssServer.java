@@ -30,7 +30,7 @@ public class BssServer extends JFrame implements Runnable{
 	JScrollPane scrollPanel;
 	
     ServerSocket ss;
-    
+    DBA member = new DBA(); 
     Vector<Client> waitVc=new Vector<Client>();//접속자 정보 저장
     Vector<UserInfo> userVc=new Vector<UserInfo>();
     ArrayList<Client> matchQueue = new ArrayList<Client>();
@@ -38,7 +38,7 @@ public class BssServer extends JFrame implements Runnable{
     
     public BssServer()
     {
-    	DBA member = new DBA();  
+    	 
     	member.battleshipTable();
     	logConsole = new JTextArea();
     	scrollPanel = new JScrollPane(logConsole);
@@ -168,7 +168,7 @@ public class BssServer extends JFrame implements Runnable{
     	 }
     	 //통신 
 		public void run() {
-
+			DBA member = new DBA();
 			printLog("A Client Thread starts");
 
 			try {
@@ -181,25 +181,67 @@ public class BssServer extends JFrame implements Runnable{
 					// 처리
 					switch (recvMsg.msgType) {
 					
-					case USERINFO:
-//						userVc.add((UserInfo) recvMsg.msgObj); //유저아이디담기
-//						System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
-						
-						for(int i=0;i<userVc.size();i++){
-							if(userVc.elementAt(i).toString().equals(recvMsg.msgObj.toString())){
-							messageTo(BssProtocol.EXIT);
-						}
-						}
-						userVc.addElement((UserInfo)recvMsg.msgObj);
-						printLog((userVc.elementAt(0).toString()));
-						break;
-						
-						
 					case HOST_CONNECTION:
 						messageTo(BssProtocol.WELCOME);
 						messageAll(new BssMsg(BssProtocol.CLIENT_COUNT,String.valueOf(waitVc.size())));
 						break;
 						
+						
+					case REGISTER:
+						
+						String info = (String) recvMsg.msgObj;
+						member.insertMember(info);
+						s.close();
+						break;
+						
+						
+					case LOGIN_CHECK:{
+						String id,pwd;
+						StringTokenizer st = new StringTokenizer((String)recvMsg.msgObj, "|"); 
+						id=st.nextToken();
+						pwd=st.nextToken();
+						System.out.println(id+","+pwd);
+						
+						if(member.login(id,pwd))
+							messageTo(BssProtocol.LOGIN_TRUE);
+						else{
+							messageTo(BssProtocol.LOGIN_FALSE);
+							s.close();	
+						}
+						break;
+					}
+					
+					case ID_CHECK:{
+						String id;
+						id = (String)recvMsg.msgObj;
+						if(member.idCheck(id)){
+							messageTo(BssProtocol.ID_TRUE);
+							s.close();
+						}
+						else{
+							messageTo(BssProtocol.ID_FALSE);
+							s.close();
+						}
+						break;
+					}
+						
+					case USERINFO:
+//						userVc.add((UserInfo) recvMsg.msgObj); //유저아이디담기
+//						System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
+						for(int i=0;i<userVc.size();i++){
+							if(userVc.elementAt(i).toString().equals(recvMsg.msgObj.toString())){
+							messageTo(BssProtocol.EXIT);
+							}
+						}
+						
+						userVc.addElement((UserInfo)recvMsg.msgObj);
+						for(int i=0; i<userVc.size();i++){
+							String p= userVc.get(i).toString();
+							System.out.println(p);
+						}
+						break;
+						
+				
 					case MATCH_QUE_REQ:
 						printLog("Match Que requested");
 						synchronized (this) {
@@ -266,6 +308,11 @@ public class BssServer extends JFrame implements Runnable{
 				}
 				matchQueue.remove(this);
 				waitVc.remove(this);
+				try{
+				userVc.removeElementAt(userVc.size()-1);
+				}catch(Exception e){}
+				System.out.println(userVc.size()); //접속한 유저수
+			
 				messageAll(new BssMsg(BssProtocol.CLIENT_COUNT,waitVc.size()));
 			}
 		}

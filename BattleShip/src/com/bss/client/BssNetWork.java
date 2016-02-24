@@ -1,6 +1,8 @@
 package com.bss.client;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -9,12 +11,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
-import javax.swing.JOptionPane;
-
-import com.bss.client.container.GamePlayPanel;
-import com.bss.client.container.GameReadyPanel;
-import com.bss.client.container.MainFrame;
-import com.bss.client.container.WaitRoomPanel;
+import javax.swing.*;
+import com.bss.client.container.*;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
@@ -56,6 +54,7 @@ public class BssNetWork extends Thread{
 	private WaitRoomPanel waitRoom;
 	private GameReadyPanel readyRoom;
 	private GamePlayPanel gamePlay;
+	private LoginWindowPanel loginpanel;
 	
 
 	
@@ -82,21 +81,37 @@ public class BssNetWork extends Thread{
 		inst = this;
 	}
 
-	public void connection(String id) {
-		
-		try {
-			s = new Socket("localhost", 3355);
+public void connection() {
+	String ip = null,port = null;
+	File file = new File("./settings/info.txt");
+	 try{
+	     BufferedReader br = new BufferedReader(new FileReader(file));
+	     String sLine = null;
+	 
+	    while((sLine = br.readLine())!= null){
+	    	StringTokenizer st=new StringTokenizer(sLine,"|");
+	    	ip=st.nextToken();
+	    	port=st.nextToken();
+	    }
+	    
+			s = new Socket(ip,(Integer.parseInt(port)));
 			out = new ObjectOutputStream(s.getOutputStream());
 			in = new ObjectInputStream(s.getInputStream());
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 
 		// 통신 시작
 		isConnected = true;
 		new Thread(this).start();
-		sendMessage(BssProtocol.HOST_CONNECTION,id);
+		sendMessage(BssProtocol.HOST_CONNECTION,null);
 	}
 	
 	//회원가입 정보
@@ -112,13 +127,27 @@ public class BssNetWork extends Thread{
 		try {
 			if (isConnected == true) {
 				switch (type) {
+				
+					
+				case HOST_CONNECTION:
+					break;
+					
+				case ID_CHECK:
+					msg.msgObj=obj;
+					break;
+					
+				case LOGIN_CHECK:
+					msg.msgObj=obj;
+					break;
+					
 				case USERINFO:
 					msg.msgObj=obj;
 					break;
 					
-				case HOST_CONNECTION:
+				case REGISTER:
+					msg.msgObj=obj;
 					break;
-
+					
 				case MATCH_QUE_REQ:
 					
 					if (obj instanceof WaitRoomPanel)
@@ -154,19 +183,28 @@ public class BssNetWork extends Thread{
 			}
 			out.writeObject(msg);
 			
-		}catch(IOException e)
+		}catch(Exception ex)
 		{
-			e.printStackTrace();
+			System.out.println("네트워크 오류");
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 		
-	}	
+	}
+	
 	
 	@Override
 	public void run() {
 		
 		BssMsg recvMsg = new BssMsg();
 		BssProtocol type;
+		
 		try
 		{
 			while(true)
@@ -175,11 +213,26 @@ public class BssNetWork extends Thread{
 				
 				switch(recvMsg.msgType)
 				{
-				case WELCOME:
-					System.out.println("Welcome to BattleShip In Space..");
-					
+				case ID_TRUE:
+					Register.id_Check(true);
 					break;
 					
+				case ID_FALSE:
+					Register.id_Check(false);
+					break;
+					
+				case LOGIN_TRUE:
+					LoginWindowPanel.login_Check(true);
+					break;
+					
+				case LOGIN_FALSE:
+					LoginWindowPanel.login_Check(false);
+					break;
+					
+				case WELCOME:
+					System.out.println("Welcome to BattleShip In Space..");
+					break;
+			
 				case EXIT:
 					JOptionPane.showMessageDialog(null, "현재 아이디가 접속중입니다.");
 					System.exit(0);
@@ -246,9 +299,7 @@ public class BssNetWork extends Thread{
 				}
 			}
 		}catch(Exception ex){
-			System.out.println("error : " +ex.getMessage());
-			ex.printStackTrace();
-		}
+			System.out.println("네트워크 에러");}
 	}
 	
 	public void setGamePlay(GamePlayPanel gamePlay) {

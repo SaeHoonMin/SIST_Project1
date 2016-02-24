@@ -9,8 +9,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -20,18 +20,25 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import com.bss.client.BssNetWork;
+import com.bss.client.container.LoginWindowPanel;
+import com.bss.client.container.MainFrame;
+import com.bss.client.gameObjects.UserInfo;
+import com.bss.common.BssDebug;
+import com.bss.common.BssProtocol;
+import com.bss.server.DBA;
+
 import resources.BssColor;
 
 // Currently this class can be used for USER's id field only..
 // need to use strategy pattern 
 
-public class StylePasswordField extends JPanel{
+public class StylePasswordField extends JPanel {
 	
 	int length;
 	Thread t ;
-	
+	LoginWindowPanel lg;
 	JPasswordField field;
-	
 	CompoundBorder selectedBorder;
 	CompoundBorder releasedBorder;
 	public StylePasswordField(int w, int h)
@@ -61,6 +68,7 @@ public class StylePasswordField extends JPanel{
 		field.setCaretColor(BssColor.TURQUOISE_MID_T2);
 		field.setBorder(null);
 		field.setOpaque(false);
+		
 		
 		setBorder( releasedBorder );     
 		

@@ -36,7 +36,7 @@ public class DBA{
 	   System.out.println("드라이버 로딩에 실패");
 	  }
 	   try{
-	   String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+	   String url = "jdbc:oracle:thin:@211.238.142.30:1521:orcl";
 	         String userId = "scott"; 
 	         String userPass = "tiger";          
 	         con =DriverManager.getConnection(url,userId,userPass);
@@ -46,7 +46,7 @@ public class DBA{
 	  }
 	   }
 	 
-	 
+	 //오라클 연결해제
 	 public void dbDisConnection(){
 	    try{
 	    	if(pstmt!=null) pstmt.close();
@@ -98,7 +98,8 @@ public class DBA{
 	   
    }
    
-   //////////////////////////////////////////
+  /*
+   //전체유저 삭제
    public void deleteAlluser(){
 	   dbConnect();
 	   query="delete from battleship";
@@ -110,13 +111,11 @@ public class DBA{
 	   finally{
 		   dbDisConnection();
 	   }
-   }
-   	/////////////////////////////////////////////필요없는 메소드
-
+   }*/
+ 
    
-   ////////////////////////////////////////////////////
    
-   	// id pwd email 가져오기
+  /* //전체 유저 정보가져오기
 	   public void allUserInfo(){
 		   dbConnect();
 		   String alluser="";
@@ -135,8 +134,8 @@ public class DBA{
 		   finally{
 			   dbDisConnection();
 		   }
-	   }///////////////////////////////필요없는 메소드
-	
+	   }
+	*/
 
 	   //아이디 중복체크
 	   public Boolean idCheck(String id) throws SQLException{
@@ -182,6 +181,5 @@ public class DBA{
 		    dbDisConnection();
 		    return false;
 	   }
-	   
 	   
 }

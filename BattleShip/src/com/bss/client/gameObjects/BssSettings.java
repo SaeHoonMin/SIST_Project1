@@ -220,8 +220,6 @@ public class BssSettings extends JDialog implements ActionListener {
 		
 		if(e.getSource().equals(b1_ok)){
 			try{	
-				DBA member= new DBA();
-				member.deleteAlluser();
 				//입력한 ip값과 port값
 				FileWriter fw = null;
 				fw=new FileWriter("./settings/info.txt");

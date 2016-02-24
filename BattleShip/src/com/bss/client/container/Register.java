@@ -11,13 +11,13 @@ import com.bss.server.*;
 
 
 public class Register extends JFrame implements ActionListener {
-
 	JTextField tf1_id,tf2_email;
 	JPasswordField pf1_pwd,pf2_pwd;
 	JLabel la_information,la1_id,la2_pwd,la3_pwd2,la4_email;
 	JTextArea ta1_register;
 	JButton b_ok,b_cancel,b_check;
 	String idcheck="";
+	static Boolean id_check;
 	
 	public Register(){
 		
@@ -107,6 +107,11 @@ public class Register extends JFrame implements ActionListener {
 		super.setLocation(left,  top); 
 		
 	}
+	public static void id_Check(Boolean id_check){
+		Register.id_check=id_check;
+		
+	}
+	
 	public Image setImage(String filename,int w, int h){
 		ImageIcon ii=new ImageIcon(filename);
 		Image i=ii.getImage().getScaledInstance(w,h,Image.SCALE_SMOOTH);
@@ -115,31 +120,49 @@ public class Register extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		DBA member = new DBA();  //객체생성해줘야한다.
+		  //객체생성해줘야한다.
 	
 		
 		if(e.getSource()==b_check){
 			try {
-				if(member.idCheck(tf1_id.getText())){
+				BssNetWork inst = BssNetWork.getInst();
+				inst.connection();
+//				if(member.idCheck(tf1_id.getText())){
+				idcheck=tf1_id.getText();
+				BssNetWork.getInst().sendMessage(BssProtocol.ID_CHECK,idcheck);
+				
+				while(true){
+					if(id_check!=null){
+						break;
+					}
+					Thread.sleep(1);
+				}
+				
+				if(id_check){
+					
 					JOptionPane.showMessageDialog(this, "중복된 아이디가 존재합니다.");
 					tf1_id.requestFocus();
+					
 				}
 				else if(tf1_id.getText().length()<5 || tf1_id.getText().length()>12){
+				
 					JOptionPane.showMessageDialog(this, "아이디는 5~12글자 사이로 입력하세요.");
 					tf1_id.requestFocus();
 				}
 				else {
+					
 					JOptionPane.showMessageDialog(this, "사용할 수 있는 아이디입니다.");
 					idcheck=tf1_id.getText();
-					this.idcheck = idcheck;
 					pf1_pwd.requestFocus();
 				}
-			} catch (SQLException e1) {}
+				id_check=null;
+			} catch (Exception e1) {}
 		}
 		
 		
 		if(e.getSource()==b_ok){
 	
+		
 			String info = null;
 			char[] a = pf1_pwd.getPassword();
 			char[] b= pf2_pwd.getPassword();
@@ -159,7 +182,6 @@ public class Register extends JFrame implements ActionListener {
 			if(!idcheck.equals(tf1_id.getText())){
 				JOptionPane.showMessageDialog(this, "중복확인을 해주세요.");
 				tf1_id.requestFocus();
-				System.out.println(idcheck);
 			}
 			
 			else if(tf1_id.getText().equals("")||pf1_pwd.equals("")||
@@ -188,24 +210,25 @@ public class Register extends JFrame implements ActionListener {
 	
 			else{
 			
+			BssNetWork inst = BssNetWork.getInst();
+			inst.connection();
 			info= tf1_id.getText()+"|"+pwd1+"|"+tf2_email.getText();
 			
-			member.insertMember(info);
+			BssNetWork.getInst().sendMessage(BssProtocol.REGISTER, info);
+			
+			
+			
+			
 			
 			JOptionPane.showMessageDialog(this, "회원가입 완료");
 			
 			
-			member.allUserInfo(); //테이블 데이터 읽어오기
-			
-			
+//			member.allUserInfo(); //테이블 데이터 읽어오기
+
 			dispose();
 			}
 			}catch(Exception ex){}
-	
 		}
-		
-
-	
 		
 		else if(e.getSource()==b_cancel){
 			dispose();
