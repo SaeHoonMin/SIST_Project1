@@ -116,10 +116,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener{
 				MainFrame.getInst().openWaitRoom();
 				return;
 			}
-
-			if (BssDebug.GAMEREADY_TESTING)
-				MainFrame.getInst().openWaitRoom();
-
+			
 		}
 		else if(b==btnExit)
 			MainFrame.getInst().quitGame();
