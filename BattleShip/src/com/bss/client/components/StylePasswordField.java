@@ -26,7 +26,7 @@ import com.bss.client.container.MainFrame;
 import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.BssDebug;
 import com.bss.common.BssProtocol;
-import com.bss.server.DBA;
+import com.bss.server.Database;
 
 import resources.BssColor;
 

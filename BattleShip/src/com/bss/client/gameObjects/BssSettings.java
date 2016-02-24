@@ -9,7 +9,7 @@ import java.net.*;
 
 import com.bss.client.*;
 import com.bss.client.container.MainFrame;
-import com.bss.server.DBA;
+import com.bss.server.Database;
 
 import javafx.scene.control.TitledPane;
 
