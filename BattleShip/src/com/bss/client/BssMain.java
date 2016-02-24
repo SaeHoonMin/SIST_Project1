@@ -88,10 +88,10 @@ public class BssMain {
 		
 		jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 		
-		try {
+		/*try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel"); 
 		} catch (Exception e) {} 
-		/*********/ 
+		*//*********/ 
 		
 		//mainFrame Start... main game window. 
 		//Includes login, waitroom, game scenes..

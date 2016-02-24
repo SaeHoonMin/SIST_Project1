@@ -20,13 +20,14 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import resources.BssColor;
+import sun.print.resources.serviceui;
 
 // Currently this class can be used for USER's id field only..
 // need to use strategy pattern 
 
 public class StyleTextField extends JPanel implements KeyListener, CaretListener ,FocusListener{
 	
-	int length;
+	private int length;
 	Thread t ;
 	
 	JTextField field;
@@ -52,7 +53,7 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 			}
 		};
 		field.setLocation(10,0);
-		field.setSize(w,h);
+		field.setSize(w-10,h);
 		field.setFont(new Font("Arial",Font.BOLD,16));
 		field.setBackground(BssColor.BLACK_T1);
 		field.setForeground(BssColor.TURQUOISE_MID_T1);
@@ -63,7 +64,7 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 		
 		setBorder( releasedBorder );     
 		
-		length = 10;
+		setLength(10);
 		
 		field.addCaretListener(this);
 		field.addKeyListener(this);
@@ -106,7 +107,7 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 		if (e.getKeyChar() == KeyEvent.VK_SPACE) {
 			e.consume();
 		}
-		if(field.getText().length()+1 > length)
+		if(field.getText().length()+1 > getLength())
 		{
 			System.out.println("over");
 			e.consume();
@@ -122,13 +123,27 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 
 	@Override
 	public void focusGained(FocusEvent e) {
-
+		setBorder(selectedBorder);
+		field.setForeground(BssColor.ORANGE_T1);
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==field)
-			setBorder(releasedBorder);
+		setBorder(releasedBorder);
+		field.setForeground(BssColor.TURQUOISE_MID_T1);
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+	
+	public String getText()
+	{
+		return field.getText();
 	}
 }

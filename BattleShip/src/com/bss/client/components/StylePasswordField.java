@@ -33,7 +33,7 @@ import resources.BssColor;
 // Currently this class can be used for USER's id field only..
 // need to use strategy pattern 
 
-public class StylePasswordField extends JPanel {
+public class StylePasswordField extends JPanel implements FocusListener{
 	
 	int length;
 	Thread t ;
@@ -75,7 +75,7 @@ public class StylePasswordField extends JPanel {
 		length = 10;
 		
 //		field.addCaretListener(this);
-//		field.addFocusListener(this);
+		field.addFocusListener(this);
 		
 		add(field);
 	}
@@ -92,6 +92,13 @@ public class StylePasswordField extends JPanel {
 	{
 		return field;
 	}
+	public char[] getPassword(){
+		return field.getPassword();
+	}
+	public void setText(String str)
+	{
+		field.setText(str);
+	}
 /*
 	@Override
 	public void caretUpdate(CaretEvent e) {
@@ -100,15 +107,16 @@ public class StylePasswordField extends JPanel {
 			field.setCaretPosition(field.getPassword().toString().length());
 	}*/
 
-/*	@Override
+	@Override
 	public void focusGained(FocusEvent e) {
-
+		setBorder(selectedBorder);
+		field.setForeground(BssColor.ORANGE_T1);
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource()==field)
 			setBorder(releasedBorder);
-	}*/
+		field.setForeground(BssColor.TURQUOISE_MID_T1);
+	}
 }

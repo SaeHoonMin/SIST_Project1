@@ -36,6 +36,8 @@ public class StyleButton extends JButton implements MouseListener {
 	private Border releaseBorder;
 	private Border disabledBorder;
 	
+	private int bigFont;
+	
 //	private Color curColor;
 //	private Font curFont;
 	
@@ -49,7 +51,7 @@ public class StyleButton extends JButton implements MouseListener {
 		releaseBorder = BorderFactory.createLineBorder(BssColor.TURQUOISE_MID_T1,2);
 		disabledBorder = BorderFactory.createLineBorder(BssColor.GREY_T1,2);
 		
-		setPreferredSize(new Dimension(150,50));
+	//	setPreferredSize(new Dimension(150,50));
 		setFocusable(false);		
 		setBorderPainted(true);
 		setBackground(bgColor);
@@ -57,8 +59,11 @@ public class StyleButton extends JButton implements MouseListener {
 		
 		label = new JLabel(text,SwingConstants.CENTER);
 		label.setForeground(labelColor);			//청록
-		label.setFont(new Font("Arial", Font.BOLD,16));
-		label.setPreferredSize(new Dimension(150,50));		//문제
+		label.setFont(new Font("Arial", Font.TRUETYPE_FONT,16));
+		
+		bigFont = 20;			//default.
+		
+	//	label.setPreferredSize(new Dimension(150,50));		//문제
 		
 		fontSize = label.getFont().getSize();
 		
@@ -116,16 +121,16 @@ public class StyleButton extends JButton implements MouseListener {
 				setBorder(onBorder);
 				label.setForeground(labelOverColor);
 				
-				int index=0;
+				int fSize=fontSize;
 				
 				while (true) {
 					
-					if (index >= BssFont.ARIAL_ARR16_20.length )
+					if (fSize >=bigFont )
 						break;
 					
-					label.setFont(BssFont.ARIAL_ARR16_20[index]);
+					label.setFont(new Font("Arial",Font.TRUETYPE_FONT,fSize));
 					
-					index++;
+					fSize++;
 					
 					try {
 						Thread.sleep(10);
@@ -151,16 +156,16 @@ public class StyleButton extends JButton implements MouseListener {
 				setBorder(releaseBorder);
 				label.setForeground(labelColor);
 
-				int index = BssFont.ARIAL_ARR16_20.length-1;
+				int fSize = label.getFont().getSize();
 				
 				while (true) {
 					
-					if (index < 0)
+					if (fSize <= fontSize)
 						break;
 					
-					label.setFont(BssFont.ARIAL_ARR16_20[index]);
+					label.setFont(new Font("Arial",Font.TRUETYPE_FONT,fSize));
 
-					index--;
+					fSize--;
 					
 					try {
 						Thread.sleep(10);
@@ -209,5 +214,13 @@ public class StyleButton extends JButton implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getBigFont() {
+		return bigFont;
+	}
+
+	public void setBigFont(int bigFont) {
+		this.bigFont = bigFont;
 	}
 }

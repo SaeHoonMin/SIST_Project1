@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import com.bss.client.BssNetWork;
+import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.StylePasswordField;
 import com.bss.client.components.StyleTextField;
@@ -35,6 +36,9 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 	private JPanel bgPanel;
 
 	public StyleButton btnLogin;
+	
+	private StyleButton btnGuest;
+	
 	private StyleButton btnSetting;
 	private StyleButton btnExit;
 	private StyleButton btnSignup;
@@ -54,9 +58,12 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 		taLogin = new StyleTextField(150, 40);
 		taPass = new StylePasswordField(150, 40);
 		btnLogin = new StyleButton("Login");
+		btnGuest = new StyleButton("Guest");
+		
 		taPass.getField().addKeyListener((KeyListener) this);
 
 		btnLogin.addActionListener(this);
+		btnGuest.addActionListener(this);
 
 		btnExit = new StyleButton("Exit Game");
 		btnExit.addActionListener(this);
@@ -64,24 +71,29 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 		btnSignup = new StyleButton("Sign up");
 		btnSignup.addActionListener(this);
 
-		btnLogin.setSize(150, 70);
-		btnExit.setSize(150, 70);
-		btnSetting.setSize(150, 70);
-		btnSignup.setSize(150, 70);
+		btnLogin.setSize(74, 40);
+		btnGuest.setSize(74,40);
+		btnExit.setSize(150, 40);
+		btnGuest.setSize(70,40);
+		btnSetting.setSize(150, 40);
+		btnSignup.setSize(150, 40);
 
 		int screenW = parent.getWidth();
 		int screenH = parent.getHeight();
 
-		int a = screenW / 2 - btnLogin.getWidth() / 2;
-		int b = screenH / 2 - btnLogin.getHeight() / 2;
+		int a = screenW / 2 - btnExit.getWidth() / 2;
+		int b = screenH / 2 - btnExit.getHeight() / 2;
 
 		taLogin.setLocation(a, b - 133);
 		taPass.setLocation(a, b - 93);
 		btnLogin.setLocation(a, b - 50);
-		btnSetting.setLocation(a, b + 23);
-		btnSignup.setLocation(a, b + 94);
-		btnExit.setLocation(a, b + 177);
+		btnGuest.setLocation(a+80,b-50);
+		
+		btnSetting.setLocation(a, b +8);
+		btnSignup.setLocation(a, b + 51);
+		btnExit.setLocation(a, b + 110);
 
+		add(btnGuest);
 		add(taLogin);
 		add(taPass);
 		add(btnSetting);
@@ -97,15 +109,21 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 
 	}
 
-	// For testing.. id 입력하기 귀찮으니까
-	/*
-	 * private String createRamdomText(int charlen) { Random rand = new
-	 * Random(); StringBuffer buf = new StringBuffer(); int num; for(int
-	 * i=0;i<charlen;i++) { num = rand.nextInt(26)+65; buf.append((char)num); }
-	 * buf.append(rand.nextInt(10)); buf.append(rand.nextInt(10));
-	 * 
-	 * return buf.toString(); }
-	 */
+
+	private String createRamdomText(int charlen) {
+		Random rand = new Random();
+		StringBuffer buf = new StringBuffer();
+		int num;
+		for (int i = 0; i < charlen; i++) {
+			num = rand.nextInt(26) + 65;
+			buf.append((char) num);
+		}
+		buf.append(rand.nextInt(10));
+		buf.append(rand.nextInt(10));
+
+		return buf.toString();
+	}
+	 
 
 	public void paintComponent(Graphics g) {
 
@@ -129,14 +147,24 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 			return;
 
 		if (b == btnLogin) {
+			
+			String id  = taLogin.getField().getText();
+			String pwd = taPass.getField().getText();
+			
+			if(id.length() <1 || pwd.length()<1)
+			{
+				MessageDialog.Show("Please fill out the ID and Password fields.");
+				return;
+			}
+			
 			BssNetWork inst = BssNetWork.getInst();
-			// inst.connection(taLogin.getField().getText());
 			inst.connection();
 
 			if (inst.isConnected()) {
 				String login_info = taLogin.getField().getText() + "|" + taPass.getField().getText();
 				BssNetWork.getInst().sendMessage(BssProtocol.LOGIN_CHECK, login_info);
 
+				//Blocking...
 				while (true) {
 					if (login_check != null) {
 						break;
@@ -165,11 +193,11 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 					if (BssDebug.GAMEREADY_TESTING)
 						MainFrame.getInst().openWaitRoom();
 				} else {
-					JOptionPane.showMessageDialog(this, "아이디 혹은 비밀번호가 틀립니다.");
+					MessageDialog.Show("Incorrect ID or Password");
 				}
 				login_check = null;
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, "서버의 주소 또는 포트번호가 다릅니다.");
+				MessageDialog.Show("Cannot connect to Server.");
 				try {
 					Thread.sleep(10);
 

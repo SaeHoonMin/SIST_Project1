@@ -1,6 +1,8 @@
 package com.bss.client.components;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -32,36 +34,58 @@ public class MessageDialog extends JDialog implements ActionListener{
 		new MessageDialog(str);
 	}
 
-	public MessageDialog(String str) {
+	private MessageDialog(String str) {
 		
 	//	mainFrame.setEnabled(false);
 		setUndecorated(true);
 		setBackground(BssColor.BLACK_T2);
 		
-		setSize(200,100);
+		
+		JLabel msg = new JLabel();
+		msg.setHorizontalAlignment(SwingConstants.CENTER);
+		msg.setForeground(Color.white);
+		msg.setFont(BssFont.ARIAL_B16);
+		
+		if(str.length()>17)
+		{
+			int a = (int) Math.ceil(str.length()/17.0);
+			System.out.println("a : "+a);
+			
+			str.replace("\n", "<br>");
+			
+			str = "<html><p align=\"center\">" +
+					str+"</p></html>";
+			
+			setSize(200,100+10*a);
+			msg.setSize( 200, 100+10*a);
+			
+		}
+		else
+		{
+			msg.setText(str);
+			msg.setSize(200,50);
+			setSize(200,100);
+		}
+		msg.setText(str);
 		setAlwaysOnTop(true);
 	
 		pane = new JPanel();
 		pane.setOpaque(false);
 		pane.setSize(getSize());
 		System.out.println(pane.getSize());
-		pane.setLayout(null);
+		pane.setLayout(new BorderLayout());
 	
-		JLabel msg = new JLabel(str);
-		msg.setHorizontalAlignment(SwingConstants.CENTER);
-		msg.setForeground(Color.white);
-		msg.setFont(BssFont.ARIAL_B16);
+
 		
 		startBtn = new StyleButton("Ok");
 		
-		msg.setBounds(0,0,200,50);
 	//	startBtn.setEnabled(false);					// --> 버튼 disabled 일때 모양 바뀌어야해
-		startBtn.setBounds(0,50,200,50);
-		startBtn.setFontSize(13);
+		startBtn.setPreferredSize(new Dimension(200,50));
+		startBtn.setFontSize(15);
 		startBtn.addActionListener(this);
 		
-		pane.add(msg);
-		pane.add(startBtn);
+		pane.add("Center",msg);
+		pane.add("South",startBtn);
 		//pack();
 		
 		add(pane);

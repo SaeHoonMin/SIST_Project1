@@ -27,6 +27,7 @@ import com.bss.common.BssProtocol;
 
 import javafx.animation.Animation;
 import resources.ResContainer;
+import sun.font.CreatedFontTracker;
 
 /*
 on the sender's side:
@@ -78,6 +79,17 @@ public class BssNetWork extends Thread {
 	public void connection() {
 		String ip = null, port = null;
 		File file = new File("./settings/info.txt");
+		
+		if(!file.exists())
+		{
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String sLine = null;
@@ -90,7 +102,7 @@ public class BssNetWork extends Thread {
 			SocketAddress socketAddress = new InetSocketAddress(ip, Integer.parseInt(port));
 			s = new Socket();
 			try {
-				s.connect(socketAddress, 3);
+				s.connect(socketAddress, 3000);
 			} catch (Exception ex) {
 			}
 			out = new ObjectOutputStream(s.getOutputStream());

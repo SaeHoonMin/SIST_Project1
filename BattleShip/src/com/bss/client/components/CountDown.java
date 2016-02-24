@@ -16,8 +16,8 @@ public class CountDown extends JLabel{
 	{
 		setHorizontalAlignment(JLabel.CENTER);
 		setText(String.valueOf(60));
-		setForeground(new Color(255,255,255));
-		setFont(new Font("Arial",Font.BOLD,30));
+		setForeground(BssColor.TURQUOISE_MID);
+		setFont(new Font("Arial",Font.TRUETYPE_FONT,30));
 		setBorder(BorderFactory.createLineBorder(BssColor.YELLOGREEN_T1,5));
 		setSize(80,80);
 		setBackground(BssColor.BLACK_T1);
@@ -28,6 +28,17 @@ public class CountDown extends JLabel{
 		// TODO Auto-generated method stub
 		
 		super.setText(text);
+		
+		try{
+
+			if(Integer.parseInt(text)<=5)
+				setForeground(BssColor.ORANGE_T1);
+			else
+				setForeground(Color.white);
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		new Thread(new Runnable(){
 

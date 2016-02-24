@@ -87,18 +87,18 @@ public class GamePlayPanel extends JPanel {
 		setSize(frame.getWidth(),frame.getHeight());
 		
 		int gridX = (frame.getWidth() -  (1100)) /2;
-		int gridY = frame.getHeight()/2 -500/2 - 30;
+		int gridY = frame.getHeight()/2 -500/2 +30;
 		
 		turnPanel = new WhiteFullScreenPane(this);
 		add(turnPanel);
 		setComponentZOrder(turnPanel, getComponentCount()-1);
 		turnPanel.setVisible(false);
 		
-		enemyGrid = new Grid(gridX,gridY,this);	
+		enemyGrid = new Grid(gridX-10,gridY,this);	
 		enemyGrid.setMouseListenerForTile();
 		
 		myGridInfo = grid;
-		myGrid = new Grid(gridX+600,gridY,this);
+		myGrid = new Grid(gridX+610,gridY,this);
 		
 	
 		setShip();
@@ -114,14 +114,14 @@ public class GamePlayPanel extends JPanel {
 		
 		JLabel ourLabel = new JLabel();
 		ourLabel.setIcon(new ImageIcon(ResContainer.ourForces));
-		ourLabel.setLocation(myGrid.getStartX()-50, myGrid.getStartY()-45);
+		ourLabel.setLocation(myGrid.getStartX()-50, myGrid.getStartY()-40);
 		ourLabel.setSize(600,600);
 		ourLabel.setVisible(true);
 		ourLabel.setOpaque(false);		
 		add(ourLabel);
 		
 		countDown = new CountDown();
-		countDown.setLocation(frame.getWidth()/2 - 100/2, gridY-95);
+		countDown.setLocation(frame.getWidth()/2 - 100/2, gridY-105);
 		countDown.setText("");
 		add(countDown);
 		

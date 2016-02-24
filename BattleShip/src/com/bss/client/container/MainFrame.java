@@ -15,8 +15,8 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
+import com.bss.client.components.BssSettings;
 import com.bss.client.components.UIDebugWindow;
-import com.bss.client.gameObjects.BssSettings;
 import com.bss.client.gameObjects.Grid;
 import com.bss.common.BssDebug;
 import resources.ResContainer;
