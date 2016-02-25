@@ -1,6 +1,7 @@
 package com.bss.client.container;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -315,7 +316,9 @@ public class GamePlayPanel extends JPanel {
 					
 					actionAllowed = false;
 					turnPanel.setVisible(true);
+					turnPanel.setFont(new Font("Arial",Font.BOLD,50));
 					turnPanel.setText("Victory!");
+					
 
 					try {
 						Thread.sleep(1500);

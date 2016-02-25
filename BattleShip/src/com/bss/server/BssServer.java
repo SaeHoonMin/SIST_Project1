@@ -37,7 +37,18 @@ public class BssServer extends JFrame implements Runnable {
 
 	public BssServer() {
 
+		/* 
+		 * Database Table Init. 
+		 * 
+		 * but if there is no oracleDB server to connect, 
+		 * 
+		 * should not connect and allows only guest mode...
+		 * 
+		 */
+		
 		member.battleshipTable();
+		
+		
 		logConsole = new JTextArea();
 		scrollPanel = new JScrollPane(logConsole);
 
@@ -179,6 +190,13 @@ public class BssServer extends JFrame implements Runnable {
 						member.insertMember(info);
 						s.close();
 						break;
+						
+					case GUEST_LOGIN : 
+						
+						userId = (String) recvMsg.msgObj;
+						messageTo(BssProtocol.LOGIN_TRUE);
+						
+						break;
 
 					case LOGIN_CHECK: {
 						String id, pwd;
@@ -187,7 +205,10 @@ public class BssServer extends JFrame implements Runnable {
 						pwd = st.nextToken();
 
 						if (member.login(id, pwd))
+						{	
 							messageTo(BssProtocol.LOGIN_TRUE);
+							userId = id;
+						}
 						else {
 							messageTo(BssProtocol.LOGIN_FALSE);
 							s.close();
@@ -278,6 +299,8 @@ public class BssServer extends JFrame implements Runnable {
 				}
 			} catch (Exception ex) {
 
+				printLog("Exception : "+ex.getMessage());
+				
 				printLog("A Client has been disconnected");
 
 				if (match != null) {

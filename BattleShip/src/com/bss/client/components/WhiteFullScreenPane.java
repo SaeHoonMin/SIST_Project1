@@ -23,13 +23,18 @@ public class WhiteFullScreenPane extends JPanel{
 		setBackground(new Color(0,0,0,200));
 		
 		label = new JLabel("hahahahah",SwingConstants.CENTER);
-		label.setFont(new Font("Arial",Font.BOLD,30));
+		label.setFont(new Font("Arial",Font.BOLD,40));
 		label.setForeground(Color.white);
 		
 		add("Center",label);
 		
 		setVisible(true);
 		setSize(parent.getSize());
+	}
+	
+	public void setFontSize(int size)
+	{
+		label.setFont(new Font(label.getFont().getName(),label.getFont().getStyle(),size));
 	}
 	
 	public void setText(String s)

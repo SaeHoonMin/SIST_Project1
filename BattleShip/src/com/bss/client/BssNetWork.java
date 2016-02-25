@@ -137,6 +137,10 @@ public class BssNetWork extends Thread {
 		try {
 			if (isConnected == true) {
 				switch (type) {
+				
+				case GUEST_LOGIN:
+					msg.msgObj = obj;
+					break;
 
 				case HOST_CONNECTION:
 					break;
@@ -299,6 +303,7 @@ public class BssNetWork extends Thread {
 				}
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			System.out.println("네트워크 에러");
 		}
 	}

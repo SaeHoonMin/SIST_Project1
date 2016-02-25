@@ -211,7 +211,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 				// TODO Auto-generated method stub
 				try {
 					
-					seconds = 60;
+					seconds = 160;
 					
 					while(MainFrame.getPanelState() == PanelState.GAMEREADY)
 					{

@@ -15,6 +15,7 @@ public enum BssProtocol implements Serializable{
 	LOGIN_CHECK,
 	LOGIN_TRUE,
 	LOGIN_FALSE,
+	GUEST_LOGIN,
 	USERINFO, // 접속한 유저정보
 	EXIT,
 	
