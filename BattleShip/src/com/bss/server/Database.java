@@ -26,12 +26,13 @@ public class Database {
 	String query;
 
 	// 자바와 오라클 연결소스
-	public void dbConnect() {
+	public boolean dbConnect() {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 			System.out.println("드라이버 로딩에 실패");
+			return false;
 		}
 		try {
 			String url = "jdbc:oracle:thin:@211.238.142.30:1521:orcl";
@@ -41,7 +42,10 @@ public class Database {
 
 		} catch (SQLException e) {
 			System.out.println("커넥션 설정에 실패");
+			return false;
 		}
+		
+		return true;
 	}
 
 	// 오라클 연결해제
@@ -91,7 +95,11 @@ public class Database {
 
 		} catch (SQLException e) {
 			System.out.println("테이블이 존재합니다.");
-		} finally {
+		} catch (Exception e)
+		{
+			System.out.println("DataBase : battleShipTable() :" + e.getMessage());
+		}
+		finally {
 			dbDisConnection();
 		}
 
@@ -119,7 +127,9 @@ public class Database {
 	// 아이디 중복체크
 	public Boolean idCheck(String id) throws SQLException {
 
-		dbConnect();
+		if(!dbConnect())
+			return false;
+		
 		ResultSet rs = null;
 		System.out.println(id);
 		int Cnt = 0;
@@ -142,7 +152,10 @@ public class Database {
 	}
 
 	public Boolean login(String id, String pwd) throws SQLException {
-		dbConnect();
+		
+		if(!dbConnect())
+			return false;
+		
 		ResultSet rs = null;
 
 		String SQL1 = "SELECT id,pwd FROM battleship WHERE id like ?";

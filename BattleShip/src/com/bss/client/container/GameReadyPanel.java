@@ -66,7 +66,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 		
 		Toolkit toolKit = Toolkit.getDefaultToolkit();
 	
-		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));	
+		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg3.jpg"));	
 		img_shipContainer = toolKit.createImage(ResLoader.getResURL("images/ShipContainer.png"));
 		
 		

@@ -115,6 +115,13 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 	}
 	
 	@Override
+	public void requestFocus() {
+		// TODO Auto-generated method stub
+		super.requestFocus();
+		field.requestFocus();
+	}
+	
+	@Override
 	public void setFocusable(boolean focusable) {
 		// TODO Auto-generated method stub
 		super.setFocusable(focusable);

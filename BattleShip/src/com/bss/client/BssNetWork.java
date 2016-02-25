@@ -190,6 +190,10 @@ public class BssNetWork extends Thread {
 				case MATCH_ENDS:
 
 					break;
+					
+				case CHAT_MSG:
+					msg.msgObj = obj;
+					break;
 				}
 			} else {
 				System.out.println("not connected to server.");
@@ -300,12 +304,16 @@ public class BssNetWork extends Thread {
 
 				case OPPONENT_READY:
 					readyRoom.opponentReady();
-
+					break;
 				case CLIENT_COUNT:
 					// System.out.println("Client Count received "+
 					// recvMsg.msgObj.toString());
 					// if(waitRoom!=null)
 					// waitRoom.setEnemyCount(recvMsg.msgObj.toString());
+					break;
+				case CHAT_MSG:
+					gamePlay.chatMsgReceive((String)recvMsg.msgObj);
+					break;
 				}
 			}
 		} catch (Exception ex) {

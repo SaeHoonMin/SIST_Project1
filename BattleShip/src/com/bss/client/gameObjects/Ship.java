@@ -484,7 +484,7 @@ implements MouseListener, MouseMotionListener, Serializable{
 			clickedX = e.getX();
 			clickedY = e.getY();
 			
-			if(SwingUtilities.isRightMouseButton(e))
+			if(SwingUtilities.isRightMouseButton(e) && !SwingUtilities.isLeftMouseButton(e))
 			{	
 				int temp = clickedX;
 				clickedX = clickedY;

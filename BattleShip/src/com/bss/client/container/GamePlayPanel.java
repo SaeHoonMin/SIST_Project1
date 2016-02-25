@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import com.bss.client.BssNetWork;
 import com.bss.client.components.CountDown;
 import com.bss.client.components.GridHighlight;
+import com.bss.client.components.StyleChatTextArea;
 import com.bss.client.components.StyleTextField;
 import com.bss.client.components.WhiteFullScreenPane;
 import com.bss.client.gameObjects.AnimName;
@@ -34,7 +37,7 @@ import com.bss.common.MatchState;
 import resources.ResContainer;
 import resources.ResLoader;
 
-public class GamePlayPanel extends JPanel {
+public class GamePlayPanel extends JPanel implements KeyListener{
 	
 	private static GamePlayPanel inst;
 	
@@ -60,6 +63,10 @@ public class GamePlayPanel extends JPanel {
 	
 	private StyleTextField myId;
 	private StyleTextField enemyId;
+	
+	private StyleChatTextArea myChatField;
+	private StyleChatTextArea enemyChatField;
+	private StyleTextField myInputField;
 	
 	private BssNetWork netWork;
 	
@@ -88,13 +95,13 @@ public class GamePlayPanel extends JPanel {
 		
 		setLayout(null);
 		
-		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg.jpg"));
+		bgImg = toolKit.createImage(ResLoader.getResURL("images/bg3.jpg"));
 		
 		
 		setSize(frame.getWidth(),frame.getHeight());
 		
 		int gridX = (frame.getWidth() -  (1100)) /2;
-		int gridY = frame.getHeight()/2 -500/2 +30;
+		int gridY = frame.getHeight()/2 -500/2 -15;
 		
 		turnPanel = new WhiteFullScreenPane(this);
 		add(turnPanel);
@@ -144,10 +151,49 @@ public class GamePlayPanel extends JPanel {
 		setComponentZOrder(enemyId,getComponentCount()-1);
 		add(myId);add(enemyId);
 		
+		
+		myChatField = new StyleChatTextArea(500, 30);
+		myChatField.setLocation(myGrid.getStartX() + 500 - myChatField.getWidth(), myGrid.getStartY()+550);
+		enemyChatField =  new StyleChatTextArea(500,30);
+		enemyChatField.setLocation(enemyGrid.getStartX(), myGrid.getStartY()+550);
+		
+		myInputField = new StyleTextField(500,30);
+		myInputField.getField().removeCaretListener(myInputField);
+		myInputField.getField().removeKeyListener(myInputField);
+		myInputField.setLength(40);
+		myInputField.getField().setFont(new Font("¸¼Àº °íµñ",Font.BOLD,16));
+		myInputField.setLocation(frame.getWidth()/2 -500/2, frame.getHeight() - 80);
+		myInputField.setVisible(false);
+		
+		add(myInputField); add(myChatField); add(enemyChatField);
+		
+		
 		setComponentZOrder(ourLabel,getComponentCount()-1);
 		
 		netWork.sendMessage(BssProtocol.ID_REQ, null);
 		
+		setFocusable(true);
+
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				while(MainFrame.getPanelState()==PanelState.GAMEPLAY)
+				{
+					if(!myInputField.isVisible())
+						requestFocus();
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}).start();
+		
+		addKeyListener(this);
 		showTileInfo();
 	}
 	
@@ -519,6 +565,53 @@ public class GamePlayPanel extends JPanel {
 	}
 
 	public void setActionAllowed(boolean actionAllowed) {
+
 		this.actionAllowed = actionAllowed;
 	}
+
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			if(myInputField.isVisible())
+			{
+				if(myInputField.getText().length()>0)
+				{
+					//Ãª¸Þ¼¼Áö³¯¸², ³» ¸Þ¼¼ÁöÃ¢ ÄÔ, ³» ÀÎÇ²Ã¢ ²û
+					myChatField.showText(myInputField.getText());
+					netWork.sendMessage(BssProtocol.CHAT_MSG, myInputField.getText());
+					
+					myInputField.getField().setText(null);
+					myInputField.setVisible(false);
+					myInputField.getField().removeKeyListener(this);
+				}
+				else
+				{
+					myInputField.setVisible(false);
+					myInputField.getField().removeKeyListener(this);
+				}
+			}
+			else
+			{	
+				myInputField.setVisible(true);
+				myInputField.getField().addKeyListener(this);
+				myInputField.requestFocus();
+			}
+			
+		}
+	}
+	
+	public void chatMsgReceive(String str)
+	{
+		System.out.println(str);
+		enemyChatField.showText(str);
+	}
+
+	public void keyReleased(KeyEvent e) {
+		
+	}
+
 }

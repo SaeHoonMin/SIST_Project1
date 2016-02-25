@@ -185,8 +185,9 @@ public class BssServer extends JFrame implements Runnable {
 					case REGISTER:
 
 						String info = (String) recvMsg.msgObj;
-						member.insertMember(info);
-						s.close();
+						if(member!=null)
+							member.insertMember(info);
+				//		s.close();						// -->  ¼ÒÄÏ ¿Ö´ÝÀ½?
 						break;
 						
 					case GUEST_LOGIN : 
@@ -201,7 +202,7 @@ public class BssServer extends JFrame implements Runnable {
 						id = st.nextToken();
 						pwd = st.nextToken();
 
-						if (member.login(id, pwd))
+						if ( member.login(id, pwd))
 						{	
 							messageTo(BssProtocol.LOGIN_TRUE);
 						}
@@ -215,12 +216,12 @@ public class BssServer extends JFrame implements Runnable {
 					case ID_CHECK: {
 						String id;
 						id = (String) recvMsg.msgObj;
-						if (member.idCheck(id)) {
+						if ( member.idCheck(id)) {
 							messageTo(BssProtocol.ID_TRUE);
-							s.close();
+					//		s.close();
 						} else {
 							messageTo(BssProtocol.ID_FALSE);
-							s.close();
+					//		s.close();
 						}
 						break;
 					}
@@ -296,6 +297,12 @@ public class BssServer extends JFrame implements Runnable {
 						opponent = null;
 						match = null;
 						match_ready = false;
+						break;
+					
+					case CHAT_MSG :
+						
+						opponent.messageTo(new BssMsg(BssProtocol.CHAT_MSG,recvMsg.msgObj));
+						
 						break;
 					}
 				}

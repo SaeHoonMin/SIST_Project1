@@ -20,6 +20,8 @@ public enum BssProtocol implements Serializable{
 	USERINFO, // 접속한 유저정보
 	EXIT,
 	
+	CHAT_MSG,
+	
 	REGISTER,
 	MATCH_QUE_REQ,
 	MATCH_QUE_FOUND,
