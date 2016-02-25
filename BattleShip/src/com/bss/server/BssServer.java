@@ -204,7 +204,6 @@ public class BssServer extends JFrame implements Runnable {
 						if (member.login(id, pwd))
 						{	
 							messageTo(BssProtocol.LOGIN_TRUE);
-							userId = id;
 						}
 						else {
 							messageTo(BssProtocol.LOGIN_FALSE);

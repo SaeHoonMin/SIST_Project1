@@ -1,6 +1,5 @@
 package com.bss.client.container;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -17,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import com.bss.client.BssNetWork;
-import com.bss.client.LoginState;
-import com.bss.client.components.LoadingDialog;
 import com.bss.client.components.MessageDialog;
 import com.bss.client.components.StyleButton;
 import com.bss.client.components.StylePasswordField;
@@ -44,23 +41,13 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 	private StyleButton btnSetting;
 	private StyleButton btnExit;
 	private StyleButton btnSignup;
-	
-	private LoadingDialog loadingDialog ;
 
 	public StyleTextField taLogin;
 	public StylePasswordField taPass;
 	
-	static LoginState login_check = LoginState.NONE;
-	
-	BssNetWork inst ;
+	static Boolean login_check = false;
 
 	public LoginWindowPanel(JFrame parent) {
-		
-		inst = BssNetWork.getInst();
-		if(!inst.isConnected())
-			inst.connection();
-
-		
 		setOpaque(false);
 		setLayout(null);
 
@@ -114,18 +101,16 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 		add(btnExit);
 		add(btnSignup);
 		btnSetting.addActionListener(this);
-		
-		
 
 	}
 
-	public static void login_Check(LoginState login_check) {
+	public static void login_Check(Boolean login_check) {
 		LoginWindowPanel.login_check = login_check;
 
 	}
 
 
-	private String createRandomText(int charlen) {
+	private String createRamdomText(int charlen) {
 		Random rand = new Random();
 		StringBuffer buf = new StringBuffer();
 		int num;
@@ -148,94 +133,23 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 	
 	
 	
-	private void login(String id, String pwd)
+	private void Login(String id, String pwd)
 	{
-		//로딩창열기
-		loadingDialog = LoadingDialog.Show();
-
-		if (inst.connection()) {
-			String login_info = taLogin.getField().getText() + "|" + taPass.getField().getText();
-			BssNetWork.getInst().sendMessage(BssProtocol.LOGIN_CHECK, login_info);
-		}
-		else{
-			loadingDialog.dispose();
-			MessageDialog.Show("Cannot connect to Server.");
-			return;
-		}
-		waitForLogin();
-	}
-	
-	private void guestLogin(String id)
-	{
-		//로딩창열기
-		loadingDialog = LoadingDialog.Show();
-	
-		if (inst.connection()) {
-			String login_info = taLogin.getField().getText();
-			BssNetWork.getInst().sendMessage(BssProtocol.GUEST_LOGIN, login_info);
-		}
-		else{
-			loadingDialog.dispose();
-			MessageDialog.Show("Cannot connect to Server");
-			return;
-		}
-		waitForLogin();
-	}
-	
-	private void waitForLogin()
-	{
-		//입력 비활성화
-		setEnableChildren(false);
-
 		
-		Thread t = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				try{
-					while(true)
-					{
-						switch(login_check)
-						{
-						case NO:
-							MessageDialog.Show("Incorrect ID or Password");
-							//창 뭐 하나 닫자
-							loadingDialog.dispose();
-							//입력 재활성화
-							setEnableChildren(true);
-							login_check = LoginState.NONE;
-							return;
-						case OK:
-							//마찬가지로 창 닫기
-							loadingDialog.dispose();
-							inst.sendMessage(BssProtocol.USERINFO,
-									taLogin.getField().getText());
-							MainFrame.setUserId(taLogin.getField().getText());
-							MainFrame.getInst().openWaitRoom();
-							return;
-						
-						}
-						Thread.sleep(30);
-					}
-				}catch(Exception e)
-				{
-					loadingDialog.dispose();
-					e.printStackTrace();
-				}
-			}
-		});
-		t.run();
 	}
 	
-	private void setEnableChildren(boolean val)
-	{
-		for(Component c : getComponents())
-			c.setEnabled(val);
-	}
+	
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+/*		if (e.getSource() == taPass || e.getSource() == taLogin) {
+			System.out.println("sdsd");
+		}*/
 
 		StyleButton b = null;
+		StylePasswordField p = null;
 
 		if (e.getSource() instanceof StyleButton)
 			b = (StyleButton) e.getSource();
@@ -254,17 +168,122 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 				return;
 			}
 			
-			login(id,pwd);
+			BssNetWork inst = BssNetWork.getInst();
+			if(!inst.isConnected())
+				inst.connection();
+
+			if (inst.isConnected()) {
+				String login_info = taLogin.getField().getText() + "|" + taPass.getField().getText();
+				BssNetWork.getInst().sendMessage(BssProtocol.LOGIN_CHECK, login_info);
+				
+				//Blocking...
+				while (true) {
+					if (login_check == true) {
+						break;
+					}
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+			else{
+				MessageDialog.Show("Cannot connect to Server.");
+				return;
+			}
+
+			try {
+
+				if (login_check) {
+					// Connection first..
+					if (inst.isConnected()) {
+						BssNetWork.getInst().sendMessage(BssProtocol.USERINFO,
+								taLogin.getField().getText());
+						MainFrame.setUserId(taLogin.getField().getText());
+						MainFrame.getInst().openWaitRoom();
+						// 유저정보보내기
+						return;
+					}
+				} else {
+					MessageDialog.Show("Incorrect ID or Password");
+				}
+				login_check = false;
+			} catch (Exception ex) {
+				MessageDialog.Show("Cannot connect to Server.");
+				try {
+					Thread.sleep(10);
+
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+		}else if( b == btnGuest ) {
 			
-		}	
-		// Guest Login Btn Clicked
-		else if( b == btnGuest ) {
-			taLogin.getField().setText(createRandomText(8));
-			guestLogin(taLogin.getText());
+			BssNetWork inst = BssNetWork.getInst();
+			if(!inst.isConnected())
+				inst.connection();
+
+			if (inst.isConnected()) {
+				
+				String login_info = createRamdomText(8);
+				taLogin.getField().setText(login_info);
+				
+				BssNetWork.getInst().sendMessage(BssProtocol.GUEST_LOGIN, login_info);
+
+				//Blocking...
+				while (true) {
+					if (login_check == true) {
+						break;
+					}
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+			else
+			{
+				MessageDialog.Show("Cannot connect to Server.");
+			}
+			
+			
+			try {
+				if (login_check) {
+					// Connection first..
+					if (inst.isConnected()) {
+						BssNetWork.getInst().sendMessage(BssProtocol.USERINFO,
+								taLogin.getField().getText());
+						MainFrame.setUserId(taLogin.getField().getText());
+						MainFrame.getInst().openWaitRoom();
+						// 유저정보보내기
+						return;
+					}
+				} else {
+					MessageDialog.Show("Incorrect ID or Password");
+				}
+				login_check = null;
+			} catch (Exception ex) {
+				MessageDialog.Show("Cannot connect to Server.");
+				try {
+					Thread.sleep(10);
+
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
+		
 		else if (b == btnSetting) {
 			MainFrame.getInst().openSetting();
 		}
+
 		else if (b == btnSignup) {
 			MainFrame.getInst().openRegister();
 		} else if (b == btnExit)

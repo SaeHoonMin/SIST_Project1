@@ -18,6 +18,8 @@ public class ResContainer {
 	
 	public static Image target_cursor;
 	
+	public static Image loading_gif;
+	
 	public static Image bg_login;
 	public static Image bg_waitRoom;
 	
@@ -101,6 +103,7 @@ public class ResContainer {
 		
 		target_cursor = toolKit.getImage(ResLoader.getResURL("images/target_cursor.png"));
 		
+		loading_gif = toolKit.getImage(ResLoader.getResURL("images/loading_gif.gif"));		
 		//frame background images
 		bg_login = toolKit.getImage(ResLoader.getResURL("images/bg.jpg"));
 		bg_waitRoom = toolKit.getImage(ResLoader.getResURL("images/1.jpg"));

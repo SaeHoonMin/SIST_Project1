@@ -78,7 +78,11 @@ public class BssNetWork extends Thread {
 		inst = this;
 	}
 
-	public void connection() {
+	public boolean connection() {
+		
+		if(isConnected==true)
+			return true;
+		
 		String ip = null, port = null;
 		File file = new File("./settings/info.txt");
 		
@@ -111,19 +115,15 @@ public class BssNetWork extends Thread {
 			in = new ObjectInputStream(s.getInputStream());
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return;
+			return false;
 		}
 
 		// 통신 시작
 		isConnected = true;
 		new Thread(this).start();
 		sendMessage(BssProtocol.HOST_CONNECTION, null);
+		
+		return true;
 	}
 
 	// 회원가입 정보
@@ -235,11 +235,11 @@ public class BssNetWork extends Thread {
 					break;
 
 				case LOGIN_TRUE:
-					LoginWindowPanel.login_Check(true);
+					LoginWindowPanel.login_Check(LoginState.OK);
 					break;
 
 				case LOGIN_FALSE:
-					LoginWindowPanel.login_Check(false);
+					LoginWindowPanel.login_Check(LoginState.NO);
 					break;
 
 				case WELCOME:
@@ -247,7 +247,7 @@ public class BssNetWork extends Thread {
 					break;
 
 				case EXIT:
-					MessageDialog.Show("현재 아이디가 접속중입니다.");
+					MessageDialog.Show("Your account is already online.");
 					System.exit(0);
 					break;
 
@@ -311,6 +311,7 @@ public class BssNetWork extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println("네트워크 에러");
+			isConnected=false;
 		}
 	}
 
