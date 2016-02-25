@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.bss.client.gameObjects.ShipType;
-import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.AttackResult;
 import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
@@ -192,7 +191,6 @@ public class BssServer extends JFrame implements Runnable {
 						
 					case GUEST_LOGIN : 
 						
-						userId = (String) recvMsg.msgObj;
 						messageTo(BssProtocol.LOGIN_TRUE);
 						
 						break;
@@ -233,9 +231,13 @@ public class BssServer extends JFrame implements Runnable {
 						// System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
 						for (int i = 0; i < waitVc.size(); i++) {
 							if (waitVc.elementAt(i).userId.equals(recvMsg.msgObj.toString())) {
+								System.out.println(waitVc.elementAt(i).userId+ " aaaand " +recvMsg.msgObj.toString());
 								messageTo(BssProtocol.EXIT);
+								break;
 							}
 						}
+
+						userId = (String) recvMsg.msgObj;
 
 						
 						printLog("접속자 수:"+String.valueOf(waitVc.size()));
@@ -262,6 +264,12 @@ public class BssServer extends JFrame implements Runnable {
 							printLog("player has pressed ready button");
 							opponent.messageTo(BssProtocol.OPPONENT_READY);
 						}
+						break;
+						
+					case ID_REQ:
+						if(opponent!=null)
+							messageTo(new BssMsg(BssProtocol.ID_REQ,opponent.userId));
+						
 						break;
 
 					case ATTACK_PERFORMED:

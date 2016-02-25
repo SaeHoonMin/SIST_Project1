@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import com.bss.client.BssNetWork;
 import com.bss.client.components.CountDown;
 import com.bss.client.components.GridHighlight;
+import com.bss.client.components.StyleTextField;
 import com.bss.client.components.WhiteFullScreenPane;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.FixedLocAnimation;
@@ -57,6 +58,9 @@ public class GamePlayPanel extends JPanel {
 	private int myShipCount=5;
 	private int enemyShipCount=5;
 	
+	private StyleTextField myId;
+	private StyleTextField enemyId;
+	
 	private BssNetWork netWork;
 	
 	Thread countThread;
@@ -74,6 +78,8 @@ public class GamePlayPanel extends JPanel {
 	public GamePlayPanel(Grid grid, JFrame frame)
 	{
 		inst = this;
+		netWork = BssNetWork.getInst();
+		netWork.setGamePlay(this);
 		
 		isMyTurn = false;
 		matchState = MatchState.START;
@@ -127,10 +133,27 @@ public class GamePlayPanel extends JPanel {
 		add(countDown);
 		
 		
+		myId = new StyleTextField(200,30);
+		myId.setLocation(myGrid.getStartX() + 500 - myId.getWidth(), myGrid.getStartY()+510);
+		myId.setFocusable(false);
+		myId.getField().setText(MainFrame.getUserId());
+		setComponentZOrder(myId,getComponentCount()-1);
+		enemyId = new StyleTextField(200,30);
+		enemyId.setLocation(enemyGrid.getStartX(), myGrid.getStartY()+510);
+		enemyId.setFocusable(false);
+		setComponentZOrder(enemyId,getComponentCount()-1);
+		add(myId);add(enemyId);
 		
-		netWork = BssNetWork.getInst();
-		netWork.setGamePlay(this);
+		setComponentZOrder(ourLabel,getComponentCount()-1);
+		
+		netWork.sendMessage(BssProtocol.ID_REQ, null);
+		
 		showTileInfo();
+	}
+	
+	public void setEnemyId(String str)
+	{
+		enemyId.getField().setText(str);
 	}
 	
 	public Grid getMyGrid()

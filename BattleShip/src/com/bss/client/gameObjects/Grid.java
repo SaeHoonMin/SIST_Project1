@@ -99,40 +99,26 @@ public class Grid implements Runnable, Serializable{
 	
 	public void randomLocate(ArrayList<Ship> ships)
 	{
-		System.out.println("** randomRocate Start **");
 		for(int i = locatedShip.size()-1;i>=0;i--)
 		{
-			System.out.println("index : "+i);
 			Ship s = locatedShip.get(i);
 			int r = s.getHeadTile().getRow();
 			int c = s.getHeadTile().getCol();
-			
-			System.out.println("shipType : "+s.getType()+" and angle : "+s.getAngle());
-			System.out.printf("* head rc(%d,%d) *\n",r,c);
 			
 			for(int j=0; j<s.getTileSize(); j++)
 			{
 				Tile t ;
 				if(s.getAngle()==ShipAngle.H)
-				{
-					System.out.printf("r,c+j(%d,%d)\n",r,c+j);
 					t = tiles[r][c+j];
-				}
 				else
-				{
 					t = tiles[r+j][c];
-				}
 				t.setLocatedShip(null, 0);
 			}
 			
 			if(s.getAngle() == ShipAngle.V)
 				s.rotateShip();
 			unsetReservedTiles(s);
-			
-			if(locatedShip.remove(s))
-				System.out.println("true");
-			else
-				System.out.println("false");
+			locatedShip.remove(s);
 		}
 
 		ArrayList<Point> points = new ArrayList<Point>();
@@ -514,7 +500,6 @@ public class Grid implements Runnable, Serializable{
 		{
 			if(locatedShip.get(i)==s)
 			{
-				System.out.println("remove success");
 				locatedShip.remove(i);
 				break;
 			}

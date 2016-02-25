@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.*;
 
+import com.bss.client.components.MessageDialog;
 import com.bss.client.components.Register;
 import com.bss.client.container.*;
 import com.bss.client.gameObjects.AnimName;
@@ -22,7 +23,6 @@ import com.bss.client.gameObjects.FixedLocAnimation;
 import com.bss.client.gameObjects.Grid;
 import com.bss.client.gameObjects.Tile;
 import com.bss.client.gameObjects.TileState;
-import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.AttackResult;
 import com.bss.common.BssMsg;
 import com.bss.common.BssProtocol;
@@ -218,8 +218,14 @@ public class BssNetWork extends Thread {
 		try {
 			while (true) {
 				recvMsg = (BssMsg) in.readObject();
+				
+				System.out.println(recvMsg.msgType);
 
 				switch (recvMsg.msgType) {
+				case ID_REQ:
+					gamePlay.setEnemyId((String)recvMsg.msgObj);
+					break;
+				
 				case ID_TRUE:
 					Register.id_Check(true);
 					break;
@@ -241,7 +247,7 @@ public class BssNetWork extends Thread {
 					break;
 
 				case EXIT:
-					JOptionPane.showMessageDialog(null, "현재 아이디가 접속중입니다.");
+					MessageDialog.Show("현재 아이디가 접속중입니다.");
 					System.exit(0);
 					break;
 

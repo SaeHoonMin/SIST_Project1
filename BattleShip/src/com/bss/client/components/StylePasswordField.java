@@ -23,7 +23,6 @@ import javax.swing.event.CaretListener;
 import com.bss.client.BssNetWork;
 import com.bss.client.container.LoginWindowPanel;
 import com.bss.client.container.MainFrame;
-import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.BssDebug;
 import com.bss.common.BssProtocol;
 import com.bss.server.Database;

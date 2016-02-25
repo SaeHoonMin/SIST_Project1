@@ -12,6 +12,7 @@ public enum BssProtocol implements Serializable{
 	ID_CHECK,
 	ID_TRUE,
 	ID_FALSE,
+	ID_REQ,			//상대 아이디 요청
 	LOGIN_CHECK,
 	LOGIN_TRUE,
 	LOGIN_FALSE,

@@ -32,6 +32,8 @@ import resources.ResLoader;
 
 public class GameReadyPanel extends JPanel implements ActionListener{
 	
+	final static int READY_COUNTDOWN = 60;
+	
 	JLabel countDown;
 	
 	JLabel shipContainer;
@@ -211,7 +213,7 @@ public class GameReadyPanel extends JPanel implements ActionListener{
 				// TODO Auto-generated method stub
 				try {
 					
-					seconds = 160;
+					seconds = READY_COUNTDOWN;
 					
 					while(MainFrame.getPanelState() == PanelState.GAMEREADY)
 					{

@@ -21,7 +21,6 @@ import com.bss.client.components.StyleButton;
 import com.bss.client.components.StylePasswordField;
 import com.bss.client.components.StyleTextField;
 import com.bss.client.gameObjects.Grid;
-import com.bss.client.gameObjects.UserInfo;
 import com.bss.common.BssDebug;
 import com.bss.common.BssProtocol;
 import com.bss.server.*;
@@ -168,7 +167,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 			if (inst.isConnected()) {
 				String login_info = taLogin.getField().getText() + "|" + taPass.getField().getText();
 				BssNetWork.getInst().sendMessage(BssProtocol.LOGIN_CHECK, login_info);
-
+				
 				//Blocking...
 				while (true) {
 					if (login_check == true) {
@@ -182,6 +181,10 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 					}
 				}
 			}
+			else{
+				MessageDialog.Show("Cannot connect to Server.");
+				return;
+			}
 
 			try {
 
@@ -189,7 +192,8 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 					// Connection first..
 					if (inst.isConnected()) {
 						BssNetWork.getInst().sendMessage(BssProtocol.USERINFO,
-								new UserInfo(taLogin.getField().getText()));
+								taLogin.getField().getText());
+						MainFrame.setUserId(taLogin.getField().getText());
 						MainFrame.getInst().openWaitRoom();
 						// 유저정보보내기
 						return;
@@ -197,7 +201,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 				} else {
 					MessageDialog.Show("Incorrect ID or Password");
 				}
-				login_check = null;
+				login_check = false;
 			} catch (Exception ex) {
 				MessageDialog.Show("Cannot connect to Server.");
 				try {
@@ -219,9 +223,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 				
 				String login_info = createRamdomText(8);
 				taLogin.getField().setText(login_info);
-				login_info = login_info + "|1234";
 				
-				System.out.println(login_info);
 				BssNetWork.getInst().sendMessage(BssProtocol.GUEST_LOGIN, login_info);
 
 				//Blocking...
@@ -237,13 +239,19 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 					}
 				}
 			}
-
+			else
+			{
+				MessageDialog.Show("Cannot connect to Server.");
+			}
+			
+			
 			try {
 				if (login_check) {
 					// Connection first..
 					if (inst.isConnected()) {
 						BssNetWork.getInst().sendMessage(BssProtocol.USERINFO,
-								new UserInfo(taLogin.getField().getText()));
+								taLogin.getField().getText());
+						MainFrame.setUserId(taLogin.getField().getText());
 						MainFrame.getInst().openWaitRoom();
 						// 유저정보보내기
 						return;
@@ -262,10 +270,7 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 					e1.printStackTrace();
 				}
 			}
-			
-			
 		}
-			
 		
 		else if (b == btnSetting) {
 			MainFrame.getInst().openSetting();

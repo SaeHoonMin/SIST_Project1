@@ -113,6 +113,17 @@ public class StyleTextField extends JPanel implements KeyListener, CaretListener
 			e.consume();
 		}
 	}
+	
+	@Override
+	public void setFocusable(boolean focusable) {
+		// TODO Auto-generated method stub
+		super.setFocusable(focusable);
+		if(focusable==false)
+			field.setEditable(false);
+		else
+			field.setEditable(true);
+		field.setFocusable(focusable);
+	}
 
 	@Override
 	public void caretUpdate(CaretEvent e) {

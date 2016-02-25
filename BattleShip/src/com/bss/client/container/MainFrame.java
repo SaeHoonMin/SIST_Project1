@@ -41,6 +41,8 @@ public class MainFrame extends JFrame implements Runnable {
 
 	Cursor defaultCursor = Cursor.getDefaultCursor();
 	Cursor targetCursor;
+	
+	private static String userId;
 
 	public static MainFrame getInst() {
 		if (inst == null) {
@@ -197,5 +199,13 @@ public class MainFrame extends JFrame implements Runnable {
 
 	public void setTargetCursor() {
 		setCursor(targetCursor);
+	}
+
+	public static String getUserId() {
+		return userId;
+	}
+
+	public static void setUserId(String userId) {
+		MainFrame.userId = userId;
 	}
 }
