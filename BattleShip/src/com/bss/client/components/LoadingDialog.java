@@ -53,7 +53,7 @@ public class LoadingDialog extends JFrame{
 		JLabel msg = new JLabel();
 		msg.setHorizontalAlignment(SwingConstants.CENTER);
 		msg.setIcon(new ImageIcon(ResContainer.loading_gif));
-	
+		msg.setText("Wait..");
 		setAlwaysOnTop(true);
 	
 		pane = new JPanel();
@@ -74,28 +74,28 @@ public class LoadingDialog extends JFrame{
 		
 		icons = BssSprites.getAnimSprites(AnimName.LOADING_GIF);
 		
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				int i=0;
-				while(running){
-				
-					msg.setIcon(icons.get(i));
-					msg.update(msg.getGraphics());
-					i++;
-					if(i>=icons.size())
-						i=0;
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			
-		}).start();
+//		new Thread(new Runnable(){
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				int i=0;
+//				while(running){
+//				
+//					msg.setIcon(icons.get(i));
+//					msg.update(msg.getGraphics());
+//					i++;
+//					if(i>=icons.size())
+//						i=0;
+//					try {
+//						Thread.sleep(10);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//			
+//		}).start();
 	}
 	
 	@Override

@@ -283,6 +283,11 @@ public class LoginWindowPanel extends JPanel implements ActionListener, KeyListe
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			btnLogin.doClick();
 		}
+//		else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+//		{
+//			System.out.println("show");
+//			loadingDialog = LoadingDialog.Show();
+//		}
 
 	}
 
