@@ -300,7 +300,7 @@ public class Grid implements Runnable, Serializable{
 	}
 	
 	@Override
-	public void run() {
+	public synchronized  void run() {
 		// TODO Auto-generated method stub
 		MainFrame inst = MainFrame.getInst();
 		int x , y;
@@ -531,7 +531,7 @@ public class Grid implements Runnable, Serializable{
 		}
 	}
 	
-	private void unsetReservedTiles(Ship s)
+	public void unsetReservedTiles(Ship s)
 	{
 		Tile minTile = s.getHeadTile();
 		if(minTile==null)
@@ -547,6 +547,7 @@ public class Grid implements Runnable, Serializable{
 				if( i>=0 && i<10 && j>=0 && j<10)
 				{
 					tiles[i][j].setState(TileState.EMPTY);
+					tiles[i][j].setLocatedShip(null, 0);
 					tiles[i][j].setIcon(ResContainer.tile_icon);
 				}
 			}

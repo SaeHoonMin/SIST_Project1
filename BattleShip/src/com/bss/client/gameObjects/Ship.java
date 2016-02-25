@@ -492,12 +492,14 @@ implements MouseListener, MouseMotionListener, Serializable{
 				
 				int mouseX = mInst.mouseX -clickedX;
 				int mouseY = mInst.mouseY -clickedY;
+
+				if(taileTile !=null && headTile != null)
+					headTile.getGrid().unsetReservedTiles(this);
 				
 				rotateShip();
-			
+
+				
 				setLocation(mouseX,mouseY);
-				
-				
 			}
 			
 			offsetPoints.clear();

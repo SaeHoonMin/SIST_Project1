@@ -14,6 +14,8 @@ import java.net.SocketAddress;
 import java.util.StringTokenizer;
 
 import javax.swing.*;
+
+import com.bss.client.components.Register;
 import com.bss.client.container.*;
 import com.bss.client.gameObjects.AnimName;
 import com.bss.client.gameObjects.FixedLocAnimation;

@@ -37,7 +37,7 @@ public class CountDown extends JLabel{
 				setForeground(Color.white);
 		
 		}catch(Exception e){
-			e.printStackTrace();
+			
 		}
 		
 		new Thread(new Runnable(){

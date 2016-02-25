@@ -1,14 +1,10 @@
-package com.bss.client.container;
+package com.bss.client.components;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import com.bss.client.*;
-import com.bss.client.components.MessageDialog;
-import com.bss.client.components.StyleButton;
-import com.bss.client.components.StylePasswordField;
-import com.bss.client.components.StyleTextField;
 
 import javax.swing.*;
 import com.bss.common.BssProtocol;
@@ -121,7 +117,7 @@ public class Register extends JFrame implements ActionListener {
 		/*b1.setIcon(new ImageIcon(setImage("./img/10.gif",20,20)));
 		b1.setRolloverIcon(new ImageIcon(setImage("./img/1.png",20,20)));*/
 		
-		b_ok  = new StyleButton("Sign In");
+		b_ok  = new StyleButton("Sign Up");
 		b_ok.setBounds(90, 320, 80, 40);
 		
 		b_cancel = new StyleButton("Cancle");
@@ -192,12 +188,12 @@ public class Register extends JFrame implements ActionListener {
 				}
 				else if(tf1_id.getText().length()<5 || tf1_id.getText().length()>12){
 				
-					JOptionPane.showMessageDialog(this, "아이디는 5~12글자 사이로 입력하세요.");
+					MessageDialog.Show( "ID must be 5 to 12 characters.");
 					tf1_id.requestFocus();
 				}
 				else {
 					
-					JOptionPane.showMessageDialog(this, "You can use this ID.");
+					MessageDialog.Show("You can use this ID.");
 					idcheck=tf1_id.getText();
 					pf1_pwd.requestFocus();
 				}
@@ -243,7 +239,7 @@ public class Register extends JFrame implements ActionListener {
 				pf2_pwd.requestFocus();
 			}
 			else if(pwd1.length()<8){
-				MessageDialog.Show("Password must be 8 characters.");
+				MessageDialog.Show("Password must be 8 or more characters.");
 				pf1_pwd.setText(""); 
 				pf2_pwd.setText(""); 
 				pf1_pwd.requestFocus();
@@ -266,7 +262,7 @@ public class Register extends JFrame implements ActionListener {
 			
 			
 			
-			JOptionPane.showMessageDialog(this, "회원가입 완료");
+			MessageDialog.Show("Sign up complete!");
 			
 			
 //			member.allUserInfo(); //테이블 데이터 읽어오기
