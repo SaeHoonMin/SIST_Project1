@@ -32,7 +32,6 @@ public class BssServer extends JFrame implements Runnable {
 	ServerSocket ss;
 	Database member = new Database();
 	Vector<Client> waitVc = new Vector<Client>();// 접속자 정보 저장
-	Vector<UserInfo> userVc = new Vector<UserInfo>();
 	ArrayList<Client> matchQueue = new ArrayList<Client>();
 
 	public BssServer() {
@@ -232,18 +231,14 @@ public class BssServer extends JFrame implements Runnable {
 					case USERINFO:
 						// userVc.add((UserInfo) recvMsg.msgObj); //유저아이디담기
 						// System.out.println(recvMsg.msgObj);//접속한 유저아이디 출력
-						for (int i = 0; i < userVc.size(); i++) {
-							if (userVc.elementAt(i).toString().equals(recvMsg.msgObj.toString())) {
+						for (int i = 0; i < waitVc.size(); i++) {
+							if (waitVc.elementAt(i).userId.equals(recvMsg.msgObj.toString())) {
 								messageTo(BssProtocol.EXIT);
 							}
 						}
 
-						userVc.addElement((UserInfo) recvMsg.msgObj);
-						for (int i = 0; i < userVc.size(); i++) {
-							String p = userVc.get(i).toString();
-							printLog(p);
-						}
-						printLog("접속자 수:"+String.valueOf(userVc.size()));
+						
+						printLog("접속자 수:"+String.valueOf(waitVc.size()));
 						break;
 
 					case MATCH_QUE_REQ:
@@ -311,16 +306,9 @@ public class BssServer extends JFrame implements Runnable {
 				}
 				matchQueue.remove(this);
 				waitVc.remove(this);
-				try {
-					userVc.removeElementAt(userVc.size() - 1);
-					for (int i = 0; i < userVc.size(); i++) {
-						String p = userVc.get(i).toString();
-						printLog(p);
-					}
-					printLog("접속자 수:"+String.valueOf(userVc.size()));
-				} catch (Exception e) {
-				}
 			
+				printLog("접속자 수:"+String.valueOf(waitVc.size()));
+				
 				messageAll(new BssMsg(BssProtocol.CLIENT_COUNT, waitVc.size()));
 			}
 		}
