@@ -1,6 +1,9 @@
 # SIST_Project1
 쌍용교육센터 첫 번째 프로젝트 
 
+YouTube : https://www.youtube.com/watch?v=Isg3QeFn4_E
+
+
 00. 프로젝트 규칙
 
 >	00-1
